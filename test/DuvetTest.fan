@@ -1,0 +1,5 @@
+
+internal class DuvetTest : Test {
+	
+	
+}
