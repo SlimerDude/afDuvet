@@ -1,7 +1,7 @@
 using afIoc
 using afBedSheet
 
-const class DuvetResponseProcessor : ResponseProcessor {
+internal const class DuvetResponseProcessor : ResponseProcessor {
 
 	@Inject private const HtmlInjector	htmlInjector
 	@Inject private const HttpResponse 	httpResponse
