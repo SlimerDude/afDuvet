@@ -1,0 +1,32 @@
+Overview [#overview]
+********************
+Something soft and comfortable to wrap your Javascript up in!
+
+
+
+Install [#Install]
+******************
+Install 'Duvet' with the Fantom Repository Manager ( [fanr]`http://fantom.org/doc/docFanr/Tool.html#install` ):
+
+  C:\> fanr install -r http://repo.status302.com/fanr/ afDuvet
+
+To use in a [Fantom]`http://fantom.org/` project, add a dependency to 'build.fan':
+
+  depends = ["sys 1.0", ..., "afDuvet 0+"]
+
+
+
+Quick Start [#quickStart]
+*************************
+pre>
+  Example here
+<pre
+
+
+
+Release Notes [#releaseNotes]
+*****************************
+
+v0.0.2 [#v0.0.2]
+----------------
+ - New: Preview release.

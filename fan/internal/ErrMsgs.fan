@@ -1,0 +1,5 @@
+
+internal const class ErrMsgs {
+	
+
+}
