@@ -45,7 +45,8 @@ internal const class StylesheetInjectorImpl : StylesheetInjector {
 	new make(|This|in) { in(this) }
 	
 	override StylesheetInjector addFromExternalUrl(Uri cssUrl, Str? media := null, Str? ieConditional := null) {
-		// TODO: assert url has scheme
+		if (cssUrl.host == null)
+			throw ArgErr(ErrMsgs.externalUrlsNeedHost(cssUrl))
 		return addStylesheet(cssUrl, media, ieConditional)
 	}
 

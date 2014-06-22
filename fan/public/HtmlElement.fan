@@ -1,7 +1,7 @@
 
 @NoDoc
 mixin HtmlNode {
-	abstract Str print(TagStyle tagStyle)
+	abstract internal Str print(TagStyle tagStyle)
 	
 	@NoDoc
 	override Str toStr() { print(TagStyle.html) }
@@ -26,7 +26,7 @@ class HtmlElement : HtmlNode {
 	}
 	
 	@NoDoc
-	override Str print(TagStyle tagStyle) {
+	override internal Str print(TagStyle tagStyle) {
 		str := "<${name.toXml} ${attr}" + tagStyle.tagEnding.startTag(name, nodes.isEmpty)
 		str += nodes.join("\n") { it.print(tagStyle) }
 		str += tagStyle.tagEnding.endTag(name, nodes.isEmpty)
@@ -43,7 +43,7 @@ class HtmlText : HtmlNode {
 	}
 
 	@NoDoc
-	override Str print(TagStyle tagStyle) {
+	override internal Str print(TagStyle tagStyle) {
 		(tagStyle == TagStyle.html) ? text : text.toXml
 	}
 }
@@ -65,7 +65,7 @@ class HtmlConditional : HtmlNode {
 	}
 	
 	@NoDoc
-	override Str print(TagStyle tagStyle) {
+	override internal Str print(TagStyle tagStyle) {
 		str := "<!--[${condition.toXml}]>"
 		str += nodes.join("\n") { it.print(tagStyle) }
 		str += "<![endif]-->"
@@ -82,7 +82,7 @@ class HtmlComment : HtmlNode {
 	}
 
 	@NoDoc
-	override Str print(TagStyle tagStyle) {
+	override internal Str print(TagStyle tagStyle) {
 		return "<!-- ${comment.toXml} -->"
 	}
 }
