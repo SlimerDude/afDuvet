@@ -9,6 +9,7 @@ const mixin ScriptInjector {
 	abstract ScriptInjector addFromExternalUrl(Uri scriptUrl)
 	abstract ScriptInjector addFromClientUrl(Uri scriptUrl)
 	abstract ScriptInjector addFromServerFile(File scriptFile)
+	
 }
 
 internal const class ScriptInjectorImpl : ScriptInjector {
@@ -51,7 +52,8 @@ internal const class ScriptInjectorImpl : ScriptInjector {
 		attr 	:= """type="text/javascript" src="${scriptUrl}" """ 
 		element := HtmlElement("script", attr) 
 		
-		htmlInjector.appendToHead(element)
+		htmlInjector.appendToBody(element)
 		return this
 	}
 }
+

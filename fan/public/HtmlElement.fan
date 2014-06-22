@@ -44,7 +44,8 @@ class HtmlText : HtmlNode {
 
 	@NoDoc
 	override internal Str print(TagStyle tagStyle) {
-		(tagStyle == TagStyle.html) ? text : text.toXml
+		text	// need to print '' chars
+//		(tagStyle == TagStyle.html) ? text : text.toXml
 	}
 }
 
