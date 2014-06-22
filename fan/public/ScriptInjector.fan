@@ -5,10 +5,10 @@ using afBedSheet
 ** (Service) - Injects Script tags into your page.
 const mixin ScriptInjector {
 	
-	abstract ScriptInjector addScript(Str script, Str? type := null)
-	abstract ScriptInjector addScriptFromExternalUrl(Uri scriptUrl)
-	abstract ScriptInjector addScriptFromClientUrl(Uri scriptUrl)
-	abstract ScriptInjector addScriptFromServerFile(File scriptFile)
+	abstract ScriptInjector add(Str script, Str? type := null)
+	abstract ScriptInjector addFromExternalUrl(Uri scriptUrl)
+	abstract ScriptInjector addFromClientUrl(Uri scriptUrl)
+	abstract ScriptInjector addFromServerFile(File scriptFile)
 }
 
 internal const class ScriptInjectorImpl : ScriptInjector {
@@ -18,7 +18,7 @@ internal const class ScriptInjectorImpl : ScriptInjector {
 	
 	new make(|This|in) { in(this) }
 	
-	override ScriptInjector addScript(Str script, Str? type := null) {
+	override ScriptInjector add(Str script, Str? type := null) {
 		type 	= type ?: "text/javascript"
 		attr 	:= """type="${type.toXml}" """ 
 		element := HtmlElement("script", attr) 
@@ -27,17 +27,18 @@ internal const class ScriptInjectorImpl : ScriptInjector {
 		return this		
 	}
 	
-	override ScriptInjector addScriptFromExternalUrl(Uri scriptUrl) {
-		// TODO: assert url has scheme
-		addScriptFile(scriptUrl)
+	override ScriptInjector addFromExternalUrl(Uri scriptUrl) {
+		if (scriptUrl.host == null)
+			throw ArgErr(ErrMsgs.externalUrlsNeedHost(scriptUrl))
+		return addScriptFile(scriptUrl)
 	}
 
-	override ScriptInjector addScriptFromClientUrl(Uri scriptUrl) {
+	override ScriptInjector addFromClientUrl(Uri scriptUrl) {
 		scriptFile := fileHandler.fromClientUrl(scriptUrl)
-		return addScriptFromServerFile(scriptFile)		
+		return addFromServerFile(scriptFile)		
 	}
 
-	override ScriptInjector addScriptFromServerFile(File scriptFile) {
+	override ScriptInjector addFromServerFile(File scriptFile) {
 		scriptUrl := fileHandler.fromServerFile(scriptFile)	// this add any ColdFeet digests
 		return addScriptFile(scriptUrl)		
 	}

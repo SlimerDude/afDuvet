@@ -1,6 +1,8 @@
 
-** Defines the ending style rendered tags should have: HTML, XHTML or XML. 
-public enum class TagStyle {
+** Defines the ending style rendered tags should have: HTML, XHTML or XML.
+** 
+** Nicked from 'Slim'. 
+internal enum class TagStyle {
 	
 	** Dictates that all [void elements]`http://www.w3.org/html/wg/drafts/html/master/syntax.html#void-elements` such as 
 	** 'meta', 'br' and 'input' are printed without an end tag:
