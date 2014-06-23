@@ -6,7 +6,6 @@ internal const class DuvetResponseProcessor : ResponseProcessor {
 	@Inject private const HtmlInjector	htmlInjector
 	@Inject private const HttpResponse 	httpResponse
 	
-	@Inject private const ScriptInjector	scriptInjector
 	@Inject private const ScriptModules		scriptModules
 	@Inject private const Require			require
 	
@@ -34,13 +33,15 @@ internal const class DuvetResponseProcessor : ResponseProcessor {
 			html.insert(index, htmlInjector.printHead(tagStyle))
 			
 			
-			config := Str:Obj?[:]
+			config := Str:Obj?[:] { ordered = true }
 			config["baseUrl"] = "/modules"
 			config["waitSeconds"] = 300
+			config["xhtml"] = (tagStyle != TagStyle.html)
+			config["skipDataMain"] = true
 			scriptModules.addConfig(config)
 			args := util::JsonOutStream.writeJsonToStr(config)
 			script := "requirejs.config(${args});"
-			requireConfig := HtmlElement("script", """type="text/javascript" """).add(HtmlText(script)).print(tagStyle)
+			requireConfig := HtmlElement("script").set("type", "text/javascript").add(HtmlText(script)).print(tagStyle)
 			
 			// TODO: make sure it finds the *last* occurrence
 			matcher = "(?i)</body>".toRegex.matcher(html.toStr)

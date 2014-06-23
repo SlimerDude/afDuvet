@@ -4,7 +4,7 @@ using afBedSheet
 
 internal class T_AppModule {
 	
-	@Inject private StylesheetInjector? cssInjector
+	@Inject private HtmlInjector? injector
 	
 	@Contribute { serviceId="Routes" }
 	static Void contributeRoutes(OrderedConfig conf) {
@@ -13,12 +13,12 @@ internal class T_AppModule {
 	}
 	
 	Text getHtml() {
-		cssInjector.addFromExternalUrl(`http://www.example.com/dude.css`)
+		injector.injectStylesheet.fromExternalUrl(`http://www.example.com/dude.css`)
 		return Text.fromHtml ("<html><head><title> HTML Test</title></head><body>body body body</body></html>")
 	}
 
 	Text getXml() {
-		cssInjector.addFromExternalUrl(`http://www.example.com/dude.css`)
+		injector.injectStylesheet.fromExternalUrl(`http://www.example.com/dude.css`)
 		return Text.fromXhtml("<html><head><title> HTML Test</title></head><body>body body body</body></html>")
 	}
 }
