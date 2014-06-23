@@ -1,7 +1,7 @@
 using afIoc
 using afIocConfig
 
-@NoDoc	// dont' overwhelm the masses! 
+@NoDoc	// Don't overwhelm the masses! 
 const class ScriptModules {
 	@Inject @Config 
 	private const Uri		requireBaseUrl
@@ -9,9 +9,9 @@ const class ScriptModules {
 	private const Str:Uri	modulePaths
 	
 	new make(ScriptModule[] modules, |This|in) {
+		in(this)
 		this.shimConfigs = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToShim(config) }
 		this.modulePaths = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToPath(config, requireBaseUrl) }
-		in(this)
 	}
 	
 	Str:Obj? addConfig(Str:Obj? config) {

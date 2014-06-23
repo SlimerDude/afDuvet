@@ -9,7 +9,7 @@ mixin HtmlNode {
 
 @NoDoc
 class HtmlElement : HtmlNode {
-	private Str name
+	Str name
 	private Str:Str 	attrs	:= Str:Str[:] { ordered = true}
 	private HtmlNode[]	nodes	:= [,]
 	
@@ -79,18 +79,22 @@ class HtmlConditional : HtmlNode {
 		nodes.add(node)
 		return this
 	}
+
+	internal HtmlElement? content() {
+		return (nodes.size == 1 && nodes.first is HtmlElement) ? nodes.first : null
+	}
 	
 	@NoDoc
 	override internal Str print(TagStyle tagStyle) {
 		str := Str.defVal
 		
 		if (condition != null)
-			str += "<!--[${condition.toXml}]>\n"
+			str += "<!--[${condition.toXml}]>"
 		
-		str += nodes.join("\n") { it.print(tagStyle) }
+		str += nodes.join(Str.defVal) { it.print(tagStyle).trim }
 		
 		if (condition != null)
-			str += "<![endif]-->\n"
+			str += "<![endif]-->"
 
 		return str
 	}

@@ -25,7 +25,7 @@ internal class TestRequireJsScript : DuvetTest {
 		index = html.index("<script type=\"text/javascript\">requirejs.config(")
 		verifyNotNull(index)
 
-		index = html.index("<script type=\"text/javascript\">require([\"dude\"], function(module){ });</script>", index)
+		index = html.index("<script type=\"text/javascript\">require([\"dude\"], function (module) { });</script>", index)
 		verifyNotNull(index)
 	}
 }

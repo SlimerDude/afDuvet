@@ -10,6 +10,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 	@Inject private const LocalList		headTags
 	@Inject private const LocalList		bodyTags
 	@Inject private const LocalRef		requireRequired
+	@Inject private const LocalList		scriptSrcs
+	@Inject private const LocalList		linkHrefs
 	@Inject private const Log			log
 	@Inject @Config private const Uri	requireJsUrl
 	@Inject @Config private const Uri	requireBaseUrl
@@ -20,6 +22,9 @@ internal const class DuvetProcessor : ResponseProcessor {
 	}
 	
 	override Obj process(Obj response) {
+		headTags.list = headTags.list.exclude { isDup(it) }
+		bodyTags.list = bodyTags.list.exclude { isDup(it) }
+		
 		text 		:= (Text) response
 		html 		:= StrBuf(text.text.size).add(text.text)
 		tagStyle	:= findTagStyle(text.contentType)
@@ -32,7 +37,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 				html.insert(endOfHead, headTags)
 				
 				// recalculate where the body ends
-				endOfBody += headTags.size
+				if (endOfBody != null)
+					endOfBody += headTags.size
 			}
 			
 			if (!bodyTags.isEmpty && endOfBody != null) {
@@ -85,7 +91,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 	private Int? findEndOfHead(Str html) {
 		matcher := "(?i)</head>".toRegex.matcher(html.toStr)
 		if (!matcher.find) {
-			log.warn(LogMsgs.canNotFindEndOfHead)
+			log.warn(LogMsgs.canNotFindHead)
 			return null
 		}
 		return matcher.start(0)		
@@ -94,7 +100,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 	private Int? findEndOfBody(Str html) {
 		matcher := "(?i)</body>".toRegex.matcher(html.toStr)
 		if (!matcher.find) {
-			log.warn(LogMsgs.canNotFindEndOfBody)
+			log.warn(LogMsgs.canNotFindBody)
 			return null
 		}
 		return matcher.start(0)		
@@ -113,5 +119,35 @@ internal const class DuvetProcessor : ResponseProcessor {
 		args	:= util::JsonOutStream.writeJsonToStr(config)
 		script	:= "requirejs.config(${args});"
 		return HtmlElement("script").set("type", "text/javascript").add(HtmlText(script))		
+	}
+	
+	private Bool isDup(HtmlNode? node) {
+		if (node is HtmlConditional) {
+			cond := (HtmlConditional) node
+			node = cond.content
+		}
+
+		if (node isnot HtmlElement)
+			return false
+		
+		element := (HtmlElement) node
+		
+		if (element.name.lower == "script") {
+			src := element["src"]
+			if (scriptSrcs.list.contains(src))
+				return true
+			scriptSrcs.add(src)
+			return false
+		}
+		
+		if (element.name.lower == "link") {
+			href := element["href"]
+			if (linkHrefs.list.contains(href))
+				return true
+			linkHrefs.add(href)
+			return false
+		}
+		
+		return false
 	}
 }
