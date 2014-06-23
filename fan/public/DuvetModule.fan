@@ -7,8 +7,6 @@ const class DuvetModule {
 	static Void bind(ServiceBinder binder) {
 		
 		binder.bind(HtmlInjector#).withoutProxy		// got internal methods
-		binder.bind(ScriptInjector#).withoutProxy
-		binder.bind(StylesheetInjector#)
 		binder.bind(ScriptModules#)
 
 		binder.bind(Require#)

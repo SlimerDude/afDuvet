@@ -46,10 +46,15 @@ class ScriptModule {
 		return this
 	}
 	
-	This at(Uri clientUrl) {
-		this.atUrl = clientUrl
+	This at(Uri url) {
+		this.atUrl = url
 		if (this.atUrl.ext == "js")
 			this.atUrl = this.atUrl.toStr[0..<-3].toUri
+		return this
+	}
+	
+	This fallbackTo(Uri localUrl) {
+		// FIXME: http://requirejs.org/docs/api.html#pathsfallbacks
 		return this
 	}
 
@@ -74,10 +79,4 @@ class ScriptModule {
 	}
 	
 }
-class A {
-	Void main() {
-		echo( `/modules`.relTo(`/scripts/quiery.js`)  )
-		echo( `/scripts/quiery.js`.relTo(`/modules`)  )
-	}
-	
-}
+

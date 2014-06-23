@@ -4,14 +4,14 @@ using afBedSheet
 using util
 
 const class Require {
-	@Inject private const ScriptInjector	scriptInjector
-	@Inject private const LocalList			requires
+	@Inject private const HtmlInjector	injector
+	@Inject private const LocalList		requires
 	
 	new make(|This|in) { in(this) }
 
 	Void invokeFunc(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null) {
 		// FIXME: adding require script
-		scriptInjector.addFromClientUrl(`/scripts/require-2.1.14.js`)
+		injector.injectScript.fromClientUrl(`/scripts/require-2.1.14.js`)
 		
 //		invoker := ScriptInvoker(moduleId) {
 //			it.funcName = funcName
@@ -24,7 +24,7 @@ const class Require {
 	Void require(Str:Str scriptParams, Str script) {
 		
 		// FIXME: adding require script
-		scriptInjector.addFromClientUrl(`/scripts/require-2.1.14.js`)
+		injector.injectScript.fromClientUrl(`/scripts/require-2.1.14.js`)
 		
 		invoker := ScriptInvoker(scriptParams, script)
 		requires.add(invoker)
@@ -33,8 +33,9 @@ const class Require {
 	
 	internal Str printBody(TagStyle tagStyle) {
 		script	:= requires.list.join("\n") { it->toScript }
-		element := HtmlElement("script", """type="text/javascript" """).add(HtmlText(script))
-		return element.print(tagStyle)
+//		element := HtmlElement("script", """type="text/javascript" """).add(HtmlText(script))
+//		return element.print(tagStyle)
+		return ""
 	}
 }
 
