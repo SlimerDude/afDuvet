@@ -43,7 +43,7 @@ const mixin HtmlInjector {
 	** will render the following tag:
 	** 
 	**   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	abstract ScriptTagBuilder injectScript()
+	abstract ScriptTagBuilder injectScript(Bool appendToHead := false)
 
 	** Wraps the 'script' in a function call to [RequireJS]`http://requirejs.org/`, ensuring the given module dependencies are available.  
 	** 
@@ -118,12 +118,15 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 	}
 
 	override LinkTagBuilder injectStylesheet() {
-		injectLink.withType(MimeType("text/css")).withRel("stylesheet")
+		injectLink.withRel("stylesheet").withType(MimeType("text/css"))
 	}
 
-	override ScriptTagBuilder injectScript() {
+	override ScriptTagBuilder injectScript(Bool inHead := false) {
 		bob := (ScriptTagBuilder) registry.autobuild(ScriptTagBuilder#)
-		appendToBody(bob.htmlNode)
+		if (inHead)
+			appendToHead(bob.htmlNode)
+		else
+			appendToBody(bob.htmlNode)
 		return bob
 	}
 	
