@@ -55,6 +55,13 @@ class ScriptTagBuilder {
 		element["id"] = id
 		return this
 	}
+
+	** Sets the contents of the script tag.
+	** Returns 'this'.
+	ScriptTagBuilder withScript(Str script) {
+		element.add(HtmlText(script))
+		return this
+	}
 	
 	** Sets the 'async' attribute to 'true'.
 	** Returns 'this'.

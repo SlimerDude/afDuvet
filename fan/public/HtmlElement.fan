@@ -10,8 +10,8 @@ mixin HtmlNode {
 @NoDoc
 class HtmlElement : HtmlNode {
 	private Str name
-	private Str:Str attrs
-	private HtmlNode[] nodes := [,]
+	private Str:Str 	attrs	:= Str:Str[:] { ordered = true}
+	private HtmlNode[]	nodes	:= [,]
 	
 	new make(Str name, |This|? in := null) {
 		this.name = name.trim
@@ -58,8 +58,7 @@ class HtmlText : HtmlNode {
 
 	@NoDoc
 	override internal Str print(TagStyle tagStyle) {
-		text	// need to print '' chars
-//		(tagStyle == TagStyle.html) ? text : text.toXml
+		text
 	}
 }
 
@@ -85,12 +84,12 @@ class HtmlConditional : HtmlNode {
 	override internal Str print(TagStyle tagStyle) {
 		str := Str.defVal
 		
-		if (condition == null)
+		if (condition != null)
 			str += "<!--[${condition.toXml}]>\n"
 		
 		str += nodes.join("\n") { it.print(tagStyle) }
 		
-		if (condition == null)
+		if (condition != null)
 			str += "<![endif]-->\n"
 
 		return str
