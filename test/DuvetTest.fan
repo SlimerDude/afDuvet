@@ -5,13 +5,20 @@ internal class DuvetTest : Test {
 	BedClient? client
 	
 	override Void setup() {
-		server := BedServer(T_AppModule#).addModule(DuvetModule#).startup
+		startBedSheet(null)
+	}
+
+	Void startBedSheet(Type? appModule) {
+		bob := BedServer(DuvetModule#)
+		if (appModule != null)
+			bob.addModule(appModule)
+		server := bob.startup
 		server.injectIntoFields(this)
 		client = server.makeClient
 	}
 	
 	override Void teardown() {
-		client.shutdown
+		client?.shutdown
 	}
 	
 	Void verifyErrMsg(Type errType, Str errMsg, |Test| c) {
