@@ -1,12 +1,15 @@
 using afIoc
 using afIocConfig
+using afBedSheet
 
 @NoDoc	// Don't overwhelm the masses! 
 const class ScriptModules {
 	@Inject @Config 
-	private const Uri		requireBaseUrl
-	private const Str:Obj	shimConfigs
-	private const Str:Uri	modulePaths
+	private const Uri			requireBaseUrl
+	private const Str:Obj		shimConfigs
+	private const Str:Uri		modulePaths
+//	@Inject
+//	private const FileHandler	fileHandler
 	
 	new make(ScriptModule[] modules, |This|in) {
 		in(this)
@@ -22,5 +25,3 @@ const class ScriptModules {
 		return config
 	}
 }
-
-

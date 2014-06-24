@@ -31,6 +31,7 @@ const class DuvetModule {
 		config[DuvetConfigIds.requireBaseUrl]	= `/modules/`
 		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require.js`
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
+		config[DuvetConfigIds.requireTimeout]	= 15sec
 	}
 	
 	@Contribute { serviceType=RegistryStartup# }
@@ -56,6 +57,10 @@ const class DuvetModule {
 			requireJsFile := (File) iocConfig.get(DuvetConfigIds.requireJsFile, File#)
 			if (!requireJsFile.exists)
 				throw ParseErr(ErrMsgs.requireJsLibNoExist(requireJsFile))
+			
+			requireTimeout := (Duration?) iocConfig.get(DuvetConfigIds.requireTimeout, Duration?#)
+			if (requireTimeout != null && requireTimeout < 0ms)
+				throw ParseErr(ErrMsgs.requireTimeoutMustBePositive(requireTimeout))
 		}
 	}
 }

@@ -1,5 +1,5 @@
 
-** [IocConfig]`http://www.fantomfactory.org/pods/afIocConfig` values for 'Duvet'.
+** [IoC Config]`http://www.fantomfactory.org/pods/afIocConfig` values for 'Duvet'.
 const class DuvetConfigIds {
 	
 	** The base URL from where [RequireJS]`http://requirejs.org/` / AMD modules are loaded. 
@@ -22,4 +22,10 @@ const class DuvetConfigIds {
 	** Defaults to '`fan://afDuvet/res/require-2.1.14.js`.get'.
 	static const Str requireJsFile	:= "afDuvet.requireJsFile"
 	
+	** How long RequireJs waits before giving up on loading a script. 
+	** Setting it to '0' or 'null' disables the timeout.
+	** Equates to the [waitSeconds]`http://requirejs.org/docs/api.html#config-waitSeconds` config option.
+	**
+	** Defaults to '15sec'.
+	static const Str requireTimeout	:= "afDuvet.requireTimeout"
 }

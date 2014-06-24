@@ -1,3 +1,4 @@
+using afBedSheet
 
 ** Module configuration for those that do not conform to AMD specification. 
 ** Contribute instances to 'ScriptModules'.
@@ -78,6 +79,7 @@ class ScriptModule {
 		return shim
 	}
 
+//	internal Str:Obj? addToPath(Str:Obj? paths, Uri baseUrl, FileHandler fileHandler) {
 	internal Str:Obj? addToPath(Str:Obj? paths, Uri baseUrl) {
 		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }.map { relToBase(it, baseUrl).toStr }
 		if (urls.size == 1)
