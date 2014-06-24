@@ -1,16 +1,16 @@
-## Overview
+## Overview 
 
 *Duvet is a support library that aids Alien-Factory in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.*
 
-Something soft and comfortable to wrap your Javascript up in!
-
-`Duvet` provides a means to inject HTML into you web page after its been rendered.
+`Duvet` provides a means to inject HTML into you web page after its been rendered, but before it is streamed to the browser.
 
 `Duvet` also provides a wrapper around [RequireJS](http://requirejs.org/) giving you clean dependency management for your Javascript libraries.
 
-> Using AMD modules is like having an IoC for Javascript! It gives you a warm, fuzzy feeling all over so I called it...
+#### Why Duvet? 
 
-## Install
+Embracing RequireJs and AMD modules is like having an IoC for Javascript; and using it gives you a warm, fuzzy feeling all over!
+
+## Install 
 
 Install `Duvet` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
@@ -20,11 +20,11 @@ To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan
 
     depends = ["sys 1.0", ..., "afDuvet 0.0+"]
 
-## Documentation
+## Documentation 
 
 Full API & fandocs are available on the [Status302 repository](http://repo.status302.com/doc/afDuvet/).
 
-## Quick Start
+## Quick Start 
 
 1). Create a text file called `Example.fan`:
 
@@ -89,9 +89,9 @@ Bed App 'Unknown' listening on http://localhost:8080/
 
 ![Duvet Example - Screenshot](http://static.alienfactory.co.uk/fantom-docs/afDuvet.exampleScreenshot.png)
 
-## Usage
+## Usage 
 
-### HTML Injection
+### HTML Injection 
 
 It is good practice to componentise your web pages (something that [efanXtra](http://www.fantomfactory.org/pods/efanXtra) excels at).
 
@@ -109,7 +109,7 @@ No fear, `HtmlInjector` silently rejects all stylesheet and script requests for 
 
 `HtmlInjector` works by wrapping BedSheet's `TextResponseProcessor`. All requests for injection are queued up and then, just before the page is streamed to the browser, the HTML tags are injected.
 
-### RequireJS
+### RequireJS 
 
 Looking after countless Javascript libraries, ensuring they all get loaded quickly and in the correct order can be a pain. [RequireJS](http://requirejs.org/), an asynchronous module loader for Javascript, not only eases that pain; but gives you proper dependency management for your libraries.
 
@@ -128,7 +128,7 @@ Now you can use `HtmlInjector.injectRequireScript()` to inject and run small scr
 
 Remember, most of your code should be in modules. The modules should then expose a mini-API (well, return an object!) that you can call with `HtmlInjector.injectRequireCall()`. This is a handy method that converts all given arguments into JSON.
 
-### Module Config
+### Module Config 
 
 Not all popular Javascript libraries are AMD modules, unfortunately, so these require a little configuration to get working. Configuration is done by contributing [ScriptModule](http://repo.status302.com/doc/afDuvet/ScriptModule.html) instances.
 
