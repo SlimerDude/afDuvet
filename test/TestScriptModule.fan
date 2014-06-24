@@ -1,4 +1,12 @@
 
+internal class TestScriptModuleWithIoc : DuvetTest {
+	
+	Void testEmptyShim() {
+		shim := ScriptModule("wotever").addToShim([:])
+		verify(shim.isEmpty)
+	}
+}
+
 internal class TestScriptModule : DuvetTest {
 	
 	override Void setup() { }
