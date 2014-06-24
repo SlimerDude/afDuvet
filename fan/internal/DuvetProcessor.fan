@@ -110,7 +110,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 		config := Str:Obj?[:] { ordered = true }
 		
 		config["baseUrl"] 		= requireBaseUrl.toStr
-		config["waitSeconds"]	= 300
+		config["waitSeconds"]	= 5
 		config["xhtml"] 		= (tagStyle != TagStyle.html)
 		config["skipDataMain"]	= true
 		

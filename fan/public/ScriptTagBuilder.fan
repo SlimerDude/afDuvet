@@ -28,8 +28,9 @@ class ScriptTagBuilder {
 	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	ScriptTagBuilder fromClientUrl(Uri scriptUrl) {
-		scriptFile := fileHandler.fromClientUrl(scriptUrl)
-		return fromServerFile(scriptFile)		
+		fileAsset := fileHandler.fromLocalUrl(scriptUrl)	// this adds any ColdFeet digests
+		element["src"] = fileAsset.clientUrl.toStr
+		return this		
 	}
 
 	** Creates a 'src' URL attribute from the given file. 
@@ -37,8 +38,8 @@ class ScriptTagBuilder {
 	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	ScriptTagBuilder fromServerFile(File scriptFile) {
-		scriptUrl := fileHandler.fromServerFile(scriptFile)	// this add any ColdFeet digests
-		element["src"] = scriptUrl.toStr
+		fileAsset := fileHandler.fromServerFile(scriptFile)	// this adds any ColdFeet digests
+		element["src"] = fileAsset.clientUrl.toStr
 		return this		
 	}
 	

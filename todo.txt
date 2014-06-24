@@ -2,6 +2,11 @@
 For 1.0.0
 =========
 
+cold feet adviseFileHandler configId, update example
+
+article / docs
+
+http://getfishtank.ca/blog/how-to-use-bootstrap-3-with-requirejs
 
 
 For Future

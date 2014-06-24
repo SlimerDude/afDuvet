@@ -38,11 +38,13 @@ const mixin HtmlInjector {
 
 	** Injects a '<script>' element into the bottom of your body. Example:
 	** 
-	**   injectScript.fromExternalUrl(`//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js`)
+	**   injectScript.fromExternalUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
 	** 
 	** will render the following tag:
 	** 
-	**   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	**   <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+	** 
+	** *Consider using [RequireJS]`http://requirejs.org/` AMD modules instead!*
 	abstract ScriptTagBuilder injectScript(Bool appendToHead := false)
 
 	** Wraps the 'script' in a function call to [RequireJS]`http://requirejs.org/`, ensuring the given module dependencies are available.  

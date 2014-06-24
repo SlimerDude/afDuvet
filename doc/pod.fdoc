@@ -6,13 +6,19 @@ Something soft and comfortable to wrap your Javascript up in!
 
 Install [#Install]
 ******************
-Install 'Duvet' with the Fantom Repository Manager ( [fanr]`http://fantom.org/doc/docFanr/Tool.html#install` ):
+Install '@{project.name}' with the Fantom Repository Manager ( [fanr]`docFanr::Tool.install` ):
 
-  C:\> fanr install -r http://repo.status302.com/fanr/ afDuvet
+  C:\> fanr install -r http://repo.status302.com/fanr/ @{pod.name}
 
 To use in a [Fantom]`http://fantom.org/` project, add a dependency to 'build.fan':
 
-  depends = ["sys 1.0", ..., "afDuvet 0+"]
+  depends = ["sys 1.0", ..., "@{pod.name} @{pod.version}+"]
+
+
+
+Documentation [#documentation]
+******************************
+Full API & fandocs are available on the [Status302 repository]`http://repo.status302.com/doc/@{pod.name}/`.
 
 
 
@@ -23,8 +29,13 @@ pre>
 <pre
 
 
+Usage [#usage]
+**************
+
 Explain Html injection, why needed from a component point of view.
 
+
+RequireJs
 
 
 Release Notes [#releaseNotes]

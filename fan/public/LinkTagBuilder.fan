@@ -29,8 +29,9 @@ class LinkTagBuilder {
 	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	LinkTagBuilder fromClientUrl(Uri scriptUrl) {
-		scriptFile := fileHandler.fromClientUrl(scriptUrl)
-		return fromServerFile(scriptFile)		
+		fileAsset := fileHandler.fromLocalUrl(scriptUrl)	// this adds any ColdFeet digests
+		element["href"] = fileAsset.clientUrl.toStr
+		return this		
 	}
 
 	** Creates a 'href' URL attribute from the given file. 
@@ -38,8 +39,8 @@ class LinkTagBuilder {
 	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	LinkTagBuilder fromServerFile(File scriptFile) {
-		scriptUrl := fileHandler.fromServerFile(scriptFile)	// this add any ColdFeet digests
-		element["href"] = scriptUrl.toStr
+		fileAsset := fileHandler.fromServerFile(scriptFile)	// this add any ColdFeet digests
+		element["href"] = fileAsset.clientUrl.toStr
 		return this		
 	}
 	
