@@ -45,14 +45,14 @@ class ScriptModule {
 	** If the module can not be found under the [baseUrl]`DuvetConfigIds#requireBaseUrl` then this dictates where it can be downloaded from.
 	** May be an external or local URL.
 	This atUrl(Uri moduleUrl) {
-		this._primaryUrl = removeJsExt(moduleUrl)
+		this._primaryUrl = moduleUrl
 		return this
 	}
 	
 	** Dictates an [alternative location for the module]`http://requirejs.org/docs/api.html#pathsfallbacks` should the primary download fail. 
 	** May be an external or local URL.
 	This fallbackToUrl(Uri moduleUrl) {
-		this._fallabackUrl = removeJsExt(moduleUrl)
+		this._fallabackUrl = moduleUrl
 		return this
 	}
 	
@@ -79,9 +79,8 @@ class ScriptModule {
 		return shim
 	}
 
-//	internal Str:Obj? addToPath(Str:Obj? paths, Uri baseUrl, FileHandler fileHandler) {
-	internal Str:Obj? addToPath(Str:Obj? paths, Uri baseUrl) {
-		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }.map { relToBase(it, baseUrl).toStr }
+	internal Str:Obj? addToPath(Str:Obj? paths, Uri baseUrl, FileHandler? fileHandler := null) {
+		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }.map { relToBase(it, baseUrl, fileHandler) }.map { removeJsExt(it).toStr }
 		if (urls.size == 1)
 			paths[moduleId] = urls.first
 		if (urls.size == 2)
@@ -95,7 +94,9 @@ class ScriptModule {
 		return url
 	}
 
-	private Uri relToBase(Uri url, Uri baseUrl) {
-		(url.host == null) ? url.relTo(baseUrl) : url
+	private Uri relToBase(Uri url, Uri baseUrl, FileHandler? fileHandler) {
+		(url.host == null)
+			? ((fileHandler == null) ? url.relTo(baseUrl) : fileHandler.fromLocalUrl(url).clientUrl)
+			: url
 	}
 }
