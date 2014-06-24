@@ -5,7 +5,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afDuvet"
 		summary = "Something soft and comfortable to wrap your Javascript up in!"
-		version = Version("0.0.1")
+		version = Version("0.0.2")
 
 		meta = [
 			"proj.name"		: "Duvet",
@@ -29,11 +29,11 @@ class Build : BuildPod {
 			"afIocConfig 1.0.8+",
 			
 			// ---- Web -------------------------
-			"afBedSheet 1.3.8+",
+			"afBedSheet 1.3.10+",
 			
 			// ---- Test ------------------------
-			"afButter 1.0.0+",
-			"afBounce 1.0.4+"
+			"afBounce 1.0.4+",
+			"afButter 1.0.0+"
 		]
 		
 		
