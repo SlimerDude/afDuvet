@@ -2,7 +2,8 @@
 For 1.0.0
 =========
 
-cold feet adviseFileHandler configId, update example
+scriptmodules to use filehandler / cold feet strat 
+
 
 article / docs
 
