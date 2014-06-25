@@ -127,7 +127,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 		
 		args	:= util::JsonOutStream.writeJsonToStr(config)
 		script	:= "requirejs.config(${args});"
-		return HtmlElement("script").set("type", "text/javascript").add(HtmlText(script))		
+		return HtmlElement("script").set("type", "text/javascript").add(HtmlText(script))
 	}
 	
 	private Bool isDup(HtmlNode? node) {
@@ -143,6 +143,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 		
 		if (element.name.lower == "script") {
 			src := element["src"]
+			if (src == null)
+				return false
 			if (scriptSrcs.list.contains(src))
 				return true
 			scriptSrcs.add(src)
@@ -151,6 +153,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 		
 		if (element.name.lower == "link") {
 			href := element["href"]
+			if (href == null)
+				return false
 			if (linkHrefs.list.contains(href))
 				return true
 			linkHrefs.add(href)

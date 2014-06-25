@@ -192,6 +192,7 @@ Release Notes [#releaseNotes]
 v0.0.4 [#v0.0.4]
 ----------------
  - New: Added 'DuvetMiddleware' to rollback / remove any HTML injections if an Err occurs. This prevents old code being injected into Err pages.
+ - Bug: Could not inject multiple scripts without a src atrribute.
 
 v0.0.2 [#v0.0.2]
 ----------------
