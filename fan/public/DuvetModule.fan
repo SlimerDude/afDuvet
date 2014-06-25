@@ -19,6 +19,11 @@ const class DuvetModule {
 		config.setOverride(Text#, duvetProcessor, "afDuvet.TextProcessor")
 	}
 
+	@Contribute { serviceType=MiddlewarePipeline# }
+	static Void contributeMiddlewarePipeline(OrderedConfig conf) {
+		conf.addOrdered("Duvet", conf.autobuild(DuvetMiddleware#), ["before: Routes"])
+	}
+	
 	@Contribute { serviceId="Routes" }
 	static Void contributeRoutes(OrderedConfig conf, IocConfigSource iocConfig) {
 		requireJsUrl	:= (Uri)  iocConfig.get(DuvetConfigIds.requireJsUrl,  Uri#)

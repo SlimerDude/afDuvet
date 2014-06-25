@@ -47,10 +47,13 @@ class Example {
 
         // inject a RequireJS script snippet
         // this ensures all dependencies are loaded before execution
-        injector.injectRequireScript(["jquery":"\$"], "alert('jQuery v' + \$().jquery);")
+        injector.injectRequireScript(["jquery":"\$"],
+            "alert('jQuery v' + \$().jquery);")
 
         // let Duvet inject all it needs into a plain HTML shell
-        return Text.fromHtml("<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>")
+        return Text.fromHtml(
+            "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
+        )
     }
 }
 
@@ -64,7 +67,9 @@ class AppModule {
     @Contribute { serviceType=ScriptModules# }
     static Void contributeScriptModules(OrderedConfig config) {
         // configure any non-standard AMD modules
-        config.add(ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`))
+        config.add(
+            ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
+        )
     }
 }
 
@@ -167,8 +172,16 @@ syntax: fantom
 
 @Contribute { serviceType=ScriptModules# }
 static Void contributeScriptModules(OrderedConfig config) {
-    config.add(ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`).fallbackToUrl(`/scripts/jquery-2.1.1.min.js`))
-    config.add(ScriptModule("bootstrap").atUrl(`/scripts/bootstrap.min.js`).requires("jquery"))
+    config.add(
+        ScriptModule("jquery")
+            .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
+            .fallbackToUrl(`/scripts/jquery-2.1.1.min.js`)
+    )
+    config.add(
+        ScriptModule("bootstrap")
+            .atUrl(`/scripts/bootstrap.min.js`)
+            .requires("jquery")
+    )
 }
 <pre
 
@@ -176,7 +189,11 @@ static Void contributeScriptModules(OrderedConfig config) {
 
 Release Notes [#releaseNotes]
 *****************************
+v0.0.4 [#v0.0.4]
+----------------
+ - New: Added 'DuvetMiddleware' to rollback / remove any HTML injections if an Err occurs. This prevents old code being injected into Err pages.
 
 v0.0.2 [#v0.0.2]
 ----------------
  - New: Preview release.
+
