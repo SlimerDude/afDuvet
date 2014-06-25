@@ -42,10 +42,13 @@ class Example {
 
         // inject a RequireJS script snippet
         // this ensures all dependencies are loaded before execution
-        injector.injectRequireScript(["jquery":"\$"], "alert('jQuery v' + \$().jquery);")
+        injector.injectRequireScript(["jquery":"\$"],
+            "alert('jQuery v' + \$().jquery);")
 
         // let Duvet inject all it needs into a plain HTML shell
-        return Text.fromHtml("<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>")
+        return Text.fromHtml(
+            "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
+        )
     }
 }
 
@@ -59,7 +62,9 @@ class AppModule {
     @Contribute { serviceType=ScriptModules# }
     static Void contributeScriptModules(OrderedConfig config) {
         // configure any non-standard AMD modules
-        config.add(ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`))
+        config.add(
+            ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
+        )
     }
 }
 
@@ -139,8 +144,16 @@ Here's a working example from the Fantom-Factory website:
 ```
 @Contribute { serviceType=ScriptModules# }
 static Void contributeScriptModules(OrderedConfig config) {
-    config.add(ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`).fallbackToUrl(`/scripts/jquery-2.1.1.min.js`))
-    config.add(ScriptModule("bootstrap").atUrl(`/scripts/bootstrap.min.js`).requires("jquery"))
+    config.add(
+        ScriptModule("jquery")
+            .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
+            .fallbackToUrl(`/scripts/jquery-2.1.1.min.js`)
+    )
+    config.add(
+        ScriptModule("bootstrap")
+            .atUrl(`/scripts/bootstrap.min.js`)
+            .requires("jquery")
+    )
 }
 ```
 

@@ -62,6 +62,14 @@ internal const class DuvetProcessor : ResponseProcessor {
 		return true
 	}
 	
+	Void clear() {
+		headTags.clear
+		bodyTags.clear
+		requireRequired.cleanUp
+		scriptSrcs.clear
+		linkHrefs.clear
+	}
+
 	This appendToHead(HtmlNode node) {
 		headTags.add(node)
 		return this
