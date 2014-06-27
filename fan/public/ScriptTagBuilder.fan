@@ -5,6 +5,7 @@ using afBedSheet
 ** 
 ** @see `https://developer.mozilla.org/en/docs/Web/HTML/Element/script` 
 class ScriptTagBuilder {
+	
 	@Inject private	FileHandler	fileHandler
 			private	HtmlElement	element
 	
@@ -27,7 +28,7 @@ class ScriptTagBuilder {
 	** The URL **must** be mapped by BedSheet's 'FileHandler' service.
 	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
-	ScriptTagBuilder fromClientUrl(Uri scriptUrl) {
+	ScriptTagBuilder fromLocalUrl(Uri scriptUrl) {
 		fileAsset := fileHandler.fromLocalUrl(scriptUrl)	// this adds any ColdFeet digests
 		element["src"] = fileAsset.clientUrl.toStr
 		return this		
