@@ -189,6 +189,11 @@ static Void contributeScriptModules(OrderedConfig config) {
 
 Release Notes [#releaseNotes]
 *****************************
+v0.0.6 [#v0.0.6]
+----------------
+ - Chg: Renamed 'LinkTagBuilder.fromClientUrl()'   -> 'fromLocalUrl()' to match BedSheet 'FileHandler'.
+ - Chg: Renamed 'ScriptTagBuilder.fromClientUrl()' -> 'fromLocalUrl()' to match BedSheet 'FileHandler'.
+
 v0.0.4 [#v0.0.4]
 ----------------
  - New: Added 'DuvetMiddleware' to rollback / remove any HTML injections if an Err occurs. This prevents old code being injected into Err pages.

@@ -5,6 +5,7 @@ using afBedSheet
 ** 
 ** @see `https://developer.mozilla.org/en/docs/Web/HTML/Element/link` 
 class LinkTagBuilder {
+	
 	@Inject private	FileHandler		fileHandler
 			private	HtmlElement		element
 			private	HtmlConditional	ieConditional
@@ -28,7 +29,7 @@ class LinkTagBuilder {
 	** The URL **must** be mapped by BedSheet's 'FileHandler' service.
 	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
-	LinkTagBuilder fromClientUrl(Uri scriptUrl) {
+	LinkTagBuilder fromLocalUrl(Uri scriptUrl) {
 		fileAsset := fileHandler.fromLocalUrl(scriptUrl)	// this adds any ColdFeet digests
 		element["href"] = fileAsset.clientUrl.toStr
 		return this		
