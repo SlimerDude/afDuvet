@@ -189,6 +189,10 @@ static Void contributeScriptModules(OrderedConfig config) {
 
 Release Notes [#releaseNotes]
 *****************************
+v0.0.8 [#v0.0.8]
+----------------
+ - XXX:
+
 v0.0.6 [#v0.0.6]
 ----------------
  - Chg: Renamed 'LinkTagBuilder.fromClientUrl()'   -> 'fromLocalUrl()' to match BedSheet 'FileHandler'.
