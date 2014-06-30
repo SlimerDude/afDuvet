@@ -6,7 +6,6 @@ using afConcurrent
 internal const class DuvetProcessor : ResponseProcessor {
 
 	@Inject private const HttpResponse 	httpResponse
-	@Inject private const FileHandler	fileHandler
 	@Inject private const ScriptModules	scriptModules
 	@Inject private const LocalList		headTags
 	@Inject private const LocalList		bodyTags
@@ -49,8 +48,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 					config := requireJsConfig(tagStyle)
 					bodyTags.list.insert(0, config)
 					
-					rjClientUrl	:= fileHandler.fromLocalUrl(requireJsUrl).clientUrl.toStr
-					requireJs 	:= HtmlElement("script").set("type", "text/javascript").set("src", rjClientUrl)
+					// can't use FileHandler / ColdFeet for requireJs because it is served up directly, not mapped to the file system.
+					requireJs := HtmlElement("script").set("type", "text/javascript").set("src", requireJsUrl.toStr)
 					bodyTags.list.insert(0, requireJs)
 				}
 				
