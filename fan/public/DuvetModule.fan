@@ -30,7 +30,13 @@ const class DuvetModule {
 		requireJsFile	:= (File) iocConfig.get(DuvetConfigIds.requireJsFile, File#)
 		conf.add(Route(requireJsUrl, requireJsFile))
 	}
-	
+
+	@Contribute { serviceType=ScriptModules# }
+	static Void contributeScriptModules(OrderedConfig config) {
+		modulePaths := (ModulePaths) config.autobuild(ModulePaths#)
+		config.addOrdered("ModulePathOptimizations", modulePaths.scriptModules)
+	}
+
 	@Contribute { serviceType=FactoryDefaults# }
 	static Void contributeFactoryDefaults(MappedConfig config) {
 		config[DuvetConfigIds.requireBaseUrl]	= `/modules/`
@@ -38,7 +44,7 @@ const class DuvetModule {
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireTimeout]	= 15sec
 	}
-	
+
 	@Contribute { serviceType=RegistryStartup# }
 	static Void contributeRegistryStartup(OrderedConfig conf, IocConfigSource iocConfig) {
 		conf.addOrdered("afDuvet.validateConfig") |->| {

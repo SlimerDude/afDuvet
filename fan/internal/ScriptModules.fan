@@ -11,8 +11,9 @@ const class ScriptModules {
 	@Inject
 	private const FileHandler	fileHandler
 	
-	new make(ScriptModule[] modules, |This|in) {
+	new make(Obj[] objs, |This|in) {
 		in(this)
+		modules := (ScriptModule[]) objs.flatten
 		this.shimConfigs = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToShim(config) }
 		this.modulePaths = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToPath(config, requireBaseUrl, fileHandler) }
 	}

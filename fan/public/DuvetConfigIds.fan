@@ -28,4 +28,5 @@ const class DuvetConfigIds {
 	**
 	** Defaults to '15sec'.
 	static const Str requireTimeout	:= "afDuvet.requireTimeout"
+
 }

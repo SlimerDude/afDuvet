@@ -191,7 +191,7 @@ Release Notes [#releaseNotes]
 *****************************
 v0.0.8 [#v0.0.8]
 ----------------
- - XXX:
+ - New: User defined modules in '`/modules/`' automatically have their asset caching strategy URLs added the RequireJS paths config.
 
 v0.0.6 [#v0.0.6]
 ----------------
