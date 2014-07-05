@@ -26,7 +26,7 @@ internal const class ModulePaths {
 		return moduleMap(requireBaseUrl, baseDir).reduce([,]) |ScriptModule[] modules, localUrl, moduleId| {
 			clientUrl 	:= fileHandler.fromLocalUrl(localUrl).clientUrl
 			module		:= ScriptModule(moduleId).atUrl(localUrl)	// let the paths service convert localUrls into clientUrls
-			return (clientUrl == localUrl) ? module : modules.add(module)
+			return (clientUrl == localUrl) ? modules : modules.add(module)
 		}
 	}
 

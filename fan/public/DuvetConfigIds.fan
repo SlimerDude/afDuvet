@@ -1,3 +1,4 @@
+using afIocConfig
 
 ** [IoC Config]`http://www.fantomfactory.org/pods/afIocConfig` values for 'Duvet'.
 const class DuvetConfigIds {
@@ -29,4 +30,29 @@ const class DuvetConfigIds {
 	** Defaults to '15sec'.
 	static const Str requireTimeout	:= "afDuvet.requireTimeout"
 
+	internal static Void validateConfig(IocConfigSource iocConfig) {
+		requireBaseUrl := (Uri) iocConfig.get(DuvetConfigIds.requireBaseUrl, Uri#)
+		if (!requireBaseUrl.isPathOnly)
+			throw ParseErr(ErrMsgs.urlMustBePathOnly("Module Base", requireBaseUrl, `/modules/`))
+		if (!requireBaseUrl.isPathAbs)
+			throw ParseErr(ErrMsgs.urlMustStartWithSlash("Module Base", requireBaseUrl, `/modules/`))
+		if (!requireBaseUrl.isDir)
+			throw ParseErr(ErrMsgs.urlMustNotEndWithSlash("Module Base", requireBaseUrl, `/modules/`))
+		
+		requireJsUrl := (Uri) iocConfig.get(DuvetConfigIds.requireJsUrl, Uri#)
+		if (!requireJsUrl.isPathOnly)
+			throw ParseErr(ErrMsgs.urlMustBePathOnly("RequireJS", requireJsUrl, `/scripts/require.js`))
+		if (!requireJsUrl.isPathAbs)
+			throw ParseErr(ErrMsgs.urlMustStartWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
+		if (requireJsUrl.isDir)
+			throw ParseErr(ErrMsgs.urlMustEndWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
+		
+		requireJsFile := (File) iocConfig.get(DuvetConfigIds.requireJsFile, File#)
+		if (!requireJsFile.exists)
+			throw ParseErr(ErrMsgs.requireJsLibNoExist(requireJsFile))
+		
+		requireTimeout := (Duration?) iocConfig.get(DuvetConfigIds.requireTimeout, Duration?#)
+		if (requireTimeout != null && requireTimeout < 0ms)
+			throw ParseErr(ErrMsgs.requireTimeoutMustBePositive(requireTimeout))		
+	}
 }

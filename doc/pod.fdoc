@@ -189,6 +189,11 @@ static Void contributeScriptModules(OrderedConfig config) {
 
 Release Notes [#releaseNotes]
 *****************************
+v0.0.10 [#v0.0.10]
+------------------
+ - New: RequireJS script has cache control / expires headers that expire in 1 year.
+ - Bug: Problems with contributing user modules.
+
 v0.0.8 [#v0.0.8]
 ----------------
  - New: User defined modules in '`/modules/`' automatically have their asset caching strategy URLs added the RequireJS paths config.
