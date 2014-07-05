@@ -14,7 +14,7 @@ const class DuvetConfigIds {
 	** The URL that the [RequireJS]`http://requirejs.org/` library will be served under. 
 	** Override it should it conflict with an existing BedSheet Route.
 	** 
-	** Defaults to '`/scripts/require.js`'.
+	** Defaults to '`/scripts/require-2.1.14.js`'.
 	static const Str requireJsUrl	:= "afDuvet.requireJsUrl"
 	
 	** The file that will be served under the [RequireJS]`http://requirejs.org/` URL. 
