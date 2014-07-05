@@ -14,6 +14,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 	@Inject private const LocalList		linkHrefs
 	@Inject private const Log			log
 	@Inject @Config private const Uri		requireJsUrl
+	@Inject @Config private const File		requireJsFile
 	@Inject @Config private const Uri		requireBaseUrl
 	@Inject @Config private const Duration?	requireTimeout
 	
@@ -61,6 +62,14 @@ internal const class DuvetProcessor : ResponseProcessor {
 		httpResponse.headers.contentType = text.contentType
 		httpResponse.out.print(html.toStr)
 		return true
+	}
+
+	File routeRequireJs() {
+		// let it expire in 1 year, as per www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
+		expiry := 365day
+		httpResponse.headers.expires = DateTime.now + expiry 
+		httpResponse.headers.cacheControl = "max-age=${expiry.toSec}" 
+		return requireJsFile
 	}
 	
 	Void clear() {

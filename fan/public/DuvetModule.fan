@@ -26,21 +26,21 @@ const class DuvetModule {
 	
 	@Contribute { serviceId="Routes" }
 	static Void contributeRoutes(OrderedConfig conf, IocConfigSource iocConfig) {
-		requireJsUrl	:= (Uri)  iocConfig.get(DuvetConfigIds.requireJsUrl,  Uri#)
-		requireJsFile	:= (File) iocConfig.get(DuvetConfigIds.requireJsFile, File#)
-		conf.add(Route(requireJsUrl, requireJsFile))
+		requireJsUrl := (Uri)  iocConfig.get(DuvetConfigIds.requireJsUrl,  Uri#)
+		conf.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
 	}
 
 	@Contribute { serviceType=ScriptModules# }
 	static Void contributeScriptModules(OrderedConfig config) {
 		modulePaths := (ModulePaths) config.autobuild(ModulePaths#)
-		config.addOrdered("ModulePathOptimizations", modulePaths.scriptModules)
+		mods := modulePaths.scriptModules
+		config.addOrdered("ModulePathOptimizations", mods)
 	}
 
 	@Contribute { serviceType=FactoryDefaults# }
 	static Void contributeFactoryDefaults(MappedConfig config) {
 		config[DuvetConfigIds.requireBaseUrl]	= `/modules/`
-		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require.js`
+		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.1.14.js`
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireTimeout]	= 15sec
 	}
@@ -48,30 +48,7 @@ const class DuvetModule {
 	@Contribute { serviceType=RegistryStartup# }
 	static Void contributeRegistryStartup(OrderedConfig conf, IocConfigSource iocConfig) {
 		conf.addOrdered("afDuvet.validateConfig") |->| {
-
-			requireBaseUrl := (Uri) iocConfig.get(DuvetConfigIds.requireBaseUrl, Uri#)
-			if (!requireBaseUrl.isPathOnly)
-				throw ParseErr(ErrMsgs.urlMustBePathOnly("Module Base", requireBaseUrl, `/modules/`))
-			if (!requireBaseUrl.isPathAbs)
-				throw ParseErr(ErrMsgs.urlMustStartWithSlash("Module Base", requireBaseUrl, `/modules/`))
-			if (!requireBaseUrl.isDir)
-				throw ParseErr(ErrMsgs.urlMustNotEndWithSlash("Module Base", requireBaseUrl, `/modules/`))
-			
-			requireJsUrl := (Uri) iocConfig.get(DuvetConfigIds.requireJsUrl, Uri#)
-			if (!requireJsUrl.isPathOnly)
-				throw ParseErr(ErrMsgs.urlMustBePathOnly("RequireJS", requireJsUrl, `/scripts/require.js`))
-			if (!requireJsUrl.isPathAbs)
-				throw ParseErr(ErrMsgs.urlMustStartWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
-			if (requireJsUrl.isDir)
-				throw ParseErr(ErrMsgs.urlMustEndWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
-			
-			requireJsFile := (File) iocConfig.get(DuvetConfigIds.requireJsFile, File#)
-			if (!requireJsFile.exists)
-				throw ParseErr(ErrMsgs.requireJsLibNoExist(requireJsFile))
-			
-			requireTimeout := (Duration?) iocConfig.get(DuvetConfigIds.requireTimeout, Duration?#)
-			if (requireTimeout != null && requireTimeout < 0ms)
-				throw ParseErr(ErrMsgs.requireTimeoutMustBePositive(requireTimeout))
+			DuvetConfigIds.validateConfig(iocConfig)
 		}
 	}
 }

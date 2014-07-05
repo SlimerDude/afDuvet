@@ -11,8 +11,12 @@ internal class TestRequireJsScript : DuvetTest {
 	}
 	
 	Void testDownloadUrl() {
-		requireJs := client.get(requireJsUrl).asStr
+		res 		:= client.get(requireJsUrl)
+		requireJs	:= res.asStr
 		verify(requireJs.contains("RequireJS 2.1.14 Copyright (c) 2010-2014, The Dojo Foundation All Rights Reserved."))
+		
+		// don't care so much for when it expires, just that it does.
+		verify(res.headers.expires > DateTime.now)
 	}
 
 	Void testRequireLibInHtml() {
