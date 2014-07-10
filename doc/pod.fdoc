@@ -189,6 +189,10 @@ static Void contributeScriptModules(OrderedConfig config) {
 
 Release Notes [#releaseNotes]
 *****************************
+v0.0.12 [#v0.0.12]
+------------------
+ - New: Added 'MetaTagBuilder.withProperty()' for adding [Open Graph]`http://ogp.me/` meta.
+
 v0.0.10 [#v0.0.10]
 ------------------
  - New: RequireJS script has cache control / expires headers that expire in 1 year.
