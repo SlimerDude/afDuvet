@@ -23,6 +23,13 @@ class MetaTagBuilder {
 		return this
 	}
 	
+	** Sets the 'property' attribute.
+	** Returns 'this'.
+	MetaTagBuilder withProperty(Str property) {
+		element["property"] = property
+		return this
+	}
+	
 	** Sets the 'lang' attribute.
 	** Returns 'this'.
 	MetaTagBuilder withLang(Str lang) {

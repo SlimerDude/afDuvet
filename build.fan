@@ -5,7 +5,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afDuvet"
 		summary = "Something soft and comfortable to wrap your Javascript up in!"
-		version = Version("0.0.11")
+		version = Version("0.0.13")
 
 		meta = [
 			"proj.name"		: "Duvet",
@@ -18,7 +18,7 @@ class Build : BuildPod {
 		index = [	
 			"afIoc.module"	: "afDuvet::DuvetModule"
 		]
-
+ 
 		depends = [
 			"sys 1.0",
 			"util 1.0",
