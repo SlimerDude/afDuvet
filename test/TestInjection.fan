@@ -54,8 +54,8 @@ internal class TestInjection : DuvetTest {
 internal class T_AppModule01 {
 	@Inject private HtmlInjector? injector
 	
-	@Contribute { serviceId="Routes" }
-	static Void contributeRoutes(OrderedConfig conf) {
+	@Contribute { serviceType=Routes# }
+	static Void contributeRoutes(Configuration conf) {
 		conf.add(Route(`/html`,		#getHtml))
 		conf.add(Route(`/xml`,		#getXml ))
 		conf.add(Route(`/noHead`,	#noHead ))

@@ -65,10 +65,10 @@ class ScriptTagBuilder {
 		return this
 	}
 	
-	** Sets the 'async' attribute to 'true'.
+	** Sets the 'async' attribute to 'async'; the XHTML value, accepted by HTML.
 	** Returns 'this'.
 	ScriptTagBuilder async() {
-		element["async"] = "true"
+		element["async"] = "async"
 		return this
 	}
 	

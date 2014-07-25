@@ -65,7 +65,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 	}
 
 	File routeRequireJs() {
-		// let it expire in 1 year, as per www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
+		// let it expire in 1 year, as per http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21
 		expiry := 365day
 		httpResponse.headers.expires = DateTime.now + expiry 
 		httpResponse.headers.cacheControl = "max-age=${expiry.toSec}" 

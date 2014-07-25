@@ -15,30 +15,30 @@ const class DuvetModule {
 	}
 
 	@Contribute { serviceType=ResponseProcessors# }
-	internal static Void contributeResponseProcessors(MappedConfig config, DuvetProcessor duvetProcessor) {
-		config.setOverride(Text#, duvetProcessor, "afDuvet.TextProcessor")
+	internal static Void contributeResponseProcessors(Configuration config, DuvetProcessor duvetProcessor) {
+		config.overrideValue(Text#, duvetProcessor, "afDuvet.textProcessor")
 	}
 
 	@Contribute { serviceType=MiddlewarePipeline# }
-	static Void contributeMiddlewarePipeline(OrderedConfig conf) {
-		conf.addOrdered("Duvet", conf.autobuild(DuvetMiddleware#), ["before: Routes"])
+	static Void contributeMiddlewarePipeline(Configuration conf) {
+		conf.set("afDuvet", conf.autobuild(DuvetMiddleware#)).before("afBedSheet.routes")
 	}
 	
-	@Contribute { serviceId="Routes" }
-	static Void contributeRoutes(OrderedConfig conf, IocConfigSource iocConfig) {
+	@Contribute { serviceType=Routes# }
+	static Void contributeRoutes(Configuration conf, IocConfigSource iocConfig) {
 		requireJsUrl := (Uri)  iocConfig.get(DuvetConfigIds.requireJsUrl,  Uri#)
 		conf.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
 	}
 
 	@Contribute { serviceType=ScriptModules# }
-	static Void contributeScriptModules(OrderedConfig config) {
+	static Void contributeScriptModules(Configuration config) {
 		modulePaths := (ModulePaths) config.autobuild(ModulePaths#)
 		mods := modulePaths.scriptModules
-		config.addOrdered("ModulePathOptimizations", mods)
+		config["ModulePathOptimizations"] = mods
 	}
 
 	@Contribute { serviceType=FactoryDefaults# }
-	static Void contributeFactoryDefaults(MappedConfig config) {
+	static Void contributeFactoryDefaults(Configuration config) {
 		config[DuvetConfigIds.requireBaseUrl]	= `/modules/`
 		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.1.14.js`
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
@@ -46,8 +46,8 @@ const class DuvetModule {
 	}
 
 	@Contribute { serviceType=RegistryStartup# }
-	static Void contributeRegistryStartup(OrderedConfig conf, IocConfigSource iocConfig) {
-		conf.addOrdered("afDuvet.validateConfig") |->| {
+	static Void contributeRegistryStartup(Configuration conf, IocConfigSource iocConfig) {
+		conf["afDuvet.validateConfig"] = |->| {
 			DuvetConfigIds.validateConfig(iocConfig)
 		}
 	}

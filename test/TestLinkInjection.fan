@@ -40,8 +40,8 @@ internal class TestLinkInjection : DuvetTest {
 internal class T_AppModule04 {
 	@Inject private HtmlInjector? injector
 	
-	@Contribute { serviceId="Routes" }
-	static Void contributeRoutes(OrderedConfig conf) {
+	@Contribute { serviceType=Routes# }
+	static Void contributeRoutes(Configuration conf) {
 		conf.add(Route(`/twoSame`,		#twoSame))
 		conf.add(Route(`/twoDiff`,		#twoDiff))
 		conf.add(Route(`/conditional`,	#conditional))

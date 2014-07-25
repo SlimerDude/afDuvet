@@ -60,12 +60,12 @@ class Example {
 @SubModule { modules=[DuvetModule#] }
 class AppModule {
     @Contribute { serviceType=Routes# }
-    static Void contributeRoutes(OrderedConfig conf) {
+    static Void contributeRoutes(Configuration conf) {
         conf.add(Route(`/`, Example#duvetExample))
     }
 
     @Contribute { serviceType=ScriptModules# }
-    static Void contributeScriptModules(OrderedConfig config) {
+    static Void contributeScriptModules(Configuration config) {
         // configure any non-standard AMD modules
         config.add(
             ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
@@ -144,7 +144,7 @@ pre>
 syntax: fantom
 
 @Contribute { serviceType=FileHandler# }
-static Void contributeFileHandler(MappedConfig config) {
+static Void contributeFileHandler(Configuration config) {
     config[`/modules/`] = `etc/web/modules/or/wherever`
 }
 <pre
@@ -171,7 +171,7 @@ pre>
 syntax: fantom
 
 @Contribute { serviceType=ScriptModules# }
-static Void contributeScriptModules(OrderedConfig config) {
+static Void contributeScriptModules(Configuration config) {
     config.add(
         ScriptModule("jquery")
             .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
@@ -189,6 +189,11 @@ static Void contributeScriptModules(OrderedConfig config) {
 
 Release Notes [#releaseNotes]
 *****************************
+v0.0.14 [#v0.0.14]
+------------------
+ - Chg: Updated to [IoC 1.7.2]`pod:afIoc`.
+ - Bug: Script 'async' attribute incorrectly had the value of 'true' (should have been 'async').
+
 v0.0.12 [#v0.0.12]
 ------------------
  - New: Added 'MetaTagBuilder.withProperty()' for adding [Open Graph]`http://ogp.me/` meta.
