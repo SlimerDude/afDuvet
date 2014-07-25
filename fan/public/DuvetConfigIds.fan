@@ -37,7 +37,7 @@ const class DuvetConfigIds {
 		if (!requireBaseUrl.isPathAbs)
 			throw ParseErr(ErrMsgs.urlMustStartWithSlash("Module Base", requireBaseUrl, `/modules/`))
 		if (!requireBaseUrl.isDir)
-			throw ParseErr(ErrMsgs.urlMustNotEndWithSlash("Module Base", requireBaseUrl, `/modules/`))
+			throw ParseErr(ErrMsgs.urlMustEndWithSlash("Module Base", requireBaseUrl, `/modules/`))
 		
 		requireJsUrl := (Uri) iocConfig.get(DuvetConfigIds.requireJsUrl, Uri#)
 		if (!requireJsUrl.isPathOnly)
@@ -45,7 +45,7 @@ const class DuvetConfigIds {
 		if (!requireJsUrl.isPathAbs)
 			throw ParseErr(ErrMsgs.urlMustStartWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
 		if (requireJsUrl.isDir)
-			throw ParseErr(ErrMsgs.urlMustEndWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
+			throw ParseErr(ErrMsgs.urlMustNotEndWithSlash("RequireJS", requireJsUrl, `/scripts/require.js`))
 		
 		requireJsFile := (File) iocConfig.get(DuvetConfigIds.requireJsFile, File#)
 		if (!requireJsFile.exists)

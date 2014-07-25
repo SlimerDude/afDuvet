@@ -9,39 +9,38 @@ internal class TestScriptInjection : DuvetTest {
 		startBedSheet(T_AppModule03#)
 	}
 
-//	Void testExternalUrls() {
-//		// these are fine
-//		injector.injectScript.fromExternalUrl(`http://example.com/wotever.css`)
-//		injector.injectScript.fromExternalUrl(`//example.com/wotever.css`)
-//		
-//		// these are not
-//		verifyErrMsg(ArgErr#, ErrMsgs.externalUrlsNeedHost(`/wotever.css`)) {
-//			injector.injectScript.fromExternalUrl(`/wotever.css`)
-//		}
-//		verifyErrMsg(ArgErr#, ErrMsgs.externalUrlsNeedHost(`dude/wotever.css`)) {
-//			injector.injectScript.fromExternalUrl(`dude/wotever.css`)
-//		}
-//	}
-//	
-//	Void testHeadBodyInjection() {
-//		html := client.get(`/head`).asStr
-//		verifyEq(html, "<html><head>\n<script type=\"text/javascript\"></script>\n</head><body></body></html>")
-//
-//		html  = client.get(`/body`).asStr
-//		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\"></script>\n</body></html>")
-//	}
-//	
-//	Void testMultipleScripts() {
-//		html := client.get(`/twoDiff`).asStr
-//		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example1.com/\"></script>\n<script type=\"text/javascript\" src=\"//example2.com/\"></script>\n</body></html>")
-//
-//		html  = client.get(`/twoSame`).asStr
-//		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example.com/\"></script>\n</body></html>")
-//	}
+	Void testExternalUrls() {
+		// these are fine
+		injector.injectScript.fromExternalUrl(`http://example.com/wotever.css`)
+		injector.injectScript.fromExternalUrl(`//example.com/wotever.css`)
+		
+		// these are not
+		verifyErrMsg(ArgErr#, ErrMsgs.externalUrlsNeedHost(`/wotever.css`)) {
+			injector.injectScript.fromExternalUrl(`/wotever.css`)
+		}
+		verifyErrMsg(ArgErr#, ErrMsgs.externalUrlsNeedHost(`dude/wotever.css`)) {
+			injector.injectScript.fromExternalUrl(`dude/wotever.css`)
+		}
+	}
+	
+	Void testHeadBodyInjection() {
+		html := client.get(`/head`).asStr
+		verifyEq(html, "<html><head>\n<script type=\"text/javascript\"></script>\n</head><body></body></html>")
+
+		html  = client.get(`/body`).asStr
+		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\"></script>\n</body></html>")
+	}
+	
+	Void testMultipleScripts() {
+		html := client.get(`/twoDiff`).asStr
+		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example1.com/\"></script>\n<script type=\"text/javascript\" src=\"//example2.com/\"></script>\n</body></html>")
+
+		html  = client.get(`/twoSame`).asStr
+		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example.com/\"></script>\n</body></html>")
+	}
 
 	Void testMultipleScriptsWithNoSrcAttribute() {
 		html := client.get(`/twoNoSrc`).asStr
-		Env.cur.err.printLine(html)
 		verify(html.contains("alert(1)"))
 		verify(html.contains("alert(2)"))
 	}
@@ -50,8 +49,8 @@ internal class TestScriptInjection : DuvetTest {
 internal class T_AppModule03 {
 	@Inject private HtmlInjector? injector
 	
-	@Contribute { serviceId="Routes" }
-	static Void contributeRoutes(OrderedConfig conf) {
+	@Contribute { serviceType=Routes# }
+	static Void contributeRoutes(Configuration conf) {
 		conf.add(Route(`/head`,		#head))
 		conf.add(Route(`/body`, 	#body))
 		conf.add(Route(`/twoSame`,	#twoSame))
