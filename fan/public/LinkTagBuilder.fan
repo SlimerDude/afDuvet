@@ -18,10 +18,10 @@ class LinkTagBuilder {
 	
 	** Sets the 'href' attribute to an external URL.
 	** Returns 'this'.
-	LinkTagBuilder fromExternalUrl(Uri scriptUrl) {
-		if (scriptUrl.host == null)
-			throw ArgErr(ErrMsgs.externalUrlsNeedHost(scriptUrl))
-		element["href"] = scriptUrl.toStr
+	LinkTagBuilder fromExternalUrl(Uri externalUrl) {
+		if (externalUrl.host == null)
+			throw ArgErr(ErrMsgs.externalUrlsNeedHost(externalUrl))
+		element["href"] = externalUrl.toStr
 		return this
 	}
 
@@ -29,8 +29,8 @@ class LinkTagBuilder {
 	** The URL **must** be mapped by BedSheet's 'FileHandler' service.
 	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
-	LinkTagBuilder fromLocalUrl(Uri scriptUrl) {
-		fileAsset := fileHandler.fromLocalUrl(scriptUrl)	// this adds any ColdFeet digests
+	LinkTagBuilder fromLocalUrl(Uri localUrl) {
+		fileAsset := fileHandler.fromLocalUrl(localUrl)	// this adds any ColdFeet digests
 		element["href"] = fileAsset.clientUrl.toStr
 		return this		
 	}
@@ -39,8 +39,8 @@ class LinkTagBuilder {
 	** The file **must** exist on the file system and be mapped by BedSheet's 'FileHandler' service.
 	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
-	LinkTagBuilder fromServerFile(File scriptFile) {
-		fileAsset := fileHandler.fromServerFile(scriptFile)	// this add any ColdFeet digests
+	LinkTagBuilder fromServerFile(File serverFile) {
+		fileAsset := fileHandler.fromServerFile(serverFile)	// this add any ColdFeet digests
 		element["href"] = fileAsset.clientUrl.toStr
 		return this		
 	}
