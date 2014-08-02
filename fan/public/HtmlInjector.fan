@@ -1,4 +1,5 @@
 using afIoc
+using afBedSheet
 using util
 
 ** (Service) - Injects HTML elements into your page.
@@ -89,6 +90,11 @@ const mixin HtmlInjector {
 	** 
 	** Note that 'funcArgs' are converted into JSON; which is really useful, as it means *you* don't have to!
 	abstract ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null)
+
+	
+//	abstract ScriptTagBuilder[] injectFantomPods(Str pods)
+	// TODO: func args?
+	abstract ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null)
 	
 	** Appends the given 'HtmlNode' to the bottom of the head section.
 	** Returns 'this'.
@@ -104,6 +110,7 @@ const mixin HtmlInjector {
 internal const class HtmlInjectorImpl : HtmlInjector {
 	@Inject private const Registry			registry
 	@Inject private const DuvetProcessor	duvetProcessor
+	@Inject private const FileHandler		fileHandler
 	
 	new make(|This|in) { in(this) }
 	
@@ -141,6 +148,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		return injectScript.withScript(body)
 	}
 	
+	// FIXME: rename --> injectRequireModule()
 	override ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null) {
 		fCall := Str.defVal
 		if (funcName != null || funcArgs != null) {
@@ -149,6 +157,30 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 			fCall  = "module${fName}(${fArgs});"
 		}
 		return injectRequireScript([moduleId:"module"], fCall)
+	}
+	
+	
+//	override ScriptTagBuilder[] injectFantomPods(Str pods) {
+//		return pods.split.map |podName->ScriptTagBuilder| {
+//			return injectRequireCall(podName)
+//		}
+//	}
+	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null) {
+		podName := method.parent.pod.name
+		params := [podName:"_${podName}"]
+		
+		script := 
+		"// find main
+		 var qname = '$method.qname';
+		 var dot = qname.indexOf('.');
+		 if (dot < 0) qname += '.main';
+		 var main = fan.sys.Slot.findMethod(qname);
+
+		 // invoke main
+		 if (main.isStatic()) main.call();
+		 else main.callOn(main.parent().make());"
+
+		return injectRequireScript(params, script)
 	}
 	
 	override HtmlInjector appendToHead(HtmlNode node) {

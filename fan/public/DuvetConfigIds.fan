@@ -3,13 +3,16 @@ using afIocConfig
 ** [IoC Config]`http://www.fantomfactory.org/pods/afIocConfig` values for 'Duvet'.
 const class DuvetConfigIds {
 	
-	** The base URL from where [RequireJS]`http://requirejs.org/` / AMD modules are loaded. 
+	** The base URL (local to BedSheet) where [RequireJS]`http://requirejs.org/` / AMD modules are loaded from. 
 	** It should be mapped by BedSheet's 'FileHandler' service as this is where you save your Javascript modules.
 	**   
 	** Override this URL should it conflict with an existing BedSheet Route.
 	** 
 	** Defaults to '`/modules/`'.
-	static const Str requireBaseUrl	:= "afDuvet.requireBaseUrl"
+	static const Str baseModuleUrl	:= "afDuvet.baseModuleUrl"
+
+	// FIXME: doc basePodUrl
+	static const Str basePodUrl		:= "afDuvet.basePodUrl"
 	
 	** The URL that the [RequireJS]`http://requirejs.org/` library will be served under. 
 	** Override it should it conflict with an existing BedSheet Route.
@@ -28,16 +31,16 @@ const class DuvetConfigIds {
 	** Equates to the [waitSeconds]`http://requirejs.org/docs/api.html#config-waitSeconds` config option.
 	**
 	** Defaults to '15sec'.
-	static const Str requireTimeout	:= "afDuvet.requireTimeout"
+	static const Str requireJsTimeout	:= "afDuvet.requireJsTimeout"
 
 	internal static Void validateConfig(IocConfigSource iocConfig) {
-		requireBaseUrl := (Uri) iocConfig.get(DuvetConfigIds.requireBaseUrl, Uri#)
-		if (!requireBaseUrl.isPathOnly)
-			throw ParseErr(ErrMsgs.urlMustBePathOnly("Module Base", requireBaseUrl, `/modules/`))
-		if (!requireBaseUrl.isPathAbs)
-			throw ParseErr(ErrMsgs.urlMustStartWithSlash("Module Base", requireBaseUrl, `/modules/`))
-		if (!requireBaseUrl.isDir)
-			throw ParseErr(ErrMsgs.urlMustEndWithSlash("Module Base", requireBaseUrl, `/modules/`))
+		baseModuleUrl := (Uri) iocConfig.get(DuvetConfigIds.baseModuleUrl, Uri#)
+		if (!baseModuleUrl.isPathOnly)
+			throw ParseErr(ErrMsgs.urlMustBePathOnly("Module Base", baseModuleUrl, `/modules/`))
+		if (!baseModuleUrl.isPathAbs)
+			throw ParseErr(ErrMsgs.urlMustStartWithSlash("Module Base", baseModuleUrl, `/modules/`))
+		if (!baseModuleUrl.isDir)
+			throw ParseErr(ErrMsgs.urlMustEndWithSlash("Module Base", baseModuleUrl, `/modules/`))
 		
 		requireJsUrl := (Uri) iocConfig.get(DuvetConfigIds.requireJsUrl, Uri#)
 		if (!requireJsUrl.isPathOnly)
@@ -51,8 +54,8 @@ const class DuvetConfigIds {
 		if (!requireJsFile.exists)
 			throw ParseErr(ErrMsgs.requireJsLibNoExist(requireJsFile))
 		
-		requireTimeout := (Duration?) iocConfig.get(DuvetConfigIds.requireTimeout, Duration?#)
-		if (requireTimeout != null && requireTimeout < 0ms)
-			throw ParseErr(ErrMsgs.requireTimeoutMustBePositive(requireTimeout))		
+		requireJsTimeout := (Duration?) iocConfig.get(DuvetConfigIds.requireJsTimeout, Duration?#)
+		if (requireJsTimeout != null && requireJsTimeout < 0ms)
+			throw ParseErr(ErrMsgs.requireJsTimeoutMustBePositive(requireJsTimeout))		
 	}
 }

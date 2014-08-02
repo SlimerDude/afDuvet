@@ -25,7 +25,7 @@ internal const class ErrMsgs {
 		"RequireJs file '${requireJsFile.normalize}' does not exist!"
 	}
 
-	static Str requireTimeoutMustBePositive(Duration timeout) {
-		"RequireTimeout must be greater than zero - ${timeout}"
+	static Str requireJsTimeoutMustBePositive(Duration timeout) {
+		"requireJsTimeout must be greater than zero - ${timeout}"
 	}
 }
