@@ -2,28 +2,25 @@ using afIoc::Inject
 using afIocConfig::Config
 using afBedSheet
 
-// TODO: maybe convert to const, for kicks!
-internal class PodModules {
+internal const class PodModules {
 	
-	@Inject private const FileHandler		fileHandler
-	@Inject private const BedSheetServer	bedServer
-
 	@Config
 	@Inject private const Uri 				basePodUrl
-
-	private PodModuleCtx	ctx			:= PodModuleCtx()
-	private Pod:Pod[] 		jsDepends	:= Pod:Pod[][:] { ordered = true }
-			File			podDir
+	@Inject private const FileHandler		fileHandler
+	@Inject private const BedSheetServer	bedServer
+			private const Pod:Pod[] 		jsDepends
+					const File				podDir
 
 	new make(|This|in) { 
 		in(this)
 		
 		if (bedServer.appPod == null) return	// TODO: log warning
 		
-		dirName := "${bedServer.appPod.name}-${bedServer.appPod.version}" 
-		podDir  = Env.cur.tempDir.createDir(dirName).deleteOnExit
-
-		addPod(bedServer.appPod)
+		dirName 	:= "${bedServer.appPod.name}-${bedServer.appPod.version}" 
+		podDir  	= Env.cur.tempDir.createDir(dirName).deleteOnExit
+		jsDepends	= addPod(PodModuleCtx(), Pod:Pod[][:] { ordered = true }, bedServer.appPod)
+		
+		copyPods
 	}
 
 	ScriptModule[] scriptModules() {
@@ -34,42 +31,36 @@ internal class PodModules {
 			return module
 		}.vals
 	}
-	
-	private Void addPod(Pod daddyPod) {
+
+	private Void copyPods() {
+		jsDepends.keys.each { createScriptModule(it) }
+	}
+
+	private Pod:Pod[] addPod(PodModuleCtx ctx, Pod:Pod[] jsDepends, Pod daddyPod) {
 		ctx.preventRecursion(daddyPod) |->| {
-			if (isJsPod(daddyPod)) {
+			if (isJsPod(jsDepends, daddyPod)) {
 				deps := jsDepends.getOrAdd(daddyPod) { Pod[,] }
 				daddyPod.depends.map |depend->Pod| { Pod.find(depend.name) }.each |Pod pod| {
-					if (isJsPod(pod) && !deps.contains(pod)) {
+					if (isJsPod(jsDepends, pod) && !deps.contains(pod)) {
 						deps.add(pod)
-						addPod(pod)
+						addPod(ctx, jsDepends, pod)
 					}
 				}
 			}
 		}
+		return jsDepends
 	}
 
-	private Bool isJsPod(Pod pod) {
+	private Bool isJsPod(Pod:Pod[] jsDepends, Pod pod) {
 		if (jsDepends.keys.contains(pod)) return true
-		
 		jsFile := pod.file(`/${pod.name}.js`, false)
-		if (jsFile == null) return false
-		
-		createScriptModule(jsFile)		
-		return true
+		return jsFile != null
 	}
 	
-	private Void createScriptModule(File podJsFile) {
+	private Void createScriptModule(Pod pod) {
+		podJsFile := pod.file(`/${pod.name}.js`, true)
 		jsFile	:= podDir + podJsFile.name.toUri
-		if (jsFile.exists) return
-
-		out	:= jsFile.out(false, 1024)
-		try {
-
-			podJsFile.in(1024).pipe(out)
-			out.flush
-			
-		} finally out.close
+		podJsFile.copyTo(jsFile, ["overwrite":true])
 	}
 }
 
@@ -77,10 +68,7 @@ internal class PodModuleCtx {
 	private Pod[] podStack := Pod[,]
 
 	Void preventRecursion(Pod pod, |->| operation) {
-		if (podStack.contains(pod))	{
-			Env.cur.err.printLine("Recurse prevent ${pod}")
-			return
-		}
+		if (podStack.contains(pod))	return
 		
 		podStack.push(pod)
 		try {
@@ -88,9 +76,5 @@ internal class PodModuleCtx {
 		} finally {			
 			podStack.pop
 		}
-	}	
-	
-	Pod peek() {
-		podStack.peek
 	}
 }
