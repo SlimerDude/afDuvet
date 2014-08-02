@@ -5,7 +5,7 @@ using afBedSheet
 @NoDoc	// Don't overwhelm the masses! 
 const class ScriptModules {
 	@Inject @Config 
-	private const Uri			requireBaseUrl
+	private const Uri			baseModuleUrl
 	private const Str:Obj		shimConfigs
 	private const Str:Uri		modulePaths
 	@Inject
@@ -15,7 +15,7 @@ const class ScriptModules {
 		in(this)
 		modules := (ScriptModule[]) objs.flatten
 		this.shimConfigs = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToShim(config) }
-		this.modulePaths = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToPath(config, requireBaseUrl, fileHandler) }
+		this.modulePaths = modules.reduce(Str:Obj?[:] { ordered = true }) |config, module -> Map| { module.addToPath(config, baseModuleUrl, fileHandler) }
 	}
 	
 	Str:Obj? addConfig(Str:Obj? config) {

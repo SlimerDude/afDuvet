@@ -137,7 +137,7 @@ but gives you proper dependency management for your libraries.
 
 *It's how Javascript should be written!*
 
-All your Javascript modules need to be served from the same [baseUrl]`afDuvet::DuvetConfigIds.requireBaseUrl` which defaults to '`/modules/`',
+All your Javascript modules need to be served from the same [baseUrl]`afDuvet::DuvetConfigIds.baseModuleUrl` which defaults to '`/modules/`',
 so configure BedSheet's 'FileHandler' to serve these files:
 
 pre>

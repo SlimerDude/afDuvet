@@ -15,8 +15,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 	@Inject private const Log			log
 	@Inject @Config private const Uri		requireJsUrl
 	@Inject @Config private const File		requireJsFile
-	@Inject @Config private const Uri		requireBaseUrl
-	@Inject @Config private const Duration?	requireTimeout
+	@Inject @Config private const Uri		baseModuleUrl
+	@Inject @Config private const Duration?	requireJsTimeout
 	
 	new make(|This|in) {
 		in(this)
@@ -128,8 +128,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 	private HtmlNode requireJsConfig(TagStyle tagStyle) {
 		config := Str:Obj?[:] { ordered = true }
 		
-		config["baseUrl"] 		= requireBaseUrl.toStr
-		config["waitSeconds"]	= requireTimeout?.toSec ?: 0
+		config["baseUrl"] 		= baseModuleUrl.toStr
+		config["waitSeconds"]	= requireJsTimeout?.toSec ?: 0
 		config["xhtml"] 		= (tagStyle != TagStyle.html)
 		config["skipDataMain"]	= true
 		
