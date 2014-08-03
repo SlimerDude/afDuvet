@@ -92,9 +92,8 @@ const mixin HtmlInjector {
 	abstract ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null)
 
 	
-//	abstract ScriptTagBuilder[] injectFantomPods(Str pods)
-	// TODO: func args?
-	abstract ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null)
+	// TODO: doc injectFantomMethod
+	abstract ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null, [Str:Str]? env := null)
 	
 	** Appends the given 'HtmlNode' to the bottom of the head section.
 	** Returns 'this'.
@@ -158,29 +157,48 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		}
 		return injectRequireScript([moduleId:"module"], fCall)
 	}
-	
-	
-//	override ScriptTagBuilder[] injectFantomPods(Str pods) {
-//		return pods.split.map |podName->ScriptTagBuilder| {
-//			return injectRequireCall(podName)
-//		}
-//	}
-	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null) {
+
+	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? jsonArgs := null, [Str:Str]? env := null) {
 		podName := method.parent.pod.name
-		params := [podName:"_${podName}"]
+		jsParam	:= [podName:"_${podName}"]
+		
+		params := JsonOutStream.writeJsonToStr(jsonArgs ?: Obj#.emptyList)
+
+		envStr := StrBuf()
+		if (env?.size > 0) {
+			envStr.add("var env = fan.sys.Map.make(fan.sys.Str.\$type, fan.sys.Str.\$type);\n")
+			envStr.add("env.caseInsensitive\$(true);\n")
+			env.each |v, k| {
+				envStr.add("  ")
+				v = v.toCode('\'')
+				// FIXME: grab this from PodHandler
+				if (k == "sys.uriPodBase")
+					envStr.add("fan.sys.UriPodBase = $v;\n")
+				else
+					envStr.add("env.set('$k', $v);\n")
+			}
+			envStr.add("fan.sys.Env.cur().\$setVars(env);\n")
+		}
 		
 		script := 
-		"// find main
+		"
+		 // inject env vars
+		 $envStr.toStr
+		
+		 var args = fan.sys.List.make(fan.sys.Str.\$type, ${params});
+
+		 // find main
 		 var qname = '$method.qname';
 		 var dot = qname.indexOf('.');
 		 if (dot < 0) qname += '.main';
 		 var main = fan.sys.Slot.findMethod(qname);
 
 		 // invoke main
-		 if (main.isStatic()) main.call();
-		 else main.callOn(main.parent().make());"
+		 if (main.isStatic()) main.call(args);
+		 else main.callOn(main.parent().make(), args);
+		 "
 
-		return injectRequireScript(params, script)
+		return injectRequireScript(jsParam, script)
 	}
 	
 	override HtmlInjector appendToHead(HtmlNode node) {
