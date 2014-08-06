@@ -2,7 +2,7 @@ using afIoc
 using afIocConfig
 using afBedSheet
 
-** To disable this feature, remove the 'ModulePathOptimizations' contribution.
+** To disable this feature, remove the 'afDuvet.cacheModuleUrls' contribution from the 'ScriptModules' service.
 internal const class ModulePaths {
 	
 	@Config
@@ -25,7 +25,7 @@ internal const class ModulePaths {
 		
 		return moduleMap(baseModuleUrl, baseDir).reduce([,]) |ScriptModule[] modules, localUrl, moduleId| {
 			clientUrl 	:= fileHandler.fromLocalUrl(localUrl).clientUrl
-			module		:= ScriptModule(moduleId).atUrl(localUrl)	// let the paths service convert localUrls into clientUrls
+			module		:= ScriptModule(moduleId).atUrl(clientUrl)	// create the module just in case
 			return (clientUrl == localUrl) ? modules : modules.add(module)
 		}
 	}

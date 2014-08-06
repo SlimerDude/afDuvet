@@ -11,9 +11,6 @@ const class DuvetConfigIds {
 	** Defaults to '`/modules/`'.
 	static const Str baseModuleUrl	:= "afDuvet.baseModuleUrl"
 
-	// FIXME: doc basePodUrl
-	static const Str basePodUrl		:= "afDuvet.basePodUrl"
-	
 	** The URL that the [RequireJS]`http://requirejs.org/` library will be served under. 
 	** Override it should it conflict with an existing BedSheet Route.
 	** 

@@ -80,8 +80,8 @@ class ScriptModule {
 		return shim
 	}
 
-	internal Str:Obj? addToPath(Str:Obj? paths, Uri baseUrl, FileHandler? fileHandler := null) {
-		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }.map { relToBase(it, baseUrl, fileHandler) }.map { removeJsExt(it).toStr }
+	internal Str:Obj? addToPath(Str:Obj? paths) {
+		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }.map { removeJsExt(it).toStr }
 		if (urls.size == 1)
 			paths[moduleId] = urls.first
 		if (urls.size == 2)
@@ -93,11 +93,5 @@ class ScriptModule {
 		if (url.ext == "js")
 			url = url.toStr[0..<-3].toUri
 		return url
-	}
-
-	private Uri relToBase(Uri url, Uri baseUrl, FileHandler? fileHandler) {
-		(url.host == null)
-			? ((fileHandler == null) ? url.relTo(baseUrl) : fileHandler.fromLocalUrl(url).clientUrl)
-			: url
 	}
 }

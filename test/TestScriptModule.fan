@@ -17,28 +17,23 @@ internal class TestScriptModule : DuvetTest {
 	}
 	
 	Void testOnePath() {
-		paths := ScriptModule("wotever").atUrl(`/primary`).addToPath([:], `/modules/`)
+		paths := ScriptModule("wotever").atUrl(`/primary`).addToPath([:])
 		verifyEq(paths["wotever"], "/primary")
 	}
 	
 	Void testTwoPaths() {
-		paths := ScriptModule("wotever").atUrl(`http://wot.com/ever`).fallbackToUrl(`/primary`).addToPath([:], `/modules/`)
+		paths := ScriptModule("wotever").atUrl(`http://wot.com/ever`).fallbackToUrl(`/primary`).addToPath([:])
 		list := paths["wotever"] as Str[]
 		verifyEq(list[0], "http://wot.com/ever")
 		verifyEq(list[1], "/primary")
 	}
 	
 	Void testJsExtIsRemoved() {
-		paths := ScriptModule("wotever").atUrl(`/primary/script.js`).addToPath([:], `/modules/`)
+		paths := ScriptModule("wotever").atUrl(`/primary/script.js`).addToPath([:])
 		verifyEq(paths["wotever"], "/primary/script")
 
-		paths = ScriptModule("wotever").atUrl(`http://wot.com/ever.js`).addToPath([:], `/modules/`)
+		paths = ScriptModule("wotever").atUrl(`http://wot.com/ever.js`).addToPath([:])
 		verifyEq(paths["wotever"], "http://wot.com/ever")
-	}
-
-	Void testPathIsRelToBase() {
-		paths := ScriptModule("wotever").atUrl(`/modules/sub/script.js`).addToPath([:], `/modules/`)
-		verifyEq(paths["wotever"], "sub/script")
 	}
 
 	Void testExportsShim() {
