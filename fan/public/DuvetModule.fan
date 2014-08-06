@@ -12,8 +12,6 @@ const class DuvetModule {
 		binder.bind(DuvetProcessor#)
 		binder.bind(HtmlInjector#)
 		binder.bind(ScriptModules#)
-
-		binder.bind(PodModules#)	// only used in startup
 	}
 
 	@Contribute { serviceType=ResponseProcessors# }
@@ -32,24 +30,18 @@ const class DuvetModule {
 		conf.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
 	}
 
-	@Contribute { serviceType=FileHandler# }
-	internal static Void contributeFileHandler(Configuration config, IocConfigSource cfgSrc, PodModules podModules) {
-		basePodUrl := (Uri) cfgSrc.get(DuvetConfigIds.basePodUrl, Uri#)
-		config[basePodUrl] = podModules.podDir
-	}
-
 	@Contribute { serviceType=ScriptModules# }
-	internal static Void contributeScriptModules(Configuration config, PodModules podModules) {
+	internal static Void contributeScriptModules(Configuration config) {
 		modulePaths := (ModulePaths) config.autobuild(ModulePaths#)
+		podModules	:= (PodModules)  config.autobuild(PodModules#)
 
-		config["afDuvet.modulePathOptimizations"]	= modulePaths.scriptModules
-		config["afDuvet.fantomPods"] 				= podModules.scriptModules
+		config["afDuvet.cacheModuleUrls"]	= modulePaths.scriptModules
+		config["afDuvet.fantomPods"] 		= podModules.scriptModules
 	}
 
 	@Contribute { serviceType=FactoryDefaults# }
 	static Void contributeFactoryDefaults(Configuration config) {
 		config[DuvetConfigIds.baseModuleUrl]	= `/modules/`
-		config[DuvetConfigIds.basePodUrl]		= `/duvet/pods/`	// FIXME: validate basePodUrl
 		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.1.14.js`
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireJsTimeout]	= 15sec
