@@ -30,7 +30,7 @@ const class DuvetConfigIds {
 	** Defaults to '15sec'.
 	static const Str requireJsTimeout	:= "afDuvet.requireJsTimeout"
 
-	internal static Void validateConfig(IocConfigSource iocConfig) {
+	internal static Void validateConfig(ConfigSource iocConfig) {
 		baseModuleUrl := (Uri) iocConfig.get(DuvetConfigIds.baseModuleUrl, Uri#)
 		if (!baseModuleUrl.isPathOnly)
 			throw ParseErr(ErrMsgs.urlMustBePathOnly("Module Base", baseModuleUrl, `/modules/`))

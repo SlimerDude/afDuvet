@@ -43,7 +43,7 @@ internal class T_AppModule02 {
 	}
 	
 	Text require() {
-		injector.injectRequireCall("dude")
+		injector.injectRequireModule("dude")
 		return Text.fromHtml ("<html><head></head><body></body></html>")
 	}
 }

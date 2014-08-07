@@ -69,7 +69,7 @@ const mixin HtmlInjector {
 	** If the [RequireJS module exposes an object]`http://requirejs.org/docs/api.html#defdep` then a function may be invoked using 'funcName' and 'funcArgs'. 
 	** Example:
 	** 
-	**   injectRequireCall("my/shirt", "addToCart", ["shirt", 1.99f])
+	**   injectRequireModule("my/shirt", "addToCart", ["shirt", 1.99f])
 	** 
 	** will generate:
 	** 
@@ -77,7 +77,7 @@ const mixin HtmlInjector {
 	**     require(["my/shirt"], function (module) { module.addToCart("shirt", 1.99); });
 	**   </script>
 	** 
-	** Or, if the [RequireJS module returns function as its module definition]`http://requirejs.org/docs/api.html#funcmodule` then it may be invoked directly by passing 'null' as the 'funcName'.
+	** Or, if the [RequireJS module returns a function as its module definition]`http://requirejs.org/docs/api.html#funcmodule` then it may be invoked directly by passing 'null' as the 'funcName'.
 	** Example:
 	** 
 	**   injectRequireCall("my/title", null, ["Reduced to Clear!"])
@@ -89,10 +89,32 @@ const mixin HtmlInjector {
 	**   </script>
 	** 
 	** Note that 'funcArgs' are converted into JSON; which is really useful, as it means *you* don't have to!
-	abstract ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null)
+	abstract ScriptTagBuilder injectRequireModule(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null)
 
+	@NoDoc @Deprecated { msg="Use 'injectRequireModule()' instead" }
+	virtual ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null) {
+		injectRequireModule(moduleId, funcName, funcArgs)
+	}
 	
-	// TODO: doc injectFantomMethod
+	** Injects a call to a Fantom method. That's right, this method lets you run Fantom code in your web browser!
+	** 
+	** Because Fantom only compiles classes with the '@Js' facet into Javascript, ensure the method's class has it! 
+	** 
+	** Method arguments are serialised into JSON so only the following types are supported: 'Str, Num, Bool, Map, List, null'
+	** 
+	** 'env' are environment variables passed into the Fantom Javascript runtime.
+	** 
+	** Note that when instantiating an FWT window, by default it takes up the whole browser window. 
+	** To constrain the FWT window to a particular element on the page, pass in the follow environment variable:
+	** 
+	**   "fwt.window.root" : "<element-id>"
+	** 
+	** Where '<element-id>' is the html ID of an element on the page. The FWT window will attach itself to this element.
+	** 
+	** Note that the element needs to specify a width, height and give a CSS position of 'relative'. 
+	** This may either be done in CSS or defined on the element directly:
+	** 
+	**   <div id="fwt-window" style="width: 640px; height:480px; position:relative;"></div>    
 	abstract ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null, [Str:Str]? env := null)
 	
 	** Appends the given 'HtmlNode' to the bottom of the head section.
@@ -109,7 +131,7 @@ const mixin HtmlInjector {
 internal const class HtmlInjectorImpl : HtmlInjector {
 	@Inject private const Registry			registry
 	@Inject private const DuvetProcessor	duvetProcessor
-	@Inject private const FileHandler		fileHandler
+	@Inject private const PodHandler		podHandler
 	
 	new make(|This|in) { in(this) }
 	
@@ -147,8 +169,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		return injectScript.withScript(body)
 	}
 	
-	// FIXME: rename --> injectRequireModule()
-	override ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null) {
+	override ScriptTagBuilder injectRequireModule(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null) {
 		fCall := Str.defVal
 		if (funcName != null || funcArgs != null) {
 			fName := (funcName == null) ? Str.defVal : "." + funcName
@@ -157,21 +178,26 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		}
 		return injectRequireScript([moduleId:"module"], fCall)
 	}
-
+ 
 	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? jsonArgs := null, [Str:Str]? env := null) {
+		if (!method.parent.hasFacet(Js#))
+			throw ArgErr(ErrMsgs.htmlInjector_noJsFacet(method.parent))
+
 		podName := method.parent.pod.name
 		jsParam	:= [podName:"_${podName}"]
 		
-		params := JsonOutStream.writeJsonToStr(jsonArgs ?: Obj#.emptyList)
+		params	:= JsonOutStream.writeJsonToStr(jsonArgs ?: Obj#.emptyList)
+
+		envs	:= env?.rw ?: Str:Str[:] 
+		if (!envs.containsKey("sys.uriPodBase") && podHandler.baseUrl != null)
+			envs["sys.uriPodBase"] = podHandler.baseUrl.toStr
 
 		envStr := StrBuf()
-		if (env?.size > 0) {
+		if (envs?.size > 0) {
 			envStr.add("var env = fan.sys.Map.make(fan.sys.Str.\$type, fan.sys.Str.\$type);\n")
 			envStr.add("env.caseInsensitive\$(true);\n")
-			env.each |v, k| {
-				envStr.add("  ")
+			envs.each |v, k| {
 				v = v.toCode('\'')
-				// FIXME: grab this from PodHandler
 				if (k == "sys.uriPodBase")
 					envStr.add("fan.sys.UriPodBase = $v;\n")
 				else
