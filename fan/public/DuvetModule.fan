@@ -25,8 +25,8 @@ const class DuvetModule {
 	}
 	
 	@Contribute { serviceType=Routes# }
-	static Void contributeRoutes(Configuration conf, IocConfigSource iocConfig) {
-		requireJsUrl := (Uri)  iocConfig.get(DuvetConfigIds.requireJsUrl,  Uri#)
+	static Void contributeRoutes(Configuration conf, ConfigSource configSrc) {
+		requireJsUrl := (Uri) configSrc.get(DuvetConfigIds.requireJsUrl, Uri#)
 		conf.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
 	}
 
@@ -36,7 +36,7 @@ const class DuvetModule {
 		podModules	:= (PodModules)  config.autobuild(PodModules#)
 
 		config["afDuvet.cacheModuleUrls"]	= modulePaths.scriptModules
-		config["afDuvet.fantomPods"] 		= podModules.scriptModules
+		config["afDuvet.podModules"] 		= podModules.scriptModules
 	}
 
 	@Contribute { serviceType=FactoryDefaults# }
@@ -48,9 +48,9 @@ const class DuvetModule {
 	}
 
 	@Contribute { serviceType=RegistryStartup# }
-	static Void contributeRegistryStartup(Configuration conf, IocConfigSource iocConfig) {
+	static Void contributeRegistryStartup(Configuration conf, ConfigSource configSrc) {
 		conf["afDuvet.validateConfig"] = |->| {
-			DuvetConfigIds.validateConfig(iocConfig)
+			DuvetConfigIds.validateConfig(configSrc)
 		}
 	}
 }

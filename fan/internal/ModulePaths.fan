@@ -17,9 +17,7 @@ internal const class ModulePaths {
 		if (!baseModuleUrl.isPathAbs)	return ScriptModule#.emptyList
 		if (!baseModuleUrl.isDir)		return ScriptModule#.emptyList
 
-		// TODO: enhance FileHandler to to this for us - findMapping()?
-		prefixes:= fileHandler.directoryMappings.keys.findAll { baseModuleUrl.toStr.startsWith(it.toStr) }
-		prefix 	:= prefixes.size == 1 ? prefixes.first : prefixes.sort |u1, u2 -> Int| { u1.path.size <=> u2.path.size }.last
+		prefix 	:= fileHandler.findMappingFromLocalUrl(baseModuleUrl)
 		if (prefix == null)				return ScriptModule#.emptyList
 		baseDir := fileHandler.directoryMappings[prefix]
 		

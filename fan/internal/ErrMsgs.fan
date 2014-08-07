@@ -21,6 +21,10 @@ internal const class ErrMsgs {
 		"${type} URL `${url}` must NOT end with a slash. e.g. `${example}`"
 	}
 
+	static Str htmlInjector_noJsFacet(Type type) {
+		"Type '${type}' MUST have the @Js facet."
+	}
+
 	static Str requireJsLibNoExist(File requireJsFile) {
 		"RequireJs file '${requireJsFile.normalize}' does not exist!"
 	}

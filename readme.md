@@ -4,7 +4,9 @@
 
 `Duvet` provides a means to inject HTML into you web page after its been rendered, but before it is streamed to the browser.
 
-`Duvet` also provides a wrapper around [RequireJS](http://requirejs.org/) giving you clean dependency management for your Javascript libraries.
+`Duvet` is a wrapper around [RequireJS](http://requirejs.org/), giving you clean dependency management for your Javascript libraries.
+
+`Duvet` also gives you a simple means of executing Fantom code in your web browser!
 
 #### Why Duvet? 
 
@@ -18,7 +20,7 @@ Install `Duvet` with the Fantom Repository Manager ( [fanr](http://fantom.org/do
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afDuvet 0.0+"]
+    depends = ["sys 1.0", ..., "afDuvet 0.1+"]
 
 ## Documentation 
 
@@ -83,7 +85,7 @@ C:\> fan Example.fan
   / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
  / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
 /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
-          Alien-Factory BedSheet v1.3.10, IoC v1.6.4 /___/
+          Alien-Factory BedSheet v1.3.14, IoC v1.7.6 /___/
 
 IoC Registry built in 612ms and started up in 104ms
 
@@ -120,7 +122,7 @@ Looking after countless Javascript libraries, ensuring they all get loaded quick
 
 *It's how Javascript should be written!*
 
-All your Javascript modules need to be served from the same [baseUrl](http://repo.status302.com/doc/afDuvet/DuvetConfigIds.html#requireBaseUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
+All your Javascript modules need to be served from the same [baseUrl](http://repo.status302.com/doc/afDuvet/DuvetConfigIds.html#baseModuleUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
 
 ```
 @Contribute { serviceType=FileHandler# }
@@ -131,7 +133,7 @@ static Void contributeFileHandler(Configuration config) {
 
 Now you can use `HtmlInjector.injectRequireScript()` to inject and run small scripts. The scripts are wrapped up in a `require()` function call to ensure proper dependency management.
 
-Remember, most of your code should be in modules. The modules should then expose a mini-API (well, return an object!) that you can call with `HtmlInjector.injectRequireCall()`. This is a handy method that converts all given arguments into JSON.
+Remember, most of your code should be in modules. The modules should then expose a mini-API (well, return an object!) that you can call with `HtmlInjector.injectRequireModule()`. This is a handy method that converts all given arguments into JSON.
 
 ### Module Config 
 
@@ -156,4 +158,56 @@ static Void contributeScriptModules(Configuration config) {
     )
 }
 ```
+
+## Run Fantom Code 
+
+Duvet also lets you require Fantom pods and run Fantom code directly in the browser.
+
+Fantom compiles all classes in a pod annotated with the `@Js` facet into a Javascript file. These javascript files may then be served up with BedSheet's `PodHandler` service.
+
+Duvet builds a dependency tree of these pods with Javascript files and turns them into RequireJs modules of the same name. Example, the `sys` module relates to the Fantom `sys` pod, and the `fwt` module relates to the Fantom `fwt` pod.
+
+From there it is a small step to require the Fantom modules and execute Fantom code in the browser. Do this by calling `HtmlInjector.injectFantomMethod()`.
+
+### Browser API
+
+You can interact with the browser's Window, Document and DOM objects by using the core Fantom [dom](http://fantom.org/doc/dom/index.html) pod.
+
+```
+using dom
+
+@Js
+class Example {
+    Void info() {
+        Win.cur.alert("Chew Bubblegum!")
+    }
+}
+```
+
+### FWT GUI
+
+You can also use fully featured FWT windows and graphics by using the core Fantom [fwt](http://fantom.org/doc/fwt/index.html) and [webfwt](http://fantom.org/doc/webfwt/index.html) pods.
+
+```
+using fwt
+
+@Js
+class Example {
+    Void info() {
+        Window {
+            Label { text = "Chew Bubblegum!"; halign = Halign.center },
+        }.open
+    }
+}
+```
+
+Note that when you instantiate an FWT window, it attaches itself to the whole browser window by default. If you wish to constrain the window to a particular element on the page, pass in the follow environment variable:
+
+    "fwt.window.root" : "<element-id>"
+
+Where `<element-id>` is the html ID of an element on the page.
+
+Note that the element needs to specify a width, height and give a CSS `position` of `relative`. This may either be done in CSS or defined on the element directly:
+
+    <div id="fwt-window" style="width: 640px; height:480px; position:relative;"></div>
 

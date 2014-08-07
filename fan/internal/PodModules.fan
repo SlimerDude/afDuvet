@@ -4,14 +4,17 @@ using afBedSheet
 
 internal const class PodModules {
 	
+	@Inject private const Log				log
 	@Inject private const PodHandler		podHandler
 	@Inject private const BedSheetServer	bedServer
 
 	new make(|This|in) { in(this) }
 
 	ScriptModule[] scriptModules() {
-		if (bedServer.appPod == null)
-			return ScriptModule#.emptyList	// TODO: log warning
+		if (bedServer.appPod == null) {
+			log.warn("Can not define RequireJS modules for Fantom pods: BedSheetServer.appPod == null")
+			return ScriptModule#.emptyList
+		}
 		
 		if (podHandler.baseUrl == null)
 			return ScriptModule#.emptyList

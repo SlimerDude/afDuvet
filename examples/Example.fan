@@ -20,14 +20,14 @@ class Example {
 @SubModule { modules=[DuvetModule#] }
 class AppModule {
 	@Contribute { serviceType=Routes# }
-	static Void contributeRoutes(OrderedConfig conf) {
+	static Void contributeRoutes(Configuration conf) {
 		conf.add(Route(`/`, Example#duvetExample))
 	}
 
 	@Contribute { serviceType=ScriptModules# }
-	static Void contributeScriptModules(OrderedConfig config) {
+	static Void contributeScriptModules(Configuration config) {
 		// configure any non-standard AMD modules
-		config.add(ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`))
+		config["jquery"] = ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
 	}
 }
 
