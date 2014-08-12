@@ -20,24 +20,25 @@ internal const class PodModules {
 			return ScriptModule#.emptyList
 		
 		jsDepends	:= addPod(PodModuleCtx(), Pod:Pod[][:] { ordered = true }, bedServer.appPod)
+		log.warn(jsDepends.toStr)
 
-		return jsDepends.map |depends, pod->ScriptModule| {
+		return jsDepends.map |depends, pod->ScriptModule?| {
 			podUrl		:= `fan://${pod.name}/${pod.name}.js`
+			if (podUrl.get(null, false) == null)
+				return null
 			clientUrl 	:= podHandler.fromPodResource(podUrl).clientUrl
 			module		:= ScriptModule(pod.name).atUrl(clientUrl).requires(depends.join(" ") { it.name })
 			return module
-		}.vals
+		}.vals.exclude { it == null }
 	}
 
 	private Pod:Pod[] addPod(PodModuleCtx ctx, Pod:Pod[] jsDepends, Pod daddyPod) {
 		ctx.preventRecursion(daddyPod) |->| {
-			if (isJsPod(jsDepends, daddyPod)) {
-				deps := jsDepends.getOrAdd(daddyPod) { Pod[,] }
-				daddyPod.depends.map |depend->Pod| { Pod.find(depend.name) }.each |Pod pod| {
-					if (isJsPod(jsDepends, pod) && !deps.contains(pod)) {
-						deps.add(pod)
-						addPod(ctx, jsDepends, pod)
-					}
+			deps := jsDepends.getOrAdd(daddyPod) { Pod[,] }
+			daddyPod.depends.map |depend->Pod| { Pod.find(depend.name) }.each |Pod pod| {
+				if (isJsPod(jsDepends, pod) && !deps.contains(pod)) {
+					deps.add(pod)
+					addPod(ctx, jsDepends, pod)
 				}
 			}
 		}
