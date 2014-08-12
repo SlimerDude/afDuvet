@@ -52,5 +52,6 @@ const class DuvetModule {
 		conf["afDuvet.validateConfig"] = |->| {
 			DuvetConfigIds.validateConfig(configSrc)
 		}
+		// TODO: print out the JS pods
 	}
 }
