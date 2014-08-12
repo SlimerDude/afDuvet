@@ -260,6 +260,10 @@ This may either be done in CSS or defined on the element directly:
 
 Release Notes [#releaseNotes]
 *****************************
+v0.1.2 [#v0.1.2]
+----------------
+ - Bug: Could not inject Fantom JS code from other pods if the main web app did not have JS code itself.
+
 v0.1.0 [#v0.1.0]
 ----------------
  - New: Support for executing Fantom code on web pages! See 'HtmlInjector.injectFantomMethod()'.
