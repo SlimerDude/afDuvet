@@ -5,18 +5,18 @@ using afConcurrent
 
 internal const class DuvetProcessor : ResponseProcessor {
 
-	@Inject private const HttpResponse 	httpResponse
-	@Inject private const ScriptModules	scriptModules
-	@Inject private const LocalList		headTags
-	@Inject private const LocalList		bodyTags
-	@Inject private const LocalRef		requireRequired
-	@Inject private const LocalList		scriptSrcs
-	@Inject private const LocalList		linkHrefs
-	@Inject private const Log			log
-	@Inject @Config private const Uri		requireJsUrl
-	@Inject @Config private const File		requireJsFile
-	@Inject @Config private const Uri		baseModuleUrl
-	@Inject @Config private const Duration?	requireJsTimeout
+	@Inject private const RequireJsConfigTweaks requireJsConfig
+	@Inject private const HttpResponse 			httpResponse
+	@Inject private const LocalList				headTags
+	@Inject private const LocalList				bodyTags
+	@Inject private const LocalRef				requireRequired
+	@Inject private const LocalList				scriptSrcs
+	@Inject private const LocalList				linkHrefs
+	@Inject private const Log					log
+	@Inject @Config private const Uri			requireJsUrl
+	@Inject @Config private const File			requireJsFile
+	@Inject @Config private const Uri			baseModuleUrl
+	@Inject @Config private const Duration?		requireJsTimeout
 	
 	new make(|This|in) {
 		in(this)
@@ -46,7 +46,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 			if (!bodyTags.isEmpty && endOfBody != null) {
 				
 				if (requireRequired.val) {
-					config := requireJsConfig(tagStyle)
+					config := requireJsConfig.tweakConfig(tagStyle)
 					bodyTags.list.insert(0, config)
 					
 					// can't use FileHandler / ColdFeet for requireJs because it is served up directly, not mapped to the file system.
@@ -123,21 +123,6 @@ internal const class DuvetProcessor : ResponseProcessor {
 			return null
 		}
 		return matcher.start(0)		
-	}
-	
-	private HtmlNode requireJsConfig(TagStyle tagStyle) {
-		config := Str:Obj?[:] { ordered = true }
-		
-		config["baseUrl"] 		= baseModuleUrl.toStr
-		config["waitSeconds"]	= requireJsTimeout?.toSec ?: 0
-		config["xhtml"] 		= (tagStyle != TagStyle.html)
-		config["skipDataMain"]	= true
-		
-		scriptModules.addConfig(config)
-		
-		args	:= util::JsonOutStream.writeJsonToStr(config)
-		script	:= "requirejs.config(${args});"
-		return HtmlElement("script").set("type", "text/javascript").add(HtmlText(script))
 	}
 	
 	private Bool isDup(HtmlNode? node) {

@@ -20,7 +20,6 @@ internal const class PodModules {
 			return ScriptModule#.emptyList
 		
 		jsDepends	:= addPod(PodModuleCtx(), Pod:Pod[][:] { ordered = true }, bedServer.appPod)
-		log.warn(jsDepends.toStr)
 
 		return jsDepends.map |depends, pod->ScriptModule?| {
 			podUrl		:= `fan://${pod.name}/${pod.name}.js`
