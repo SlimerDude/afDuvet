@@ -1,12 +1,10 @@
 ## Overview 
 
-*Duvet is a support library that aids Alien-Factory in the development of other libraries, frameworks and applications. Though you are welcome to use it, you may find features are missing and the documentation incomplete.*
-
-`Duvet` provides a means to inject HTML into you web page after its been rendered, but before it is streamed to the browser.
+`Duvet` is a [BedSheet](http://www.fantomfactory.org/pods/afBedSheet) library that injects HTML into your web page after it has been rendered, but before it is streamed to the browser.
 
 `Duvet` is a wrapper around [RequireJS](http://requirejs.org/), giving you clean dependency management for your Javascript libraries.
 
-`Duvet` also gives you a simple means of executing Fantom code in your web browser!
+`Duvet` also gives a simple means of executing Fantom code in your web browser!
 
 #### Why Duvet? 
 
@@ -20,7 +18,7 @@ Install `Duvet` with the Fantom Repository Manager ( [fanr](http://fantom.org/do
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afDuvet 0.1+"]
+    depends = ["sys 1.0", ..., "afDuvet 1.0+"]
 
 ## Documentation 
 
