@@ -1,10 +1,10 @@
 Overview [#overview]
 ********************
-'Duvet' provides a means to inject HTML into you web page after its been rendered, but before it is streamed to the browser.
+'Duvet' is a [BedSheet]`pod:afBedSheet` library that injects HTML into your web page after it has been rendered, but before it is streamed to the browser.
 
 'Duvet' is a wrapper around [RequireJS]`http://requirejs.org/`, giving you clean dependency management for your Javascript libraries.
 
-'Duvet' also gives you a simple means of executing Fantom code in your web browser!
+'Duvet' also gives a simple means of executing Fantom code in your web browser!
 
 Why Duvet? [#why]
 -----------------
@@ -260,9 +260,10 @@ This may either be done in CSS or defined on the element directly:
 
 Release Notes [#releaseNotes]
 *****************************
-v0.1.2 [#v0.1.2]
+v1.0.0 [#v1.0.0]
 ----------------
- - Bug: Could not inject Fantom JS code from other pods if the main web app did not have JS code itself.
+ - New: 'RequireJsConfigTweaks' services allows last minute tweaks to the RequireJS config.
+ - Bug: Could not inject Fantom JS code from other pods if the main web app itself did not have JS code.
 
 v0.1.0 [#v0.1.0]
 ----------------

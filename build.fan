@@ -5,14 +5,13 @@ class Build : BuildPod {
 	new make() {
 		podName = "afDuvet"
 		summary = "Something soft and comfortable to wrap your Javascript up in!"
-		version = Version("0.1.1")
+		version = Version("1.0.0")
 
 		meta = [
 			"proj.name"		: "Duvet",
 			"afIoc.module"	: "afDuvet::DuvetModule",
 			"tags"			: "web",
-//			"internal"		: "true",	// internal or not?
-			"repo.private"	: "true"
+			"repo.private"	: "false"
 		]
 
 		index = [	
