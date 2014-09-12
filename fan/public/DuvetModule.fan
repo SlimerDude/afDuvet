@@ -8,14 +8,11 @@ using afBedSheet
 @NoDoc
 const class DuvetModule { 
 
-	static Void bind(ServiceBinder binder) {
-		binder.bind(DuvetProcessor#)
-		binder.bind(HtmlInjector#)
-		binder.bind(ScriptModules#)
-		
-		// there's no point in having a proxy
-		// the service exists to make tweaks, so just... tweak!
-		binder.bind(RequireJsConfigTweaks#).withoutProxy
+	static Void defineServices(ServiceDefinitions defs) {
+		defs.add(DuvetProcessor#)
+		defs.add(HtmlInjector#)
+		defs.add(ScriptModules#)		
+		defs.add(RequireJsConfigTweaks#)
 	}
 
 	@Contribute { serviceType=ResponseProcessors# }
