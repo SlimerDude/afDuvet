@@ -20,7 +20,6 @@ internal class TestInjection : DuvetTest {
 
 	Void testHtmlInjection() {
 		html := client.get(`/html`).asStr
-		Env.cur.err.printLine(html)
 		verifyEq(html, """<html><head><title> HTML Test</title>\n<link rel="stylesheet" type="text/css" href="http://www.example.com/dude.css">\n</head><body> --body-- </body></html>""")
 	}
 
