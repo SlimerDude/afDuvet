@@ -277,6 +277,10 @@ Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' serv
 
 Release Notes [#releaseNotes]
 *****************************
+v1.0.2 [#v1.0.2]
+----------------
+ - Chg: Recompiled to work with [BedSheet 1.3.18]`pod:afBedSheet`.
+ 
 v1.0.0 [#v1.0.0]
 ----------------
  - New: 'RequireJsConfigTweaks' service allows last minute tweaks to the RequireJS config.
