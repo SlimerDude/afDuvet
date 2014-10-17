@@ -20,7 +20,7 @@ Install '@{project.name}' with the Fantom Repository Manager ( [fanr]`docFanr::T
 
 To use in a [Fantom]`http://fantom.org/` project, add a dependency to 'build.fan':
 
-  depends = ["sys 1.0", ..., "@{pod.name} @{pod.version}+"]
+  depends = ["sys 1.0", ..., "@{pod.name} @{pod.version}"]
 
 
 
@@ -89,7 +89,7 @@ C:\> fan Example.fan
   / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
  / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
 /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
-          Alien-Factory BedSheet v1.3.14, IoC v1.7.6 /___/
+          Alien-Factory BedSheet v1.3.16, IoC v2.0.0 /___/
 
 IoC Registry built in 612ms and started up in 104ms
 
@@ -193,20 +193,21 @@ Run Fantom Code [#fantom]
 *************************
 Duvet also lets you require Fantom pods and run Fantom code directly in the browser.
 
-Fantom compiles all classes in a pod annotated with the '@Js' facet into a Javascript file.
-These javascript files may then be served up with BedSheet's 'PodHandler' service.
+Fantom compiles all classes in a pod annotated with the '@Js' facet into a Javascript file that is saved in the pod.
+These javascript pod files may then be served up with BedSheet's 'PodHandler' service.
 
 Duvet builds a dependency tree of these pods with Javascript files and turns them into RequireJs modules of the same name.
 Example, the 'sys' module relates to the Fantom 'sys' pod, and the 'fwt' module relates to the Fantom 'fwt' pod.
 
 From there it is a small step to require the Fantom modules and execute Fantom code in the browser.
-Do this by calling 'HtmlInjector.injectFantomMethod()'.
+Do this by calling 'HtmlInjector.injectFantomMethod(...)'.
 
 
 
-Browser API
-===========
-You can interact with the browser's Window, Document and DOM objects by using the core Fantom [dom]`pod:dom` pod.
+Browser API [#browserApi]
+=========================
+Use the core Fantom [dom]`pod:dom` pod to write code that interacts with the browser's Window, Document and DOM objects.
+Example, the following code fires up a browser alert - note the '@Js' annotation on the class.
 
 pre>
 syntax: fantom
@@ -221,10 +222,14 @@ class Example {
 }
 <pre
 
+You would inject it into a web page with the following:
+
+  htmlInjector.injectFantomMethod(Example#info)
 
 
-FWT GUI
-=======
+
+FWT GUI [#fwtGui]
+=================
 You can also use fully featured FWT windows and graphics by using the core Fantom [fwt]`pod:fwt` and [webfwt]`pod:webfwt` pods.
 
 pre>
@@ -258,11 +263,23 @@ This may either be done in CSS or defined on the element directly:
 
 
 
+Disable Pod Modules [#disablePods]
+==================================
+If you don't want to give access to your Fantom generated Javascript, or just don't like the Fantom modules cluttering up your RequireJS shim, then you can easily disable this feature.
+Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' service: 
+
+  Contribute { serviceType=ScriptModules# }
+  static Void contributeScriptModules(Configuration config) {
+      config.remove("afDuvet.podModules")
+  }
+
+
+
 Release Notes [#releaseNotes]
 *****************************
 v1.0.0 [#v1.0.0]
 ----------------
- - New: 'RequireJsConfigTweaks' services allows last minute tweaks to the RequireJS config.
+ - New: 'RequireJsConfigTweaks' service allows last minute tweaks to the RequireJS config.
  - Bug: Could not inject Fantom JS code from other pods if the main web app itself did not have JS code.
 
 v0.1.0 [#v0.1.0]

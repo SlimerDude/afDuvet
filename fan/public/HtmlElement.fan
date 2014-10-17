@@ -40,7 +40,7 @@ class HtmlElement : HtmlNode {
 	
 	@NoDoc
 	override internal Str print(TagStyle tagStyle) {
-		att := attrs.join(" ") |v, k->Str| { k.toXml + "=" + v.toCode }
+		att := attrs.join(" ") |v, k->Str| { k.toXml + "=\"${v.toXml}\"" }
 		str := "<${name.toXml} ${att}" + tagStyle.tagEnding.startTag(name, nodes.isEmpty)
 		str += nodes.join("\n") { it.print(tagStyle) }
 		str += tagStyle.tagEnding.endTag(name, nodes.isEmpty)
