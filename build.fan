@@ -21,6 +21,7 @@ class Build : BuildPod {
 		depends = [
 			"sys 1.0",
 			"util 1.0",
+			"web 1.0",
 			
 			// ---- Core ------------------------
 			"afConcurrent 1.0.6+",
@@ -35,7 +36,7 @@ class Build : BuildPod {
 			"afButter 1.0.2+"
 		]
 		
-		srcDirs = [`test/`, `test/modules/`, `test/modules/my/`, `fan/`, `fan/public/`, `fan/internal/`]
+		srcDirs = [`test/`, `test/modules/`, `test/modules/my/`, `fan/`, `fan/public/`, `fan/public/advanced/`, `fan/internal/`]
 		resDirs = [`res/`]
 	}
 	

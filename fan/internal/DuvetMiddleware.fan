@@ -7,9 +7,9 @@ internal const class DuvetMiddleware : Middleware {
 	
 	new make(|This|in) { in(this) }
 	
-	override Bool service(MiddlewarePipeline pipeline) {
+	override Void service(MiddlewarePipeline pipeline) {
 		try {
-			return pipeline.service
+			pipeline.service
 			
 		} catch (Err err) {
 			duvetProcessor.clear

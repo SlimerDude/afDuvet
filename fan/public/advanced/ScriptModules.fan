@@ -4,8 +4,8 @@ using afBedSheet
 
 @NoDoc	// Don't overwhelm the masses! 
 const class ScriptModules {
-	private const Str:Obj		shimConfigs
-	private const Str:Uri		modulePaths
+	internal const Str:Obj		shimConfigs	// val may be Str or ...anything!
+	internal const Str:Obj		modulePaths // val may be Uri or Uri[]
 	
 	new make(Obj[] objs, |This|in) {
 		in(this)

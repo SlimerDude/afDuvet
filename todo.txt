@@ -1,0 +1,7 @@
+
+Currently, Duvet doesn't resolve requireRS modules with FileHandler. 
+That's because requireJS uses relative moduleIDs as paths to find other modules.
+When ColdFeet alters the URLs, then it'll be redirecting and 404'ing all over the place.
+
+So what Duvet needs to do, is walk the module directory and add module paths for each script file it finds.
+   

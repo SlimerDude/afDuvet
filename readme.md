@@ -18,7 +18,7 @@ Install `Duvet` with the Fantom Repository Manager ( [fanr](http://fantom.org/do
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
-    depends = ["sys 1.0", ..., "afDuvet 1.0+"]
+    depends = ["sys 1.0", ..., "afDuvet 1.0"]
 
 ## Documentation 
 
@@ -83,7 +83,7 @@ C:\> fan Example.fan
   / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
  / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
 /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
-          Alien-Factory BedSheet v1.3.14, IoC v1.7.6 /___/
+          Alien-Factory BedSheet v1.3.16, IoC v2.0.0 /___/
 
 IoC Registry built in 612ms and started up in 104ms
 
@@ -161,15 +161,15 @@ static Void contributeScriptModules(Configuration config) {
 
 Duvet also lets you require Fantom pods and run Fantom code directly in the browser.
 
-Fantom compiles all classes in a pod annotated with the `@Js` facet into a Javascript file. These javascript files may then be served up with BedSheet's `PodHandler` service.
+Fantom compiles all classes in a pod annotated with the `@Js` facet into a Javascript file that is saved in the pod. These javascript pod files may then be served up with BedSheet's `PodHandler` service.
 
 Duvet builds a dependency tree of these pods with Javascript files and turns them into RequireJs modules of the same name. Example, the `sys` module relates to the Fantom `sys` pod, and the `fwt` module relates to the Fantom `fwt` pod.
 
-From there it is a small step to require the Fantom modules and execute Fantom code in the browser. Do this by calling `HtmlInjector.injectFantomMethod()`.
+From there it is a small step to require the Fantom modules and execute Fantom code in the browser. Do this by calling `HtmlInjector.injectFantomMethod(...)`.
 
-### Browser API
+### Browser API 
 
-You can interact with the browser's Window, Document and DOM objects by using the core Fantom [dom](http://fantom.org/doc/dom/index.html) pod.
+Use the core Fantom [dom](http://fantom.org/doc/dom/index.html) pod to write code that interacts with the browser's Window, Document and DOM objects. Example, the following code fires up a browser alert - note the `@Js` annotation on the class.
 
 ```
 using dom
@@ -182,7 +182,11 @@ class Example {
 }
 ```
 
-### FWT GUI
+You would inject it into a web page with the following:
+
+    htmlInjector.injectFantomMethod(Example#info)
+
+### FWT GUI 
 
 You can also use fully featured FWT windows and graphics by using the core Fantom [fwt](http://fantom.org/doc/fwt/index.html) and [webfwt](http://fantom.org/doc/webfwt/index.html) pods.
 
@@ -208,4 +212,13 @@ Where `<element-id>` is the html ID of an element on the page.
 Note that the element needs to specify a width, height and give a CSS `position` of `relative`. This may either be done in CSS or defined on the element directly:
 
     <div id="fwt-window" style="width: 640px; height:480px; position:relative;"></div>
+
+### Disable Pod Modules 
+
+If you don't want to give access to your Fantom generated Javascript, or just don't like the Fantom modules cluttering up your RequireJS shim, then you can easily disable this feature. Just remove the `afDuvet.podModules` configuration from the `ScriptModules` service:
+
+    Contribute { serviceType=ScriptModules# }
+    static Void contributeScriptModules(Configuration config) {
+        config.remove("afDuvet.podModules")
+    }
 

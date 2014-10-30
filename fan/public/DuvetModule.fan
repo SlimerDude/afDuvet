@@ -1,6 +1,7 @@
 using afIoc
 using afIocConfig
 using afBedSheet
+using web::WebOutStream
 
 ** The [Ioc]`http://www.fantomfactory.org/pods/afIoc` module class.
 ** 
@@ -13,6 +14,7 @@ const class DuvetModule {
 		defs.add(HtmlInjector#)
 		defs.add(ScriptModules#)		
 		defs.add(RequireJsConfigTweaks#)
+		defs.add(DuvetPrinter#)
 	}
 
 	@Contribute { serviceType=ResponseProcessors# }
@@ -40,6 +42,16 @@ const class DuvetModule {
 		config["afDuvet.podModules"] 		= podModules.scriptModules
 	}
 
+	@Contribute { serviceType=NotFoundPrinterHtml# }
+	internal static Void contributeNotFoundHtml(Configuration config, DuvetPrinter printer) {
+		config.set("afDuvet.requireJsModules",	|WebOutStream out| { printer.printModules(out) }).after("afPillow.pillowPages").before("afBedSheet.routes")
+	}
+
+	@Contribute { serviceType=ErrPrinterHtml# }
+	internal static Void contributeErrorHtml(Configuration config, DuvetPrinter printer) {
+		config.set("afDuvet.requireJsModules",	|WebOutStream out, Err? err| { printer.printModules(out) }).after("afPillow.pillowPages").before("afBedSheet.routes")
+	}
+	
 	@Contribute { serviceType=FactoryDefaults# }
 	static Void contributeFactoryDefaults(Configuration config) {
 		config[DuvetConfigIds.baseModuleUrl]	= `/modules/`
@@ -49,10 +61,12 @@ const class DuvetModule {
 	}
 
 	@Contribute { serviceType=RegistryStartup# }
-	static Void contributeRegistryStartup(Configuration conf, ConfigSource configSrc) {
-		conf["afDuvet.validateConfig"] = |->| {
+	internal static Void contributeRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
+		config["afDuvet.validateConfig"] = |->| {
 			DuvetConfigIds.validateConfig(configSrc)
 		}
-		// TODO: print out the JS pods
+		config["afDuvet.logModules"] = |->| {
+			printer.logModules
+		}
 	}
 }
