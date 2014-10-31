@@ -44,12 +44,14 @@ const class DuvetModule {
 
 	@Contribute { serviceType=NotFoundPrinterHtml# }
 	internal static Void contributeNotFoundHtml(Configuration config, DuvetPrinter printer) {
-		config.set("afDuvet.requireJsModules",	|WebOutStream out| { printer.printModules(out) }).after("afPillow.pillowPages").before("afBedSheet.routes")
+		// TODO: make 'optional' contribution of: .after("afPillow.pillowPages")
+		config.set("afDuvet.requireJsModules",	|WebOutStream out| { printer.printModules(out) }).before("afBedSheet.routes")
 	}
 
 	@Contribute { serviceType=ErrPrinterHtml# }
 	internal static Void contributeErrorHtml(Configuration config, DuvetPrinter printer) {
-		config.set("afDuvet.requireJsModules",	|WebOutStream out, Err? err| { printer.printModules(out) }).after("afPillow.pillowPages").before("afBedSheet.routes")
+		// TODO: make 'optional' contribution of: .after("afPillow.pillowPages")
+		config.set("afDuvet.requireJsModules",	|WebOutStream out, Err? err| { printer.printModules(out) }).before("afBedSheet.routes")
 	}
 	
 	@Contribute { serviceType=FactoryDefaults# }

@@ -281,7 +281,7 @@ v1.0.2 [#v1.0.2]
 ----------------
  - New: RequireJS modules are logged at startup.
  - New: RequireJS modules are printed on the BedSheet 404 and Error pages. 
- - Chg: Recompiled to work with [BedSheet 1.3.18]`pod:afBedSheet`.
+ - Chg: Recompiled to work with [BedSheet 1.4.0]`pod:afBedSheet`.
  
 v1.0.0 [#v1.0.0]
 ----------------

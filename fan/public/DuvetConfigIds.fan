@@ -1,7 +1,7 @@
 using afIocConfig
 
 ** [IoC Config]`http://www.fantomfactory.org/pods/afIocConfig` values for 'Duvet'.
-const class DuvetConfigIds {
+const mixin DuvetConfigIds {
 	
 	** The base URL (local to BedSheet) where [RequireJS]`http://requirejs.org/` / AMD modules are loaded from. 
 	** It should be mapped by BedSheet's 'FileHandler' service as this is where you save your Javascript modules.
