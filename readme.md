@@ -102,11 +102,11 @@ It is good practice to componentise your web pages (something that [efanXtra](ht
 
 Taking an example blog website, on some pages you want to show comments, on others you don't. So you make a Comment Component which you only render on those pages that need it. Like a good self-contained component, it requires it's own stylesheet and some javascript. As you don't want to download them on *every* page, just the comment pages, you let the component download what it needs.
 
-> Q). But how does the component, which is typically rendered at the bottom of the web page, specify what stylesheets should be downloaded in the `<head>`?
+> Q). But how does the component, which is typically rendered at the bottom of the web page, specify what stylesheets should be downloaded in the `<head>` section?
 
 > A). Duvet Html Injection.
 
-The [HtmlInjector](http://repo.status302.com/doc/afDuvet/HtmlInjector.html) service lets you inject meta, scripts and stylesheets into your HTML. They are injected into either the bottom of the HEAD or the BODY section.
+The [HtmlInjector](http://repo.status302.com/doc/afDuvet/HtmlInjector.html) service lets you inject meta, scripts and stylesheets into your HTML, at any time before the page is sent to the client. The HTML tags are injected into either the bottom of the HEAD or the BODY section.
 
 What if you want to render the Comment Component more than once on a single page? You don't want multiple copies of the same stylesheet downloaded on the same page!?
 
