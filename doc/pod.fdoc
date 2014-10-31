@@ -277,7 +277,7 @@ Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' serv
 
 Release Notes [#releaseNotes]
 *****************************
-v1.0.2 [#v1.0.2]
+v1.0.4 [#v1.0.4]
 ----------------
  - New: RequireJS modules are logged at startup.
  - New: RequireJS modules are printed on the BedSheet 404 and Error pages. 
