@@ -277,11 +277,19 @@ Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' serv
 
 Release Notes [#releaseNotes]
 *****************************
+v1.0.6 [#v1.0.6]
+----------------
+ - Bug: Duvet no longers Errs when resolving pod JS file when run as a script. (Updated mainly for FormBean demo.)
+
 v1.0.4 [#v1.0.4]
 ----------------
  - New: RequireJS modules are logged at startup.
  - New: RequireJS modules are printed on the BedSheet 404 and Error pages. 
  - Chg: Recompiled to work with [BedSheet 1.4.0]`pod:afBedSheet`.
+
+v1.0.2 [#v1.0.2]
+----------------
+ - Chg: Updated to [IoC 2.0.0]`pod:afIoc`.
  
 v1.0.0 [#v1.0.0]
 ----------------
