@@ -5,13 +5,13 @@ class Build : BuildPod {
 	new make() {
 		podName = "afDuvet"
 		summary = "Something soft and comfortable to wrap your Javascript up in!"
-		version = Version("1.0.5")
+		version = Version("1.0.6")
 
 		meta = [
 			"proj.name"		: "Duvet",
 			"afIoc.module"	: "afDuvet::DuvetModule",
 			"tags"			: "web",
-			"repo.private"	: "true"
+			"repo.private"	: "false"
 		]
 
 		index = [	
@@ -25,11 +25,11 @@ class Build : BuildPod {
 			
 			// ---- Core ------------------------
 			"afConcurrent 1.0.6  - 1.0",
-			"afIoc        2.0.0  - 2.0",
+			"afIoc        2.0.2  - 2.0",
 			"afIocConfig  1.0.16 - 1.0",
 			
 			// ---- Web -------------------------
-			"afBedSheet   1.4.0  - 1.4",
+			"afBedSheet   1.4.2  - 1.4",
 			
 			// ---- Test ------------------------
 			"afBounce     1.0.18 - 1.0",

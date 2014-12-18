@@ -23,8 +23,13 @@ internal const class PodModules {
 
 		return jsDepends.map |depends, pod->ScriptModule?| {
 			podUrl		:= `fan://${pod.name}/${pod.name}.js`
-			if (podUrl.get(null, false) == null)
+			try if (podUrl.get(null, false) == null)
 				return null
+			catch (Err err) {
+				// usually "Not backed by pod file" when run from a script
+				log.warn("Could not resolve `$podUrl` - $err.msg")
+				return null
+			}
 			clientUrl 	:= podHandler.fromPodResource(podUrl).clientUrl
 			module		:= ScriptModule(pod.name).atUrl(clientUrl).requires(depends.join(" ") { it.name })
 			return module
