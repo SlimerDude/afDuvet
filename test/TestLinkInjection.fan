@@ -24,15 +24,15 @@ internal class TestLinkInjection : DuvetTest {
 	}
 	
 	Void testMultipleLinks() {
-		html := client.get(`/twoDiff`).asStr
+		html := client.get(`/twoDiff`).body.str
 		verifyEq(html, "<html><head>\n<link href=\"//example1.com/\">\n<link href=\"//example2.com/\">\n</head><body></body></html>")
 
-		html  = client.get(`/twoSame`).asStr
+		html  = client.get(`/twoSame`).body.str
 		verifyEq(html, "<html><head>\n<link href=\"//example.com/\">\n</head><body></body></html>")
 	}
 	
 	Void testConditional() {
-		html := client.get(`/conditional`).asStr
+		html := client.get(`/conditional`).body.str
 		verifyEq(html, "<html><head>\n<!--[if IE]><link href=\"//example.com/\"><![endif]-->\n</head><body></body></html>")
 	}
 }

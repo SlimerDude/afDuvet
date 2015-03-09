@@ -7,7 +7,7 @@ Overview [#overview]
 'Duvet' also gives a simple means of executing Fantom code in your web browser!
 
 Why Duvet? [#why]
------------------
+=================
 Embracing RequireJs and AMD modules is like having an IoC for Javascript; and using it gives you a warm, fuzzy feeling all over!
 
 
@@ -107,7 +107,7 @@ Usage [#usage]
 
 HTML Injection [#htmlInjection]
 ===============================
-It is good practice to componentise your web pages (something that [efanXtra]`pod:efanXtra` excels at).
+It is good practice to componentise your web pages (something that [efanXtra]`pod:afEfanXtra` excels at).
 
 Taking an example blog website, on some pages you want to show comments, on others you don't.
 So you make a Comment Component which you only render on those pages that need it.
@@ -266,7 +266,7 @@ This may either be done in CSS or defined on the element directly:
 Disable Pod Modules [#disablePods]
 ==================================
 If you don't want to give access to your Fantom generated Javascript, or just don't like the Fantom modules cluttering up your RequireJS shim, then you can easily disable this feature.
-Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' service: 
+Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' service:
 
   Contribute { serviceType=ScriptModules# }
   static Void contributeScriptModules(Configuration config) {
@@ -278,57 +278,57 @@ Just remove the 'afDuvet.podModules' configuration from the 'ScriptModules' serv
 Release Notes [#releaseNotes]
 *****************************
 v1.0.6 [#v1.0.6]
-----------------
+================
  - Bug: Duvet no longers Errs when resolving pod JS file when run as a script. (Updated mainly for FormBean demo.)
 
 v1.0.4 [#v1.0.4]
-----------------
+================
  - New: RequireJS modules are logged at startup.
- - New: RequireJS modules are printed on the BedSheet 404 and Error pages. 
+ - New: RequireJS modules are printed on the BedSheet 404 and Error pages.
  - Chg: Recompiled to work with [BedSheet 1.4.0]`pod:afBedSheet`.
 
 v1.0.2 [#v1.0.2]
-----------------
+================
  - Chg: Updated to [IoC 2.0.0]`pod:afIoc`.
- 
+
 v1.0.0 [#v1.0.0]
-----------------
+================
  - New: 'RequireJsConfigTweaks' service allows last minute tweaks to the RequireJS config.
  - Bug: Could not inject Fantom JS code from other pods if the main web app itself did not have JS code.
 
 v0.1.0 [#v0.1.0]
-----------------
+================
  - New: Support for executing Fantom code on web pages! See 'HtmlInjector.injectFantomMethod()'.
 
 v0.0.14 [#v0.0.14]
-------------------
+==================
  - Chg: Updated to [IoC 1.7.2]`pod:afIoc`.
  - Bug: Script 'async' attribute incorrectly had the value of 'true' (should have been 'async').
 
 v0.0.12 [#v0.0.12]
-------------------
+==================
  - New: Added 'MetaTagBuilder.withProperty()' for adding [Open Graph]`http://ogp.me/` meta.
 
 v0.0.10 [#v0.0.10]
-------------------
+==================
  - New: RequireJS script has cache control / expires headers that expire in 1 year.
  - Bug: Problems with contributing user modules.
 
 v0.0.8 [#v0.0.8]
-----------------
+================
  - New: User defined modules in '`/modules/`' automatically have their asset caching strategy URLs added the RequireJS paths config.
 
 v0.0.6 [#v0.0.6]
-----------------
+================
  - Chg: Renamed 'LinkTagBuilder.fromClientUrl()'   -> 'fromLocalUrl()' to match BedSheet 'FileHandler'.
  - Chg: Renamed 'ScriptTagBuilder.fromClientUrl()' -> 'fromLocalUrl()' to match BedSheet 'FileHandler'.
 
 v0.0.4 [#v0.0.4]
-----------------
+================
  - New: Added 'DuvetMiddleware' to rollback / remove any HTML injections if an Err occurs. This prevents old code being injected into Err pages.
  - Bug: Could not inject multiple scripts without a src atrribute.
 
 v0.0.2 [#v0.0.2]
-----------------
+================
  - New: Preview release.
 

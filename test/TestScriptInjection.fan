@@ -24,23 +24,23 @@ internal class TestScriptInjection : DuvetTest {
 	}
 	
 	Void testHeadBodyInjection() {
-		html := client.get(`/head`).asStr
+		html := client.get(`/head`).body.str
 		verifyEq(html, "<html><head>\n<script type=\"text/javascript\"></script>\n</head><body></body></html>")
 
-		html  = client.get(`/body`).asStr
+		html  = client.get(`/body`).body.str
 		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\"></script>\n</body></html>")
 	}
 	
 	Void testMultipleScripts() {
-		html := client.get(`/twoDiff`).asStr
+		html := client.get(`/twoDiff`).body.str
 		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example1.com/\"></script>\n<script type=\"text/javascript\" src=\"//example2.com/\"></script>\n</body></html>")
 
-		html  = client.get(`/twoSame`).asStr
+		html  = client.get(`/twoSame`).body.str
 		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example.com/\"></script>\n</body></html>")
 	}
 
 	Void testMultipleScriptsWithNoSrcAttribute() {
-		html := client.get(`/twoNoSrc`).asStr
+		html := client.get(`/twoNoSrc`).body.str
 		verify(html.contains("alert(1)"))
 		verify(html.contains("alert(2)"))
 	}
