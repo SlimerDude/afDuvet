@@ -19,17 +19,17 @@ internal class TestInjection : DuvetTest {
 	}
 
 	Void testHtmlInjection() {
-		html := client.get(`/html`).asStr
+		html := client.get(`/html`).body.str
 		verifyEq(html, """<html><head><title> HTML Test</title>\n<link rel="stylesheet" type="text/css" href="http://www.example.com/dude.css">\n</head><body> --body-- </body></html>""")
 	}
 
 	Void testXmlInjection() {
-		html := client.get(`/xml`).asStr
+		html := client.get(`/xml`).body.str
 		verifyEq(html, """<html><head><title> HTML Test</title>\n<link rel="stylesheet" type="text/css" href="http://www.example.com/dude.css" />\n</head><body> --body-- </body></html>""")
 	}
 	
 	Void testNoHeadIsOkay() {
-		html := client.get(`/noHead`).asStr
+		html := client.get(`/noHead`).body.str
 		verifyEq(html, "<html><body> --- </body></html>")
 		
 		verifyEq(logs.size, 1)
@@ -39,7 +39,7 @@ internal class TestInjection : DuvetTest {
 	}
 	
 	Void testNoBodyIsOkay() {
-		html := client.get(`/noBody`).asStr
+		html := client.get(`/noBody`).body.str
 		verifyEq(html, "<html><head> --- </head></html>")
 		
 		verifyEq(logs.size, 1)

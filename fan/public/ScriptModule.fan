@@ -43,7 +43,7 @@ class ScriptModule {
 		return this
 	}
 	
-	** If the module can not be found under the [baseUrl]`DuvetConfigIds#baseModuleUrl` then this dictates where it can be downloaded from.
+	** If the module can not be found under the [baseUrl]`DuvetConfigIds.baseModuleUrl` then this dictates where it can be downloaded from.
 	** May be an external or local URL.
 	This atUrl(Uri moduleUrl) {
 		this._primaryUrl = moduleUrl

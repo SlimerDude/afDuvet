@@ -11,7 +11,7 @@ internal class TestMiddleware : DuvetTest {
 		client.errOn5xx.enabled = false
 		res := client.get(`/bang`)
 		verifyEq(res.statusCode, 500)
-		verifyFalse(res.asStr.contains("""<link href="//example.com/"""))
+		verifyFalse(res.body.str.contains("""<link href="//example.com/"""))
 	}
 	
 }
