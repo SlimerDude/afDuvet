@@ -46,7 +46,30 @@ const mixin HtmlInjector {
 	**   <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 	** 
 	** *Consider using [RequireJS]`http://requirejs.org/` AMD modules instead!*
+	** 
+	** Note that by default the script is injected at the bottom of the '<body>' tag.
 	abstract ScriptTagBuilder injectScript(Bool appendToHead := false)
+
+	** Ensures that the RequireJS script and corresponding config is injected into the page.
+	** 
+	** A call to this is only required when you want to hard code require calls in the HTML. 
+	** For example, if your HTML looked like this:
+	** 
+	** pre>
+	** <html>
+	** <body>
+	**     <h1>Hello!</h1>
+	**     <script>
+	**         require(['jquery'], function($) {
+	**             // ... wotever...
+	**         });
+	**     </script>
+	** </body>
+	** </html>
+	** <pre
+	** 
+	** Then a call to 'injectRequireJs()' would be required to ensure RequireJS was loaded before the script call.
+	abstract Void injectRequireJs()
 
 	** Wraps the 'script' in a function call to [RequireJS]`http://requirejs.org/`, ensuring the given module dependencies are available.  
 	** 
@@ -158,6 +181,10 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		else
 			appendToBody(bob.htmlNode)
 		return bob
+	}
+	
+	override Void injectRequireJs() {
+		duvetProcessor.addRequireJs		
 	}
 	
 	override ScriptTagBuilder injectRequireScript(Str:Str scriptParams, Str script) {

@@ -6,7 +6,7 @@ internal class TestLinkInjection : DuvetTest {
 	@Inject HtmlInjector? injector
 	
 	override Void setup() {
-		startBedSheet(T_AppModule04#)
+		startBedSheet([T_AppModule04#])
 	}
 	
 	Void testExternalUrls() {

@@ -8,10 +8,10 @@ internal class DuvetTest : Test {
 		startBedSheet(null)
 	}
 
-	Void startBedSheet(Type? appModule) {
+	Void startBedSheet(Type[]? appModules) {
 		bob := BedServer(DuvetModule#)
-		if (appModule != null)
-			bob.addModule(appModule)
+		if (appModules != null)
+			bob.addModules(appModules)
 		server := bob.startup
 		server.injectIntoFields(this)
 		client = server.makeClient

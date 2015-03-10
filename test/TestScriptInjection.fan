@@ -1,12 +1,14 @@
 using afIoc
+using afIocConfig
 using afBedSheet
 
 internal class TestScriptInjection : DuvetTest {
 	
-	@Inject HtmlInjector? injector
+	@Inject HtmlInjector?	injector
+	@Inject @Config Str? 	requireJsUrl
 	
 	override Void setup() {
-		startBedSheet(T_AppModule03#)
+		startBedSheet([T_AppModule03#])
 	}
 
 	Void testExternalUrls() {
@@ -44,6 +46,52 @@ internal class TestScriptInjection : DuvetTest {
 		verify(html.contains("alert(1)"))
 		verify(html.contains("alert(2)"))
 	}
+
+	Void testRequireIsInjectedBeforeCustomScripts() {
+		html := client.get(`/scriptX1`).body.str
+		myScript := html.index("myScript")	 ?: throw Err("Script not found")
+		requireJ := html.index(requireJsUrl) ?: throw Err("Require not found")
+		verify(requireJ < myScript)
+	}
+
+	Void testDoubleScripts() {
+		html := client.get(`/scriptX2`).body.str
+		echo(html)
+		myScript1 := html.index("myScript1")	?: throw Err("Script not found")
+		myScript2 := html.index("myScript2")	?: throw Err("Script not found")
+		requireJs := html.index(requireJsUrl)	?: throw Err("Require not found")
+		verify(requireJs < myScript1)
+		verify(requireJs < myScript2)
+	}
+
+	Void testMidScript() {
+		html := client.get(`/scriptX0`).body.str
+		echo(html)
+		myScript1 := html.index("myScript1")	?: throw Err("Script not found")
+		myScript2 := html.index("myScript2")	?: throw Err("Script not found")
+		requireJs := html.index(requireJsUrl)	?: throw Err("Require not found")
+		wotever  := html.index("<p>wotever</p>")?: throw Err("Wotever not found")
+		verify(myScript1 < requireJs)
+		verify(wotever   < requireJs)
+		verify(requireJs < myScript2)
+	}
+}
+
+internal class TestDisableSmartScriptInjection : DuvetTest {
+	
+	@Inject HtmlInjector?	injector
+	@Inject @Config Str? 	requireJsUrl
+	
+	override Void setup() {
+		startBedSheet([T_AppModule03#, T_AppModule06#])
+	}
+	
+	Void testRequireIsNOTinjectedBeforeCustomScripts() {
+		html := client.get(`/scriptX1`).body.str
+		myScript := html.index("myScript")	 ?: throw Err("Script not found")
+		requireJ := html.index(requireJsUrl) ?: throw Err("Require not found")
+		verify(requireJ > myScript)
+	}
 }
 
 internal class T_AppModule03 {
@@ -56,6 +104,9 @@ internal class T_AppModule03 {
 		conf.add(Route(`/twoSame`,	#twoSame))
 		conf.add(Route(`/twoDiff`,	#twoDiff))
 		conf.add(Route(`/twoNoSrc`,	#twoNoSrc))
+		conf.add(Route(`/scriptX1`,	#myOwnRequireScript))
+		conf.add(Route(`/scriptX2`,	#scriptX2))
+		conf.add(Route(`/scriptX0`,	#scriptX0))
 	}
 	
 	Text head() {
@@ -84,5 +135,49 @@ internal class T_AppModule03 {
 		injector.injectScript.withScript("alert(1)")
 		injector.injectScript.withScript("alert(2)")
 		return Text.fromHtml("<html><head></head><body></body></html>")
+	}
+
+	Text myOwnRequireScript() {
+		injector.injectRequireJs
+		return Text.fromHtml("<html>
+		                          <head></head>
+		                          <body>
+		                              <script id='myScript'>
+		                                  require(['jquery'], function (\$) {
+		                                      \$('p').addClass('magic');
+		                                  });
+		                              </script>
+		                          </body>
+		                      </html>")
+	}
+
+	Text scriptX2() {
+		injector.injectRequireJs
+		return Text.fromHtml("<html>
+		                          <head></head>
+		                          <body>
+		                              <script id='myScript1'></script>
+		                              <script id='myScript2'></script>
+		                          </body>
+		                      </html>")
+	}
+
+	Text scriptX0() {
+		injector.injectRequireJs
+		return Text.fromHtml("<html>
+		                          <head></head>
+		                          <body>
+		                              <script id='myScript1'></script>
+		                              <p>wotever</p>
+		                              <script id='myScript2'></script>
+		                          </body>
+		                      </html>")
+	}
+}
+
+internal class T_AppModule06 {
+	@Contribute { serviceType=ApplicationDefaults# }
+	static Void contributeAppDefaults(Configuration config) {
+		config[DuvetConfigIds.disableSmartInsertion]	= true
 	}
 }

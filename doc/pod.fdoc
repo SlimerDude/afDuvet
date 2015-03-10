@@ -3,7 +3,7 @@ Overview [#overview]
 'Duvet' is a [BedSheet]`pod:afBedSheet` library that delivers Javascript to the browser.
 
 'Duvet' provides a wrapper around [RequireJS]`http://requirejs.org/` and packages up Fantom generated Javascript code.
-It gives you clean dependency management for Javascript libraries and a means to execute Fantom code in the web browser!
+It gives clean dependency management for Javascript libraries and a means to execute Fantom code in the web browser.
 
 
 Why Duvet? [#why]
@@ -311,6 +311,42 @@ static Void contributeScriptModules(Configuration config) {
 
 
 
+Custom Require Scripts [#customRequireScripts]
+==============================================
+Sometimes, for quick wins in development, it is handy to write your own script tags directly in the HTML. This is still possible, even when it calls RequireJS. Example:
+
+pre>
+syntax: html
+
+<html>
+<body>
+    <h1>Hello!</h1>
+    <script>
+        require(['jquery'], function($) {
+            // ... wotever...
+        });
+    </script>
+</body>
+</html>
+<pre
+
+To make the above work, make a call to 'HtmlInjector.injectRequireJs()'. That will ensure that RequireJS, and any corresponding config, is injected into the HTML.
+
+Note that by default, Duvet will try to be a little smart about inserting RequireJS (and other script tags) into the body. It will insert them *before* the last '<script>' tag in the HTML. That is, the last script tag immediately before '</body>'.
+
+Inevitably this *smart* insertion will fail at some point, especially if your script contains the character sequence '</script>' in a comment or similar; it is after all, just regular expression matching.
+
+So to disable this *(ahem)* *smart* insertion and bang all scripts in just before the closing '</body>' tag, add the following to your 'AppModule':
+
+pre>
+@Contribute { serviceType=ApplicationDefaults# }
+static Void contributeAppDefaults(Configuration config) {
+    config[DuvetConfigIds.disableSmartInsertion]    = true
+}
+<pre
+
+
+
 Non-RequireJS Usage [#nonRequireJs]
 ***********************************
 Sometimes an old skool approach is more convenient when executing Fantom code on a page.
@@ -339,6 +375,8 @@ syntax: html
 <pre
 
 Note that the order in which the pod '.js' files are listed is very important; each pod's dependencies must be listed before the pod itself.
+
+Fantom code may also be executed via the [web::WebUtil.jsMain()]`web::WebUtil.jsMain` method.
 
 
 
@@ -381,11 +419,13 @@ const mixin PooPage : EfanComponent {
 }
 <pre
 
+
+
 Release Notes [#releaseNotes]
 *****************************
 v1.0.8 [#v1.0.8]
 ================
- -
+ - New: Smart script insertion allows you to write your own require scripts in the static HTML.
  - Chg: Added 'DuvetMiddleware' to BedSheet's 'StackFrameFilter' because it's boring!
  - Chg: Revamped portions of the documentation.
 

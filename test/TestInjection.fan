@@ -8,7 +8,7 @@ internal class TestInjection : DuvetTest {
 	private static const |LogRec rec| handler := |LogRec rec| { logs.add(rec) }
 	
 	override Void setup() {
-		startBedSheet(T_AppModule01#)
+		startBedSheet([T_AppModule01#])
 		logs.clear
 		Log.addHandler(handler)
 	}

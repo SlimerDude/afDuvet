@@ -7,7 +7,7 @@ internal class TestRequireJsScript : DuvetTest {
 	@Inject @Config Uri? requireJsUrl
 	
 	override Void setup() {
-		startBedSheet(T_AppModule02#)
+		startBedSheet([T_AppModule02#])
 	}
 	
 	Void testDownloadUrl() {
