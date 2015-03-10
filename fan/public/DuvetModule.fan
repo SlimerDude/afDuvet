@@ -17,6 +17,12 @@ const class DuvetModule {
 		defs.add(DuvetPrinter#)
 	}
 
+	@Contribute { serviceType=StackFrameFilter# }
+	static Void contributeStackFrameFilter(Configuration config) {
+		// remove meaningless and boring stack frames
+		config.add("^afDuvet::DuvetMiddleware.+\$")
+	}
+
 	@Contribute { serviceType=ResponseProcessors# }
 	internal static Void contributeResponseProcessors(Configuration config, DuvetProcessor duvetProcessor) {
 		config.overrideValue(Text#, duvetProcessor, "afDuvet.textProcessor")

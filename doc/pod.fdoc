@@ -78,7 +78,7 @@ Quick Start [#quickStart]
 
     class Main {
         Int main() {
-            afBedSheet::Main().main([AppModule#.qname, "8080"])
+            BedSheetBuilder(AppModule#.qname).startWisp(8069)
         }
     }
 
@@ -93,9 +93,9 @@ Quick Start [#quickStart]
 
     IoC Registry built in 612ms and started up in 104ms
 
-    Bed App 'Unknown' listening on http://localhost:8080/
+    Bed App 'Example_0' listening on http://localhost:8069/
 
-3. Visit 'http://localhost:8080/'
+3. Visit 'http://localhost:8069/'
 
   ![Duvet Example - Screenshot]`http://static.alienfactory.co.uk/fantom-docs/afDuvet.exampleScreenshot.png`
 
@@ -196,7 +196,7 @@ htmlInjector.injectRequireModule("myModule", "doOtherStuff", ["Emma!"])
 
 Fantom Pod Modules [#fantomModules]
 ===================================
-Duvet lets Fantom code be run directly in the browser by converting pod .js files into RequireJS modules.
+Duvet lets Fantom code be run directly in the browser by converting pod '.js' files into RequireJS modules.
 
 Fantom compiles all classes in a pod annotated with the '@Js' facet into a Javascript file that is saved in the pod.
 These javascript pod files can then be served up with BedSheet's 'PodHandler' service.
@@ -311,33 +311,87 @@ static Void contributeScriptModules(Configuration config) {
 
 
 
-Non-RequireJS Usage
-*******************
-Sometimes an old skool approach is preferred / is more convenient when
+Non-RequireJS Usage [#nonRequireJs]
+***********************************
+Sometimes an old skool approach is more convenient when executing Fantom code on a page.
 
-For this you don't actually need Duvet at all - here is some example HTML that only relies on BedSheet's 'PodHandler' service:
+For this you don't actually need Duvet at all, instead you just rely on BedSheet's 'PodHandler' service to serve up the pod '.js' files. Here is an example that calls 'alert()' via Fantom's DOM pod; just serve it up in BedSHeet as static HTML:
 
- <script type='text/javascript' src='/pod/sys/sys.js'></script>
-<script type='text/javascript' src='/pod/concurrent/concurrent.js'></script>
-<script type='text/javascript' src='/pod/gfx/gfx.js'></script>
-<script type='text/javascript' src='/pod/fwt/fwt.js'></script>
-<script type='text/javascript' src='/pod/afUtils/afUtils.js'></script>
+pre>
+syntax: html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="/pods/sys/sys.js"></script>
+    <script type="text/javascript" src="/pods/gfx/gfx.js"></script>
+    <script type="text/javascript" src="/pods/web/web.js"></script>
+    <script type="text/javascript" src="/pods/dom/dom.js"></script>
+</head>
+<body>
+    <h1>Old Skool Example</h1>
+
+    <script type="text/javascript">
+        fan.dom.Win.cur().alert("Hello Mum!");
+    </script>
+</body>
+</html>
+<pre
+
+Note that the order in which the pod '.js' files are listed is very important; each pod's dependencies must be listed before the pod itself.
 
 
-(cut n paste into BedSheet)
 
+Pillow & efanExtra Example [#pillowExample]
+*******************************************
+It is common to use Duvet with [Pillow]`pod:afPillow` and [efanXtra]`pod:afEfanXtra`. As such, below is a sample Pillow page / efanXtra component component that may be useful for cut'n'paste purposes:
 
+pre>
+syntax: fantom
 
-Pillow Example
-**************
+using afIoc::Inject
+using afEfanXtra::EfanComponent
+using afEfanXtra::InitRender
+using afPillow::Page
+using afDuvet::HtmlInjector
 
+@Page { contentType=MimeType("text/html") }
+const mixin PooPage : EfanComponent {
 
+    @Inject abstract HtmlInjector htmlInjector
+
+    @InitRender
+    Void initRender() {
+
+        // inject meta tags and stylesheets into your HTML
+        htmlInjector.injectMeta.withName("author").withContent("Fantom-Factory")
+
+        // inject a RequireJS script snippet
+        // this ensures all dependencies are loaded before execution
+        htmlInjector.injectRequireScript(
+            ["jquery" : "jq"],
+            "alert('jQuery v' + jq().jquery);"
+        )
+    }
+
+    // This is usually an external template file - overridden here for visibility.
+    override Str renderTemplate() {
+        "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
+    }
+}
+<pre
 
 Release Notes [#releaseNotes]
 *****************************
+v1.0.8 [#v1.0.8]
+================
+ -
+ - Chg: Added 'DuvetMiddleware' to BedSheet's 'StackFrameFilter' because it's boring!
+ - Chg: Revamped portions of the documentation.
+
 v1.0.6 [#v1.0.6]
 ================
- - Bug: Duvet no longers Errs when resolving pod JS file when run as a script. (Updated mainly for FormBean demo.)
+ - Bug: Duvet no longers Errs when resolving pod JS files when run as a script. (Updated mainly for FormBean demo.)
 
 v1.0.4 [#v1.0.4]
 ================
