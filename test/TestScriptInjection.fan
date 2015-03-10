@@ -56,7 +56,6 @@ internal class TestScriptInjection : DuvetTest {
 
 	Void testDoubleScripts() {
 		html := client.get(`/scriptX2`).body.str
-		echo(html)
 		myScript1 := html.index("myScript1")	?: throw Err("Script not found")
 		myScript2 := html.index("myScript2")	?: throw Err("Script not found")
 		requireJs := html.index(requireJsUrl)	?: throw Err("Require not found")
@@ -66,7 +65,6 @@ internal class TestScriptInjection : DuvetTest {
 
 	Void testMidScript() {
 		html := client.get(`/scriptX0`).body.str
-		echo(html)
 		myScript1 := html.index("myScript1")	?: throw Err("Script not found")
 		myScript2 := html.index("myScript2")	?: throw Err("Script not found")
 		requireJs := html.index(requireJsUrl)	?: throw Err("Require not found")

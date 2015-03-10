@@ -5,6 +5,10 @@ internal class DuvetTest : Test {
 	BedClient? client
 	
 	override Void setup() {
+		Log.get("afIoc").level		= LogLevel.warn
+		Log.get("afIocEnv").level	= LogLevel.warn
+		Log.get("afBedSheet").level	= LogLevel.warn
+		Log.get("afDuvet").level	= LogLevel.warn
 		startBedSheet(null)
 	}
 
