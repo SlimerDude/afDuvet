@@ -17,6 +17,11 @@ internal const class DuvetProcessor : ResponseProcessor {
 	@Inject @Config private const File			requireJsFile
 	@Inject @Config private const Uri			baseModuleUrl
 	@Inject @Config private const Duration?		requireJsTimeout
+	@Inject @Config private const Bool			disableSmartInsertion
+	
+	private static const Regex 					headRegex	:= "(?i)</head>".toRegex
+	private static const Regex 					bodyRegex	:= "(?i)</body>".toRegex
+	private static const Regex 					jsRegex		:= "(?is)<script ((?!</script>).)*?</script>\\s*\$".toRegex
 	
 	new make(|This|in) {
 		in(this)
@@ -31,7 +36,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 		html 		:= StrBuf(text.text.size).add(text.text)
 		tagStyle	:= findTagStyle(text.contentType)
 		endOfHead	:= headTags.isEmpty ? null : findEndOfHead(text.text)
-		endOfBody	:= bodyTags.isEmpty ? null : findEndOfBody(text.text)
+		endOfBody	:= bodyTags.isEmpty && !requireRequired.val ? null : findEndOfBody(text.text)
 		
 		if (tagStyle != null) {
 			if (!headTags.isEmpty && endOfHead != null) {
@@ -43,7 +48,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 					endOfBody += headTags.size
 			}
 			
-			if (!bodyTags.isEmpty && endOfBody != null) {
+			if (endOfBody != null && (bodyTags.size > 0 || requireRequired.val)) {
 				
 				if (requireRequired.val) {
 					config := requireJsConfig.tweakConfig(tagStyle)
@@ -108,21 +113,38 @@ internal const class DuvetProcessor : ResponseProcessor {
 	}
 	
 	private Int? findEndOfHead(Str html) {
-		matcher := "(?i)</head>".toRegex.matcher(html.toStr)
-		if (!matcher.find) {
+		headMatcher := headRegex.matcher(html)
+		if (!headMatcher.find) {
 			log.warn(LogMsgs.canNotFindHead)
 			return null
 		}
-		return matcher.start(0)		
+		return headMatcher.start(0)		
 	}
 
 	private Int? findEndOfBody(Str html) {
-		matcher := "(?i)</body>".toRegex.matcher(html.toStr)
-		if (!matcher.find) {
+		bodyMatcher := bodyRegex.matcher(html)
+		if (!bodyMatcher.find) {
 			log.warn(LogMsgs.canNotFindBody)
 			return null
 		}
-		return matcher.start(0)		
+		bodyEnd := bodyMatcher.start(0)
+
+		if (disableSmartInsertion)
+			return bodyEnd
+		
+		// now search backwards looking for the last script tag
+		jsEnd   := bodyEnd
+		subHtml := html[0..<bodyEnd]
+		enough	:= false
+		while (!enough) {
+			jsMatcher := jsRegex.matcher(subHtml)
+			if (jsMatcher.find) {
+				jsEnd = jsMatcher.start(0)
+				subHtml = subHtml[0..<jsEnd]
+			} else
+				enough = true
+		}
+		return jsEnd
 	}
 	
 	private Bool isDup(HtmlNode? node) {

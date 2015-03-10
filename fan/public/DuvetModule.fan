@@ -66,6 +66,7 @@ const class DuvetModule {
 		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.1.14.js`
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireJsTimeout]	= 15sec
+		config[DuvetConfigIds.disableSmartInsertion]	= false
 	}
 
 	@Contribute { serviceType=RegistryStartup# }

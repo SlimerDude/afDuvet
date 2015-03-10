@@ -4,7 +4,7 @@ using afBedSheet
 internal class TestMiddleware : DuvetTest {
 	
 	override Void setup() {
-		startBedSheet(T_AppModule05#)
+		startBedSheet([T_AppModule05#])
 	}
 
 	Void testCleanUpOnErr() {

@@ -29,6 +29,16 @@ const mixin DuvetConfigIds {
 	**
 	** Defaults to '15sec'.
 	static const Str requireJsTimeout	:= "afDuvet.requireJsTimeout"
+	
+	** By default, Duvet will try to insert RequireJS and other script tags *before* the last '<script>' tag in the HTML. 
+	** This allows you to write your own 'require()' script functions at the bottom of the HTML page and still have access to RequireJS.
+	** (Which is handy for quick wins in development).
+	** 
+	** But inevitably this *smart* insertion will fail at some point, especially if the script contains the character sequence '</script>' in a comment or similar;
+	** it is, after all, just regular expression matching. 
+	** 
+	** So setting this config to 'true' disables the *(ahem)* *smart* insertion and bangs in all scripts just before the closing '</body>' tag. 
+	static const Str disableSmartInsertion	:= "afDuvet.disableSmartInsertion"
 
 	internal static Void validateConfig(ConfigSource iocConfig) {
 		baseModuleUrl := (Uri) iocConfig.get(DuvetConfigIds.baseModuleUrl, Uri#)
