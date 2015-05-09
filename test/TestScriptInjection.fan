@@ -73,6 +73,14 @@ internal class TestScriptInjection : DuvetTest {
 		verify(wotever   < requireJs)
 		verify(requireJs < myScript2)
 	}
+
+	Void testRequireIsInjectedBeforeCustomScripts2() {
+		// check it still works with a plain <script> tag
+		html := client.get(`/script2X1`).body.str
+		myScript := html.index("<script>")	 ?: throw Err("Script not found")
+		requireJ := html.index(requireJsUrl) ?: throw Err("Require not found")
+		verify(requireJ < myScript)
+	}
 }
 
 internal class TestDisableSmartScriptInjection : DuvetTest {
@@ -105,6 +113,7 @@ internal class T_AppModule03 {
 		conf.add(Route(`/scriptX1`,	#myOwnRequireScript))
 		conf.add(Route(`/scriptX2`,	#scriptX2))
 		conf.add(Route(`/scriptX0`,	#scriptX0))
+		conf.add(Route(`/script2X1`,#myOwnRequireScript2))
 	}
 	
 	Text head() {
@@ -168,6 +177,20 @@ internal class T_AppModule03 {
 		                              <script id='myScript1'></script>
 		                              <p>wotever</p>
 		                              <script id='myScript2'></script>
+		                          </body>
+		                      </html>")
+	}
+
+	Text myOwnRequireScript2() {
+		injector.injectRequireJs
+		return Text.fromHtml("<html>
+		                          <head></head>
+		                          <body>
+		                              <script>
+		                                  require(['jquery'], function (\$) {
+		                                      \$('p').addClass('magic');
+		                                  });
+		                              </script>
 		                          </body>
 		                      </html>")
 	}
