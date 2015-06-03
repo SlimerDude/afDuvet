@@ -8,6 +8,8 @@ using afIocConfig
 ** Example, to define multiple modules in one '.js' file use the [RequireJS bundles]`http://requirejs.org/docs/api.html#config-bundles` config property: 
 ** 
 ** pre>
+** syntax: fantom
+** 
 ** @Contribute { serviceType=RequireJsConfigTweaks# }
 ** static Void contributeRequireJsConfigTweaks(Configuration conf) {
 **     conf["app.bundles"] = |Str:Obj? config| {
@@ -18,6 +20,8 @@ using afIocConfig
 ** <pre
 ** 
 ** Note that when doing so, your module define() functions need to specify their module name:
+** 
+**   syntax: fantom
 ** 
 **   define("moduleId", ["jquery"], function($) { ... }
 ** 

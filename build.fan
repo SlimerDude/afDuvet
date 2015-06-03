@@ -5,13 +5,13 @@ class Build : BuildPod {
 	new make() {
 		podName = "afDuvet"
 		summary = "Something soft and comfortable to wrap your Javascript up in!"
-		version = Version("1.0.11")
+		version = Version("1.0.10")
 
 		meta = [
 			"proj.name"		: "Duvet",
 			"afIoc.module"	: "afDuvet::DuvetModule",
-			"tags"			: "web",
-			"repo.private"	: "true"
+			"repo.tags"		: "web",
+			"repo.public"	: "true"
 		]
 
 		index = [	
@@ -37,7 +37,7 @@ class Build : BuildPod {
 		]
 		
 		srcDirs = [`test/`, `test/modules/`, `test/modules/my/`, `fan/`, `fan/public/`, `fan/public/advanced/`, `fan/internal/`]
-		resDirs = [`res/`]
+		resDirs = [`doc/`,`res/`]
 	}
 	
 	override Void compile() {

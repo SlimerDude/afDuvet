@@ -1,6 +1,6 @@
 using afIocConfig
 
-** [IoC Config]`http://www.fantomfactory.org/pods/afIocConfig` values for 'Duvet'.
+** [IoC Config]`pod:afIocConfig` values for 'Duvet'.
 const mixin DuvetConfigIds {
 	
 	** The base URL (local to BedSheet) where [RequireJS]`http://requirejs.org/` / AMD modules are loaded from. 
