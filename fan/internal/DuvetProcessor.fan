@@ -21,7 +21,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 	
 	private static const Regex 					headRegex	:= "(?i)</head>".toRegex
 	private static const Regex 					bodyRegex	:= "(?i)</body>".toRegex
-	private static const Regex 					jsRegex		:= "(?is)<script ((?!</script>).)*?</script>\\s*\$".toRegex
+	private static const Regex 					jsRegex		:= "(?is)<script[ >]((?!</script>).)*?</script>\\s*\$".toRegex
 
 	
 	new make(|This|in) {

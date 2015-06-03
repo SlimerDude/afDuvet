@@ -1,6 +1,10 @@
 Versions
 ********
 
+v1.0.12
+==================
+ - Bug: Smart script insertion didn't work with plain '<script>' tags.
+
 v1.0.10
 =======
  - Chg: Re-compiled to work with [BedSheet 1.4.10]`pod:afBedSheet`.

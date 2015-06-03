@@ -6,7 +6,7 @@
 
 ## Overview
 
-`Duvet` is a [BedSheet](http://www.fantomfactory.org/pods/afBedSheet) library that delivers Javascript to the browser.
+`Duvet` is a [BedSheet](http://pods.fantomfactory.org/pods/afBedSheet) library that delivers Javascript to the browser.
 
 `Duvet` provides a wrapper around [RequireJS](http://requirejs.org/) and packages up Fantom generated Javascript code. It gives clean dependency management for Javascript libraries and a means to execute Fantom code in the web browser.
 
@@ -26,7 +26,7 @@ To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan
 
 ## Documentation
 
-Full API & fandocs are available on the [Status302 repository](http://repo.status302.com/doc/afDuvet/).
+Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afDuvet/).
 
 ## Quick Start
 
@@ -79,7 +79,7 @@ Full API & fandocs are available on the [Status302 repository](http://repo.statu
         }
 
 
-2. Run `Example.fan` as a Fantom script from the command line. This starts the [BedSheet](http://www.fantomfactory.org/pods/afBedSheet) app server:
+2. Run `Example.fan` as a Fantom script from the command line. This starts the [BedSheet](http://pods.fantomfactory.org/pods/afBedSheet) app server:
 
         C:\> fan Example.fan
            ___    __                 _____        _
@@ -95,13 +95,13 @@ Full API & fandocs are available on the [Status302 repository](http://repo.statu
 
 3. Visit `http://localhost:8069/`
 
-  ![Duvet Example - Screenshot](http://static.alienfactory.co.uk/fantom-docs/afDuvet.exampleScreenshot.png)
+  ![Duvet Quickstart Example - Screenshot](quickstartScreenshot.png)
 
 
 
 ## HTML Injection
 
-It is good practice to componentise your web pages (something that [efanXtra](http://www.fantomfactory.org/pods/afEfanXtra) excels at).
+It is good practice to componentise your web pages (something that [efanXtra](http://pods.fantomfactory.org/pods/afEfanXtra) excels at).
 
 Taking a blog website as an example, some pages show comments and others don't. If comments were encapsulated in a *CommentComponent* it would only need to be rendered on those pages that need it. And like any fully featured component it requires its own stylesheet and some javascript. But these files shouldn't be downloaded on *every* page, just the pages that render the *CommentComponent*. The *CommentComponent* itself should be responsible for referencing its support files.
 
@@ -109,7 +109,7 @@ Taking a blog website as an example, some pages show comments and others don't. 
 
 ** *A). Duvet Html Injection.* **
 
-The [HtmlInjector](http://repo.status302.com/doc/afDuvet/HtmlInjector.html) service lets you inject meta, scripts and stylesheets into your HTML, at any time before the page is sent to the client. The HTML tags are injected into either the bottom of the HEAD or the BODY section.
+The [HtmlInjector](http://pods.fantomfactory.org/pods/afDuvet/api/HtmlInjector) service lets you inject meta, scripts and stylesheets into your HTML, at any time before the page is sent to the client. The HTML tags are injected into either the bottom of the HEAD or the BODY section.
 
 But what if the *CommentComponent* is rendered more than once on a single page? You don't want multiple copies of the same stylesheet downloaded on the same page!?
 
@@ -127,7 +127,7 @@ Looking after countless Javascript libraries, ensuring they all get loaded quick
 
 RequireJS requires Javascript to be packaged up into module files. A lot of popular Javascript libraries, including jQuery, already conform to this standard.
 
-All Javascript module files need to be served from the same [baseUrl](http://repo.status302.com/doc/afDuvet/DuvetConfigIds.html#baseModuleUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
+All Javascript module files need to be served from the same [baseUrl](http://pods.fantomfactory.org/pods/afDuvet/api/DuvetConfigIds#baseModuleUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
 
 ```
 @Contribute { serviceType=FileHandler# }
@@ -237,6 +237,10 @@ Note that the element needs to specify a width, height and give a CSS `position`
 
     <div id="fwt-window" style="width: 640px; height:480px; position:relative;"></div>
 
+For an example of what fwt is capable of in the browser, see the article [Run Fantom Code In a Browser!](http://www.fantomfactory.org/articles/run-fantom-code-in-a-browser).
+
+![Duvet FWT Example - Screenshot](fwtScreenshot.png)
+
 #### Disabling Pods
 
 If you want to restrict access to Fantom generated Javascript, or just don't like Fantom modules cluttering up the RequireJS shim, then pods can be easily disabled. Simply remove the `afDuvet.podModules` configuration from the `ScriptModules` service:
@@ -248,7 +252,7 @@ If you want to restrict access to Fantom generated Javascript, or just don't lik
 
 ### Module Config
 
-Not all popular Javascript libraries are AMD modules, unfortunately, so these require a little configuration to get working. Configuration is done by contributing [ScriptModule](http://repo.status302.com/doc/afDuvet/ScriptModule.html) instances.
+Not all popular Javascript libraries are AMD modules, unfortunately, so these require a little configuration to get working. Configuration is done by contributing [ScriptModule](http://pods.fantomfactory.org/pods/afDuvet/api/ScriptModule) instances.
 
 All `ScriptModule` data map to the RequireJS [path](http://requirejs.org/docs/api.html#config-paths) and [shim](http://requirejs.org/docs/api.html#config-shim) config options.
 
@@ -333,7 +337,7 @@ Fantom code may also be executed via the [web::WebUtil.jsMain()](http://fantom.o
 
 ## Pillow & efanExtra Example
 
-It is common to use Duvet with [Pillow](http://www.fantomfactory.org/pods/afPillow) and [efanXtra](http://www.fantomfactory.org/pods/afEfanXtra). As such, below is a sample Pillow page / efanXtra component component that may be useful for cut'n'paste purposes:
+It is common to use Duvet with [Pillow](http://pods.fantomfactory.org/pods/afPillow) and [efanXtra](http://pods.fantomfactory.org/pods/afEfanXtra). As such, below is a sample Pillow page / efanXtra component component that may be useful for cut'n'paste purposes:
 
 ```
 using afIoc::Inject
