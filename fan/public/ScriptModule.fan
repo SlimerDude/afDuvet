@@ -5,6 +5,8 @@ using afBedSheet
 ** Example:
 ** 
 ** pre>
+** syntax: fantom
+** 
 ** @Contribute { serviceType=ScriptModules# }
 ** static Void contributeScriptModules(OrderedConfig config) {
 **     jqueryModule := ScriptModule("jquery").atUrl(`/scripts/jquery-2.1.1.min.js`).exports("jQuery") 
@@ -58,6 +60,7 @@ class ScriptModule {
 	}
 	
 	** An alternative to 'exports', this allows the module to be initialised with a short expression.
+	** 
 	** @see `http://requirejs.org/docs/api.html#config-shim` for details.
 	This initWith(Str expression) {
 		this._init = expression
