@@ -95,7 +95,7 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
 
 3. Visit `http://localhost:8069/`
 
-  ![Duvet Quickstart Example - Screenshot](quickstartScreenshot.png)
+  ![Duvet Quickstart Example - Screenshot](http://pods.fantomfactory.org/pods/afDuvet/doc/quickstartScreenshot.png)
 
 
 
@@ -239,7 +239,7 @@ Note that the element needs to specify a width, height and give a CSS `position`
 
 For an example of what fwt is capable of in the browser, see the article [Run Fantom Code In a Browser!](http://www.fantomfactory.org/articles/run-fantom-code-in-a-browser).
 
-![Duvet FWT Example - Screenshot](fwtScreenshot.png)
+![Duvet FWT Example - Screenshot](http://pods.fantomfactory.org/pods/afDuvet/doc/fwtScreenshot.png)
 
 #### Disabling Pods
 
