@@ -83,8 +83,15 @@ class ScriptModule {
 		return shim
 	}
 
+	internal Void cacheUrls(ClientAssetCache assetCache) {
+		if (isLocal(_primaryUrl))
+			_primaryUrl = assetCache.getAndUpdateOrProduce(_primaryUrl)?.clientUrl ?: _primaryUrl
+		if (isLocal(_fallabackUrl))
+			_fallabackUrl = assetCache.getAndUpdateOrProduce(_fallabackUrl)?.clientUrl ?: _fallabackUrl
+	}
+	
 	internal Str:Obj? addToPath(Str:Obj? paths) {
-		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }.map { removeJsExt(it).toStr }
+		urls := [_primaryUrl, _fallabackUrl].exclude { it == null }. map { removeJsExt(it).toStr }
 		if (urls.size == 1)
 			paths[moduleId] = urls.first
 		if (urls.size == 2)
@@ -96,5 +103,9 @@ class ScriptModule {
 		if (url.ext == "js")
 			url = url.toStr[0..<-3].toUri
 		return url
+	}
+	
+	private Bool isLocal(Uri? url) {
+		url != null && url.isRel && url.isPathOnly && url.isPathAbs
 	}
 }
