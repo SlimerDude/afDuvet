@@ -1,7 +1,7 @@
-#Duvet v1.0.10
+#Duvet v1.0.12
 ---
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v1.0.10](http://img.shields.io/badge/pod-v1.0.10-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
+[![pod: v1.0.12](http://img.shields.io/badge/pod-v1.0.12-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
@@ -18,7 +18,7 @@ Embracing RequireJs and AMD modules is like having an IoC for Javascript; and us
 
 Install `Duvet` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
 
-    C:\> fanr install -r http://repo.status302.com/fanr/ afDuvet
+    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afDuvet
 
 To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
 
