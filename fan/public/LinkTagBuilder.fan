@@ -21,7 +21,7 @@ class LinkTagBuilder {
 	LinkTagBuilder fromExternalUrl(Uri externalUrl) {
 		if (externalUrl.host == null)
 			throw ArgErr(ErrMsgs.externalUrlsNeedHost(externalUrl))
-		element["href"] = externalUrl.toStr
+		element["href"] = externalUrl.encode
 		return this
 	}
 
@@ -31,7 +31,7 @@ class LinkTagBuilder {
 	** Returns 'this'.
 	LinkTagBuilder fromLocalUrl(Uri localUrl) {
 		fileAsset := fileHandler.fromLocalUrl(localUrl)	// this adds any ColdFeet digests
-		element["href"] = fileAsset.clientUrl.toStr
+		element["href"] = fileAsset.clientUrl.encode
 		return this		
 	}
 
@@ -41,7 +41,7 @@ class LinkTagBuilder {
 	** Returns 'this'.
 	LinkTagBuilder fromServerFile(File serverFile) {
 		fileAsset := fileHandler.fromServerFile(serverFile)	// this add any ColdFeet digests
-		element["href"] = fileAsset.clientUrl.toStr
+		element["href"] = fileAsset.clientUrl.encode
 		return this		
 	}
 	
