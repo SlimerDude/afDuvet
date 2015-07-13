@@ -2,7 +2,8 @@ Versions
 ********
 
 v1.0.12
-==================
+=======
+ - Bug: 'LinkTagBuilder' and 'ScriptTagBuilder' did not 'enode()' their URLs.
  - Bug: Smart script insertion didn't work with plain '<script>' tags.
 
 v1.0.10

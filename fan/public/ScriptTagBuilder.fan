@@ -20,7 +20,7 @@ class ScriptTagBuilder {
 	ScriptTagBuilder fromExternalUrl(Uri scriptUrl) {
 		if (scriptUrl.host == null)
 			throw ArgErr(ErrMsgs.externalUrlsNeedHost(scriptUrl))
-		element["src"] = scriptUrl.toStr
+		element["src"] = scriptUrl.encode
 		return this
 	}
 
@@ -30,7 +30,7 @@ class ScriptTagBuilder {
 	** Returns 'this'.
 	ScriptTagBuilder fromLocalUrl(Uri scriptUrl) {
 		fileAsset := fileHandler.fromLocalUrl(scriptUrl)	// this adds any ColdFeet digests
-		element["src"] = fileAsset.clientUrl.toStr
+		element["src"] = fileAsset.clientUrl.encode
 		return this		
 	}
 
@@ -40,7 +40,7 @@ class ScriptTagBuilder {
 	** Returns 'this'.
 	ScriptTagBuilder fromServerFile(File scriptFile) {
 		fileAsset := fileHandler.fromServerFile(scriptFile)	// this adds any ColdFeet digests
-		element["src"] = fileAsset.clientUrl.toStr
+		element["src"] = fileAsset.clientUrl.encode
 		return this		
 	}
 	
