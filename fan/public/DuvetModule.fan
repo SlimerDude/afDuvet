@@ -10,11 +10,11 @@ using web::WebOutStream
 const class DuvetModule { 
 
 	static Void defineServices(RegistryBuilder defs) {
-		defs.addService(DuvetProcessor#)
-		defs.addService(HtmlInjector#)
-		defs.addService(ScriptModules#)		
-		defs.addService(RequireJsConfigTweaks#)
-		defs.addService(DuvetPrinter#)
+		defs.addService(DuvetProcessor#)	.withRootScope
+		defs.addService(HtmlInjector#)		.withRootScope
+		defs.addService(ScriptModules#)		.withRootScope
+		defs.addService(RequireJsConfigTweaks#).withRootScope
+		defs.addService(DuvetPrinter#)		.withRootScope
 	}
 
 	@Contribute { serviceType=StackFrameFilter# }
