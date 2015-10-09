@@ -32,8 +32,10 @@ internal class TestInjection : DuvetTest {
 		html := client.get(`/noHead`).body.str
 		verifyEq(html, "<html><body> --- </body></html>")
 		
+		logs := (logs.list as LogRec[]).findAll { it.logName == "afDuvet" }
+		
 		verifyEq(logs.size, 1)
-		rec := logs.list.first as LogRec
+		rec := logs.first
 		verifyEq(rec.level,	LogLevel.warn)
 		verifyEq(rec.msg, 	LogMsgs.canNotFindHead)
 	}
@@ -41,25 +43,31 @@ internal class TestInjection : DuvetTest {
 	Void testNoBodyIsOkay() {
 		html := client.get(`/noBody`).body.str
 		verifyEq(html, "<html><head> --- </head></html>")
+
+		logs := (logs.list as LogRec[]).findAll { it.logName == "afDuvet" }
 		
 		verifyEq(logs.size, 1)
-		rec := logs.list.first as LogRec
+		rec := logs.first as LogRec
 		verifyEq(rec.level,	LogLevel.warn)
 		verifyEq(rec.msg, 	LogMsgs.canNotFindBody)
 	}
 	
 }
 
-internal class T_AppModule01 {
-	@Inject private HtmlInjector? injector
-	
+internal const class T_AppModule01 {
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration conf) {
-		conf.add(Route(`/html`,		#getHtml))
-		conf.add(Route(`/xml`,		#getXml ))
-		conf.add(Route(`/noHead`,	#noHead ))
-		conf.add(Route(`/noBody`,	#noBody ))
+		conf.add(Route(`/html`,		T_AppModule01Routes#getHtml))
+		conf.add(Route(`/xml`,		T_AppModule01Routes#getXml ))
+		conf.add(Route(`/noHead`,	T_AppModule01Routes#noHead ))
+		conf.add(Route(`/noBody`,	T_AppModule01Routes#noBody ))
 	}
+}
+
+internal const class T_AppModule01Routes {
+	@Inject private const HtmlInjector? injector
+	
+	new make(|This|in) { in(this) }
 	
 	Text getHtml() {
 		injector.injectStylesheet.fromExternalUrl(`http://www.example.com/dude.css`)

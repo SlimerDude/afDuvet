@@ -65,5 +65,4 @@ internal class TestScriptModule : DuvetTest {
 		verifyEq(conf.size, 2)
 		verifyEq(conf, ["jquery", "bootstrap"])
 	}
-	
 }
