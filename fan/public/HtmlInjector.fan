@@ -152,7 +152,7 @@ const mixin HtmlInjector {
 }
 
 internal const class HtmlInjectorImpl : HtmlInjector {
-	@Inject private const Registry			registry
+	@Inject private const Scope				scope
 	@Inject private const DuvetProcessor	duvetProcessor
 	@Inject private const PodHandler		podHandler
 	
@@ -165,7 +165,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 	}
 
 	override LinkTagBuilder injectLink() {
-		bob := (LinkTagBuilder) registry.autobuild(LinkTagBuilder#)
+		bob := (LinkTagBuilder) scope.build(LinkTagBuilder#)
 		appendToHead(bob.htmlNode)
 		return bob
 	}
@@ -175,7 +175,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 	}
 
 	override ScriptTagBuilder injectScript(Bool inHead := false) {
-		bob := (ScriptTagBuilder) registry.autobuild(ScriptTagBuilder#)
+		bob := (ScriptTagBuilder) scope.build(ScriptTagBuilder#)
 		if (inHead)
 			appendToHead(bob.htmlNode)
 		else

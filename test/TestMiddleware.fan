@@ -16,13 +16,17 @@ internal class TestMiddleware : DuvetTest {
 	
 }
 
-internal class T_AppModule05 {
-	@Inject private HtmlInjector? injector
-	
+internal const class T_AppModule05 {
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration conf) {
-		conf.add(Route(`/bang`,		#bang))
+		conf.add(Route(`/bang`,		T_AppModule05Routes#bang))
 	}
+}
+
+internal const class T_AppModule05Routes {
+	@Inject private const HtmlInjector? injector
+	
+	new make(|This|in) { in(this) }
 	
 	Text bang() {
 		injector.injectLink.fromExternalUrl(`//example.com/`)

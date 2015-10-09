@@ -34,14 +34,18 @@ internal class TestRequireJsScript : DuvetTest {
 	}
 }
 
-internal class T_AppModule02 {
-	@Inject private HtmlInjector? injector
-	
+internal const class T_AppModule02 {
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration conf) {
-		conf.add(Route(`/require`, #require))
+		conf.add(Route(`/require`, T_AppModule02Routes#require))
 	}
+}
+
+internal const class T_AppModule02Routes {
+	@Inject private const HtmlInjector? injector
 	
+	new make(|This|in) { in(this) }
+
 	Text require() {
 		injector.injectRequireModule("dude")
 		return Text.fromHtml ("<html><head></head><body></body></html>")

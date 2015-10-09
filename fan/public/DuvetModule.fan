@@ -9,12 +9,12 @@ using web::WebOutStream
 @NoDoc
 const class DuvetModule { 
 
-	static Void defineServices(ServiceDefinitions defs) {
-		defs.add(DuvetProcessor#)
-		defs.add(HtmlInjector#)
-		defs.add(ScriptModules#)		
-		defs.add(RequireJsConfigTweaks#)
-		defs.add(DuvetPrinter#)
+	static Void defineServices(RegistryBuilder defs) {
+		defs.addService(DuvetProcessor#)
+		defs.addService(HtmlInjector#)
+		defs.addService(ScriptModules#)		
+		defs.addService(RequireJsConfigTweaks#)
+		defs.addService(DuvetPrinter#)
 	}
 
 	@Contribute { serviceType=StackFrameFilter# }
@@ -30,7 +30,7 @@ const class DuvetModule {
 
 	@Contribute { serviceType=MiddlewarePipeline# }
 	static Void contributeMiddlewarePipeline(Configuration conf) {
-		conf.set("afDuvet", conf.autobuild(DuvetMiddleware#)).before("afBedSheet.routes")
+		conf.set("afDuvet", conf.build(DuvetMiddleware#)).before("afBedSheet.routes")
 	}
 	
 	@Contribute { serviceType=Routes# }
@@ -41,8 +41,8 @@ const class DuvetModule {
 
 	@Contribute { serviceType=ScriptModules# }
 	internal static Void contributeScriptModules(Configuration config) {
-		modulePaths := (ModulePaths) config.autobuild(ModulePaths#)
-		podModules	:= (PodModules)  config.autobuild(PodModules#)
+		modulePaths := (ModulePaths) config.build(ModulePaths#)
+		podModules	:= (PodModules)  config.build(PodModules#)
 
 		config["afDuvet.cacheModuleUrls"]	= modulePaths.scriptModules
 		config["afDuvet.podModules"] 		= podModules.scriptModules
@@ -69,8 +69,7 @@ const class DuvetModule {
 		config[DuvetConfigIds.disableSmartInsertion]	= false
 	}
 
-	@Contribute { serviceType=RegistryStartup# }
-	internal static Void contributeRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
+	internal static Void onRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
 		config["afDuvet.validateConfig"] = |->| {
 			DuvetConfigIds.validateConfig(configSrc)
 		}

@@ -37,16 +37,20 @@ internal class TestLinkInjection : DuvetTest {
 	}
 }
 
-internal class T_AppModule04 {
-	@Inject private HtmlInjector? injector
-	
+internal const class T_AppModule04 {
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration conf) {
-		conf.add(Route(`/twoSame`,		#twoSame))
-		conf.add(Route(`/twoDiff`,		#twoDiff))
-		conf.add(Route(`/conditional`,	#conditional))
+		conf.add(Route(`/twoSame`,		T_AppModule04Routes#twoSame))
+		conf.add(Route(`/twoDiff`,		T_AppModule04Routes#twoDiff))
+		conf.add(Route(`/conditional`,	T_AppModule04Routes#conditional))
 	}
+}
 	
+internal const class T_AppModule04Routes {
+	@Inject private const HtmlInjector? injector
+	
+	new make(|This|in) { in(this) }
+
 	Text conditional() {
 		injector.injectLink.fromExternalUrl(`//example.com/`).ifIe("if IE")
 		return Text.fromHtml("<html><head></head><body></body></html>")

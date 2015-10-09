@@ -1,6 +1,10 @@
 Versions
 ********
 
+v1.1.0
+======
+ - Chg: Updated to work with [IoC v3]`pod:afIoc` and  [BedSheet 1.5]`pod:afBedSheet`. (Breaking change.)
+
 v1.0.12
 =======
  - Bug: 'LinkTagBuilder' and 'ScriptTagBuilder' did not 'enode()' their URLs.

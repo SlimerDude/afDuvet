@@ -100,21 +100,25 @@ internal class TestDisableSmartScriptInjection : DuvetTest {
 	}
 }
 
-internal class T_AppModule03 {
-	@Inject private HtmlInjector? injector
-	
+internal const class T_AppModule03 {
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration conf) {
-		conf.add(Route(`/head`,		#head))
-		conf.add(Route(`/body`, 	#body))
-		conf.add(Route(`/twoSame`,	#twoSame))
-		conf.add(Route(`/twoDiff`,	#twoDiff))
-		conf.add(Route(`/twoNoSrc`,	#twoNoSrc))
-		conf.add(Route(`/scriptX1`,	#myOwnRequireScript))
-		conf.add(Route(`/scriptX2`,	#scriptX2))
-		conf.add(Route(`/scriptX0`,	#scriptX0))
-		conf.add(Route(`/script2X1`,#myOwnRequireScript2))
+		conf.add(Route(`/head`,		T_AppModule03Routes#head))
+		conf.add(Route(`/body`, 	T_AppModule03Routes#body))
+		conf.add(Route(`/twoSame`,	T_AppModule03Routes#twoSame))
+		conf.add(Route(`/twoDiff`,	T_AppModule03Routes#twoDiff))
+		conf.add(Route(`/twoNoSrc`,	T_AppModule03Routes#twoNoSrc))
+		conf.add(Route(`/scriptX1`,	T_AppModule03Routes#myOwnRequireScript))
+		conf.add(Route(`/scriptX2`,	T_AppModule03Routes#scriptX2))
+		conf.add(Route(`/scriptX0`,	T_AppModule03Routes#scriptX0))
+		conf.add(Route(`/script2X1`,T_AppModule03Routes#myOwnRequireScript2))
 	}
+}
+
+internal const class T_AppModule03Routes {
+	@Inject const private HtmlInjector? injector
+	
+	new make(|This|in) { in(this) }
 	
 	Text head() {
 		injector.injectScript(true)
@@ -196,7 +200,7 @@ internal class T_AppModule03 {
 	}
 }
 
-internal class T_AppModule06 {
+internal const class T_AppModule06 {
 	@Contribute { serviceType=ApplicationDefaults# }
 	static Void contributeAppDefaults(Configuration config) {
 		config[DuvetConfigIds.disableSmartInsertion]	= true
