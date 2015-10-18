@@ -17,6 +17,15 @@ const class DuvetModule {
 		defs.addService(DuvetPrinter#)		.withRootScope
 	}
 
+	internal static Void onRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
+		config["afDuvet.validateConfig"] = |->| {
+			DuvetConfigIds.validateConfig(configSrc)
+		}
+		config.set("afDuvet.logModules", |->| {
+			printer.logModules
+		}).after("afIoc.logServices").after("afEfanXtra.logLibraries", true).after("afPillow.logLibraries", true)
+	}
+
 	@Contribute { serviceType=StackFrameFilter# }
 	static Void contributeStackFrameFilter(Configuration config) {
 		// remove meaningless and boring stack frames
@@ -65,14 +74,5 @@ const class DuvetModule {
 		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireJsTimeout]	= 15sec
 		config[DuvetConfigIds.disableSmartInsertion]	= false
-	}
-
-	internal static Void onRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
-		config["afDuvet.validateConfig"] = |->| {
-			DuvetConfigIds.validateConfig(configSrc)
-		}
-		config["afDuvet.logModules"] = |->| {
-			printer.logModules
-		}
 	}
 }
