@@ -10,7 +10,7 @@ internal const class DuvetPrinter {
 	Void logModules() {
 		modPaths := scriptModules.modulePaths
 		buf := StrBuf()
-		buf.add("\nDuvet is configured with ${modPaths.size} RequireJS modules:\n\n")
+		buf.add("\nDuvet has ${modPaths.size} RequireJS modules:\n\n")
 		maxName	 := (Int) modPaths.keys.reduce(0) |Int size, modId| { size.max(modId.size) }
 		modPaths.keys.sort.each |modId| {
 			url := modPaths[modId]

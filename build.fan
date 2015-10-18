@@ -13,9 +13,9 @@ class Build : BuildPod {
 			"repo.tags"		: "web",
 			"repo.public"	: "false"
 		]
-
-		index = [	
-			"afIoc.module"	: "afDuvet::DuvetModule"
+		
+		index = [
+			"afIoc.module"	: "afDuvet::DuvetModule" 
 		]
  
 		depends = [
