@@ -36,7 +36,7 @@ class Build : BuildPod {
 			"afButter     1.1.2  - 1.1"
 		]
 		
-		srcDirs = [`test/`, `test/modules/`, `test/modules/my/`, `fan/`, `fan/public/`, `fan/public/advanced/`, `fan/internal/`]
+		srcDirs = [`fan/`, `fan/internal/`, `fan/public/`, `fan/public/advanced/`, `test/`, `test/modules/`, `test/modules/my/`]
 		resDirs = [`doc/`,`res/`]
 	}
 	
