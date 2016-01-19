@@ -269,12 +269,14 @@ Disabling Pods
 --------------
 If you want to restrict access to Fantom generated Javascript, or just don't like Fantom modules cluttering up the RequireJS shim, then pods can be easily disabled. Simply remove the 'afDuvet.podModules' configuration from the 'ScriptModules' service:
 
-  syntax: fantom
+pre>
+syntax: fantom
 
-  Contribute { serviceType=ScriptModules# }
-  static Void contributeScriptModules(Configuration config) {
-      config.remove("afDuvet.podModules")
-  }
+@Contribute { serviceType=ScriptModules# }
+static Void contributeScriptModules(Configuration config) {
+    config.remove("afDuvet.podModules")
+}
+<pre
 
 
 
