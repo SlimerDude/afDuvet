@@ -114,11 +114,6 @@ const mixin HtmlInjector {
 	** Note that 'funcArgs' are converted into JSON; which is really useful, as it means *you* don't have to!
 	abstract ScriptTagBuilder injectRequireModule(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null)
 
-	@NoDoc @Deprecated { msg="Use 'injectRequireModule()' instead" }
-	virtual ScriptTagBuilder injectRequireCall(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null) {
-		injectRequireModule(moduleId, funcName, funcArgs)
-	}
-	
 	** Injects a call to a Fantom method. That's right, this method lets you run Fantom code in your web browser!
 	** 
 	** Because Fantom only compiles classes with the '@Js' facet into Javascript, ensure the method's class has it! 
