@@ -57,14 +57,14 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
         }
         
         @SubModule { modules=[DuvetModule#] }
-        class AppModule {
+        const class AppModule {
             @Contribute { serviceType=Routes# }
-            static Void contributeRoutes(Configuration conf) {
+            Void contributeRoutes(Configuration conf) {
                 conf.add(Route(`/`, Example#duvetExample))
             }
         
             @Contribute { serviceType=ScriptModules# }
-            static Void contributeScriptModules(Configuration config) {
+            Void contributeScriptModules(Configuration config) {
                 // configure any non-standard AMD modules
                 config.add(
                     ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
@@ -131,7 +131,7 @@ All Javascript module files need to be served from the same [baseUrl](http://pod
 
 ```
 @Contribute { serviceType=FileHandler# }
-static Void contributeFileHandler(Configuration config) {
+Void contributeFileHandler(Configuration config) {
     config[`/modules/`] = `etc/web-static/modules/`
 }
 ```
@@ -245,10 +245,12 @@ For an example of what fwt is capable of in the browser, see the article [Run Fa
 
 If you want to restrict access to Fantom generated Javascript, or just don't like Fantom modules cluttering up the RequireJS shim, then pods can be easily disabled. Simply remove the `afDuvet.podModules` configuration from the `ScriptModules` service:
 
-    Contribute { serviceType=ScriptModules# }
-    static Void contributeScriptModules(Configuration config) {
-        config.remove("afDuvet.podModules")
-    }
+```
+@Contribute { serviceType=ScriptModules# }
+Void contributeScriptModules(Configuration config) {
+    config.remove("afDuvet.podModules")
+}
+```
 
 ### Module Config
 
@@ -260,7 +262,7 @@ Here's a working example from the Fantom-Factory website:
 
 ```
 @Contribute { serviceType=ScriptModules# }
-static Void contributeScriptModules(Configuration config) {
+Void contributeScriptModules(Configuration config) {
     config.add(
         ScriptModule("jquery")
             .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
@@ -301,7 +303,7 @@ So to disable this *(ahem)* *smart* insertion and bang all scripts in just befor
 
 ```
 @Contribute { serviceType=ApplicationDefaults# }
-static Void contributeAppDefaults(Configuration config) {
+Void contributeAppDefaults(Configuration config) {
     config[DuvetConfigIds.disableSmartInsertion]    = true
 }
 ```

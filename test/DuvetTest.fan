@@ -17,7 +17,7 @@ internal class DuvetTest : Test {
 		if (appModules != null)
 			bob.addModules(appModules)
 		server := bob.startup
-		server.injectIntoFields(this)
+		server.inject(this)
 		client = server.makeClient
 	}
 	

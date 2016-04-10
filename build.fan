@@ -11,7 +11,7 @@ class Build : BuildPod {
 			"proj.name"		: "Duvet",
 			"afIoc.module"	: "afDuvet::DuvetModule",
 			"repo.tags"		: "web",
-			"repo.public"	: "false"
+			"repo.public"	: "true"
 		]
 		
 		index = [

@@ -43,14 +43,14 @@ Quick Start
     }
 
     @SubModule { modules=[DuvetModule#] }
-    class AppModule {
+    const class AppModule {
         @Contribute { serviceType=Routes# }
-        static Void contributeRoutes(Configuration conf) {
+        Void contributeRoutes(Configuration conf) {
             conf.add(Route(`/`, Example#duvetExample))
         }
 
         @Contribute { serviceType=ScriptModules# }
-        static Void contributeScriptModules(Configuration config) {
+        Void contributeScriptModules(Configuration config) {
             // configure any non-standard AMD modules
             config.add(
                 ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
@@ -124,7 +124,7 @@ pre>
 syntax: fantom
 
 @Contribute { serviceType=FileHandler# }
-static Void contributeFileHandler(Configuration config) {
+Void contributeFileHandler(Configuration config) {
     config[`/modules/`] = `etc/web-static/modules/`
 }
 <pre
@@ -273,7 +273,7 @@ pre>
 syntax: fantom
 
 @Contribute { serviceType=ScriptModules# }
-static Void contributeScriptModules(Configuration config) {
+Void contributeScriptModules(Configuration config) {
     config.remove("afDuvet.podModules")
 }
 <pre
@@ -293,7 +293,7 @@ pre>
 syntax: fantom
 
 @Contribute { serviceType=ScriptModules# }
-static Void contributeScriptModules(Configuration config) {
+Void contributeScriptModules(Configuration config) {
     config.add(
         ScriptModule("jquery")
             .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
@@ -340,7 +340,7 @@ pre>
 syntax: fantom
 
 @Contribute { serviceType=ApplicationDefaults# }
-static Void contributeAppDefaults(Configuration config) {
+Void contributeAppDefaults(Configuration config) {
     config[DuvetConfigIds.disableSmartInsertion]    = true
 }
 <pre
