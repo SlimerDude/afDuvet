@@ -19,9 +19,9 @@ class Build : BuildPod {
 		]
  
 		depends = [
-			"sys  1.0",
-			"util 1.0",
-			"web  1.0",
+			"sys  1.0.68 - 1.0",
+			"util 1.0.68 - 1.0",
+			"web  1.0.68 - 1.0",
 			
 			// ---- Core ------------------------
 			"afConcurrent 1.0.12 - 1.0",
@@ -33,17 +33,12 @@ class Build : BuildPod {
 			
 			// ---- Test ------------------------
 			"afBounce     1.1.0  - 1.1",
-			"afButter     1.1.2  - 1.1"
+			"afButter     1.2.0  - 1.2"
 		]
 		
 		srcDirs = [`fan/`, `fan/internal/`, `fan/public/`, `fan/public/advanced/`, `test/`, `test/modules/`, `test/modules/my/`]
 		resDirs = [`doc/`,`res/`]
-	}
-	
-	override Void compile() {
-		// remove test pods from final build
-		testPods := "afBounce afButter".split
-		depends = depends.exclude { testPods.contains(it.split.first) }
-		super.compile
+		
+		meta["afBuild.testPods"]	= "afBounce afButter"
 	}
 }
