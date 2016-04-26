@@ -11,6 +11,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 	@Inject private const LocalList				bodyTags
 	@Inject private const LocalRef				requireRequired
 	@Inject private const LocalList				scriptSrcs
+	@Inject private const LocalList				scriptCode
 	@Inject private const LocalList				linkHrefs
 	@Inject private const Log					log
 	@Inject @Config private const Uri			requireJsUrl
@@ -160,7 +161,16 @@ internal const class DuvetProcessor : ResponseProcessor {
 		element := (HtmlElement) node
 		
 		if (element.name.lower == "script") {
-			src := element["src"]
+			code := element.text
+			src  := element["src"]
+
+			if (code != null && src == null) {
+				if (scriptCode.list.contains(code))
+					return true
+				scriptCode.add(code)
+				return false
+			}
+			
 			if (src == null)
 				return false
 			if (scriptSrcs.list.contains(src))
