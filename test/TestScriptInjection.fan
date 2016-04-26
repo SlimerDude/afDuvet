@@ -39,6 +39,13 @@ internal class TestScriptInjection : DuvetTest {
 
 		html  = client.get(`/twoSame`).body.str
 		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example.com/\"></script>\n</body></html>")
+
+		html  = client.get(`/twoSame2`).body.str
+		echo(html)
+		i := html.index("dude", 0)
+		verifyNotNull(i)
+		i = html.index("dude", i+1)
+		verifyNull(i)
 	}
 
 	Void testMultipleScriptsWithNoSrcAttribute() {
@@ -106,6 +113,7 @@ internal const class T_AppModule03 {
 		conf.add(Route(`/head`,		T_AppModule03Routes#head))
 		conf.add(Route(`/body`, 	T_AppModule03Routes#body))
 		conf.add(Route(`/twoSame`,	T_AppModule03Routes#twoSame))
+		conf.add(Route(`/twoSame2`,	T_AppModule03Routes#twoSame2))
 		conf.add(Route(`/twoDiff`,	T_AppModule03Routes#twoDiff))
 		conf.add(Route(`/twoNoSrc`,	T_AppModule03Routes#twoNoSrc))
 		conf.add(Route(`/scriptX1`,	T_AppModule03Routes#myOwnRequireScript))
@@ -133,6 +141,12 @@ internal const class T_AppModule03Routes {
 	Text twoSame() {
 		injector.injectScript.fromExternalUrl(`//example.com/`)
 		injector.injectScript.fromExternalUrl(`//example.com/`)
+		return Text.fromHtml("<html><head></head><body></body></html>")
+	}
+
+	Text twoSame2() {
+		injector.injectRequireModule("dude")
+		injector.injectRequireModule("dude")
 		return Text.fromHtml("<html><head></head><body></body></html>")
 	}
 

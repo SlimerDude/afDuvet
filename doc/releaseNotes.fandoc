@@ -1,5 +1,8 @@
 Versions
 ********
+v1.1.2
+======
+ - Bug: The same module script could be injected multiple times.
 
 v1.1.0
 ======

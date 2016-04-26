@@ -38,6 +38,10 @@ class HtmlElement : HtmlNode {
 		return this
 	}
 	
+	Str? text() {
+		(nodes.first as HtmlText)?.text
+	}
+	
 	@NoDoc
 	override internal Str print(TagStyle tagStyle) {
 		att := attrs.join(" ") |v, k->Str| { k.toXml + "=\"${v.toXml}\"" }
@@ -50,7 +54,7 @@ class HtmlElement : HtmlNode {
 
 @NoDoc
 class HtmlText : HtmlNode {
-	private Str text
+	Str text
 	
 	new make(Str text) {
 		this.text = text
