@@ -359,10 +359,10 @@ syntax: html
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="/pods/sys/sys.js"></script>
-    <script type="text/javascript" src="/pods/gfx/gfx.js"></script>
-    <script type="text/javascript" src="/pods/web/web.js"></script>
-    <script type="text/javascript" src="/pods/dom/dom.js"></script>
+    <script type="text/javascript" src="/pod/sys/sys.js"></script>
+    <script type="text/javascript" src="/pod/gfx/gfx.js"></script>
+    <script type="text/javascript" src="/pod/web/web.js"></script>
+    <script type="text/javascript" src="/pod/dom/dom.js"></script>
 </head>
 <body>
     <h1>Old Skool Example</h1>
