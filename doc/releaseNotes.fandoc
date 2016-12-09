@@ -1,5 +1,10 @@
 Versions
 ********
+
+v1.1.4
+======
+ - Bug: Scripts could be inserted in the wrong place if the HTML legitimately contained the string '</body>'.
+
 v1.1.2
 ======
  - Bug: The same module script could be injected multiple times.

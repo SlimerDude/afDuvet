@@ -20,8 +20,6 @@ internal const class DuvetProcessor : ResponseProcessor {
 	@Inject @Config private const Duration?		requireJsTimeout
 	@Inject @Config private const Bool			disableSmartInsertion
 	
-	private static const Regex 					headRegex	:= "(?i)</head>".toRegex
-	private static const Regex 					bodyRegex	:= "(?i)</body>".toRegex
 	private static const Regex 					jsRegex		:= "(?is)<script[ >]((?!</script>).)*?</script>\\s*\$".toRegex
 
 	
@@ -115,21 +113,18 @@ internal const class DuvetProcessor : ResponseProcessor {
 	}
 	
 	private Int? findEndOfHead(Str html) {
-		headMatcher := headRegex.matcher(html)
-		if (!headMatcher.find) {
+		headEnd := html.indexIgnoreCase("</head>")
+		if (headEnd == null)
 			log.warn(LogMsgs.canNotFindHead)
-			return null
-		}
-		return headMatcher.start(0)		
+		return headEnd
 	}
 
 	private Int? findEndOfBody(Str html) {
-		bodyMatcher := bodyRegex.matcher(html)
-		if (!bodyMatcher.find) {
+		bodyEnd := html.indexrIgnoreCase("</body>")
+		if (bodyEnd == null) {
 			log.warn(LogMsgs.canNotFindBody)
 			return null
 		}
-		bodyEnd := bodyMatcher.start(0)
 
 		if (disableSmartInsertion)
 			return bodyEnd
