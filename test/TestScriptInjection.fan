@@ -88,6 +88,27 @@ internal class TestScriptInjection : DuvetTest {
 		requireJ := html.index(requireJsUrl) ?: throw Err("Require not found")
 		verify(requireJ < myScript)
 	}
+
+	Void testMultipleBodies() {
+		// check the smart insertion picks the last <body> tag - V1 in scripts
+		html := client.get(`/multiBody`).body.str
+		
+		// ensure our fake HTML is untouched
+		verify(html.contains("<html><body>Hello!</body></html>"))
+
+		// check requireJS is still inserted before our custom script
+		myScript := html.index("<script>")	 ?: throw Err("Script not found")
+		requireJ := html.index(requireJsUrl) ?: throw Err("Require not found")
+		verify(requireJ < myScript)
+
+
+
+		// check the smart insertion picks the last <body> tag - V2 in textareas
+		html = client.get(`/multiBody`).body.str
+		
+		// ensure our fake HTML is untouched
+		verify(html.contains("<html><body>Hello!</body></html>"))
+	}
 }
 
 internal class TestDisableSmartScriptInjection : DuvetTest {
@@ -110,16 +131,18 @@ internal class TestDisableSmartScriptInjection : DuvetTest {
 internal const class T_AppModule03 {
 	@Contribute { serviceType=Routes# }
 	static Void contributeRoutes(Configuration conf) {
-		conf.add(Route(`/head`,		T_AppModule03Routes#head))
-		conf.add(Route(`/body`, 	T_AppModule03Routes#body))
-		conf.add(Route(`/twoSame`,	T_AppModule03Routes#twoSame))
-		conf.add(Route(`/twoSame2`,	T_AppModule03Routes#twoSame2))
-		conf.add(Route(`/twoDiff`,	T_AppModule03Routes#twoDiff))
-		conf.add(Route(`/twoNoSrc`,	T_AppModule03Routes#twoNoSrc))
-		conf.add(Route(`/scriptX1`,	T_AppModule03Routes#myOwnRequireScript))
-		conf.add(Route(`/scriptX2`,	T_AppModule03Routes#scriptX2))
-		conf.add(Route(`/scriptX0`,	T_AppModule03Routes#scriptX0))
-		conf.add(Route(`/script2X1`,T_AppModule03Routes#myOwnRequireScript2))
+		conf.add(Route(`/head`,			T_AppModule03Routes#head))
+		conf.add(Route(`/body`, 		T_AppModule03Routes#body))
+		conf.add(Route(`/twoSame`,		T_AppModule03Routes#twoSame))
+		conf.add(Route(`/twoSame2`,		T_AppModule03Routes#twoSame2))
+		conf.add(Route(`/twoDiff`,		T_AppModule03Routes#twoDiff))
+		conf.add(Route(`/twoNoSrc`,		T_AppModule03Routes#twoNoSrc))
+		conf.add(Route(`/scriptX1`,		T_AppModule03Routes#myOwnRequireScript))
+		conf.add(Route(`/scriptX2`,		T_AppModule03Routes#scriptX2))
+		conf.add(Route(`/scriptX0`,		T_AppModule03Routes#scriptX0))
+		conf.add(Route(`/script2X1`,	T_AppModule03Routes#myOwnRequireScript2))
+		conf.add(Route(`/multiBody`,	T_AppModule03Routes#multipleBodies))
+		conf.add(Route(`/multiBody2`,	T_AppModule03Routes#multipleBodies2))
 	}
 }
 
@@ -209,6 +232,30 @@ internal const class T_AppModule03Routes {
 		                                      \$('p').addClass('magic');
 		                                  });
 		                              </script>
+		                          </body>
+		                      </html>")
+	}
+
+	Text multipleBodies() {
+		injector.injectRequireJs
+		return Text.fromHtml("<html>
+		                          <head></head>
+		                          <body>
+		                              <script>
+		                                  console.log('<html><body>Hello!</body></html>');
+		                              </script>
+		                          </body>
+		                      </html>")
+	}
+
+	Text multipleBodies2() {
+		injector.injectRequireJs
+		return Text.fromHtml("<html>
+		                          <head></head>
+		                          <body>
+		                              <textarea>
+		                                  <html><body>Hello!</body></html>
+		                              </textarea>
 		                          </body>
 		                      </html>")
 	}
