@@ -1,12 +1,12 @@
-#Duvet v1.1.2
+#Duvet v1.1.4
 ---
-[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom.org/)
-[![pod: v1.1.2](http://img.shields.io/badge/pod-v1.1.2-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
+[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
+[![pod: v1.1.4](http://img.shields.io/badge/pod-v1.1.4-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
 ![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
 
 ## Overview
 
-`Duvet` is a [BedSheet](http://pods.fantomfactory.org/pods/afBedSheet) library that delivers Javascript to the browser.
+`Duvet` is a [BedSheet](http://eggbox.fantomfactory.org/pods/afBedSheet) library that delivers Javascript to the browser.
 
 `Duvet` provides a wrapper around [RequireJS](http://requirejs.org/) and packages up Fantom generated Javascript code. It gives clean dependency management for Javascript libraries and a means to execute Fantom code in the web browser.
 
@@ -16,17 +16,21 @@ Embracing RequireJs and AMD modules is like having an IoC for Javascript; and us
 
 ## Install
 
-Install `Duvet` with the Fantom Repository Manager ( [fanr](http://fantom.org/doc/docFanr/Tool.html#install) ):
+Install `Duvet` with the Fantom Pod Manager ( [FPM](http://eggbox.fantomfactory.org/pods/afFpm) ):
 
-    C:\> fanr install -r http://pods.fantomfactory.org/fanr/ afDuvet
+    C:\> fpm install afDuvet
 
-To use in a [Fantom](http://fantom.org/) project, add a dependency to `build.fan`:
+Or install `Duvet` with [fanr](http://fantom.org/doc/docFanr/Tool.html#install):
+
+    C:\> fanr install -r http://eggbox.fantomfactory.org/fanr/ afDuvet
+
+To use in a [Fantom](http://fantom-lang.org/) project, add a dependency to `build.fan`:
 
     depends = ["sys 1.0", ..., "afDuvet 1.1"]
 
 ## Documentation
 
-Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fantomfactory.org/pods/afDuvet/).
+Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org/pods/afDuvet/) - the Fantom Pod Repository.
 
 ## Quick Start
 
@@ -79,7 +83,7 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
         }
 
 
-2. Run `Example.fan` as a Fantom script from the command line. This starts the [BedSheet](http://pods.fantomfactory.org/pods/afBedSheet) app server:
+2. Run `Example.fan` as a Fantom script from the command line. This starts the [BedSheet](http://eggbox.fantomfactory.org/pods/afBedSheet) app server:
 
         C:\> fan Example.fan
            ___    __                 _____        _
@@ -95,13 +99,13 @@ Full API & fandocs are available on the [Fantom Pod Repository](http://pods.fant
 
 3. Visit `http://localhost:8069/`
 
-  ![Duvet Quickstart Example - Screenshot](http://pods.fantomfactory.org/pods/afDuvet/doc/quickstartScreenshot.png)
+  ![Duvet Quickstart Example - Screenshot](http://eggbox.fantomfactory.org/pods/afDuvet/doc/quickstartScreenshot.png)
 
 
 
 ## HTML Injection
 
-It is good practice to componentise your web pages (something that [efanXtra](http://pods.fantomfactory.org/pods/afEfanXtra) excels at).
+It is good practice to componentise your web pages (something that [efanXtra](http://eggbox.fantomfactory.org/pods/afEfanXtra) excels at).
 
 Taking a blog website as an example, some pages show comments and others don't. If comments were encapsulated in a *CommentComponent* it would only need to be rendered on those pages that need it. And like any fully featured component it requires its own stylesheet and some javascript. But these files shouldn't be downloaded on *every* page, just the pages that render the *CommentComponent*. The *CommentComponent* itself should be responsible for referencing its support files.
 
@@ -109,7 +113,7 @@ Taking a blog website as an example, some pages show comments and others don't. 
 
 ** *A). Duvet Html Injection.* **
 
-The [HtmlInjector](http://pods.fantomfactory.org/pods/afDuvet/api/HtmlInjector) service lets you inject meta, scripts and stylesheets into your HTML, at any time before the page is sent to the client. The HTML tags are injected into either the bottom of the HEAD or the BODY section.
+The [HtmlInjector](http://eggbox.fantomfactory.org/pods/afDuvet/api/HtmlInjector) service lets you inject meta, scripts and stylesheets into your HTML, at any time before the page is sent to the client. The HTML tags are injected into either the bottom of the HEAD or the BODY section.
 
 But what if the *CommentComponent* is rendered more than once on a single page? You don't want multiple copies of the same stylesheet downloaded on the same page!?
 
@@ -127,7 +131,7 @@ Looking after countless Javascript libraries, ensuring they all get loaded quick
 
 RequireJS requires Javascript to be packaged up into module files. A lot of popular Javascript libraries, including jQuery, already conform to this standard.
 
-All Javascript module files need to be served from the same [baseUrl](http://pods.fantomfactory.org/pods/afDuvet/api/DuvetConfigIds#baseModuleUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
+All Javascript module files need to be served from the same [baseUrl](http://eggbox.fantomfactory.org/pods/afDuvet/api/DuvetConfigIds#baseModuleUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
 
 ```
 @Contribute { serviceType=FileHandler# }
@@ -239,7 +243,7 @@ Note that the element needs to specify a width, height and give a CSS `position`
 
 For an example of what fwt is capable of in the browser, see the article [Run Fantom Code In a Browser!](http://www.fantomfactory.org/articles/run-fantom-code-in-a-browser).
 
-![Duvet FWT Example - Screenshot](http://pods.fantomfactory.org/pods/afDuvet/doc/fwtScreenshot.png)
+![Duvet FWT Example - Screenshot](http://eggbox.fantomfactory.org/pods/afDuvet/doc/fwtScreenshot.png)
 
 #### Disabling Pods
 
@@ -254,7 +258,7 @@ Void contributeScriptModules(Configuration config) {
 
 ### Module Config
 
-Not all popular Javascript libraries are AMD modules, unfortunately, so these require a little configuration to get working. Configuration is done by contributing [ScriptModule](http://pods.fantomfactory.org/pods/afDuvet/api/ScriptModule) instances.
+Not all popular Javascript libraries are AMD modules, unfortunately, so these require a little configuration to get working. Configuration is done by contributing [ScriptModule](http://eggbox.fantomfactory.org/pods/afDuvet/api/ScriptModule) instances.
 
 All `ScriptModule` data map to the RequireJS [path](http://requirejs.org/docs/api.html#config-paths) and [shim](http://requirejs.org/docs/api.html#config-shim) config options.
 
@@ -318,10 +322,10 @@ For this you don't actually need Duvet at all, instead you just rely on BedSheet
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript" src="/pods/sys/sys.js"></script>
-    <script type="text/javascript" src="/pods/gfx/gfx.js"></script>
-    <script type="text/javascript" src="/pods/web/web.js"></script>
-    <script type="text/javascript" src="/pods/dom/dom.js"></script>
+    <script type="text/javascript" src="/pod/sys/sys.js"></script>
+    <script type="text/javascript" src="/pod/gfx/gfx.js"></script>
+    <script type="text/javascript" src="/pod/web/web.js"></script>
+    <script type="text/javascript" src="/pod/dom/dom.js"></script>
 </head>
 <body>
     <h1>Old Skool Example</h1>
@@ -339,7 +343,7 @@ Fantom code may also be executed via the [web::WebUtil.jsMain()](http://fantom.o
 
 ## Pillow & efanExtra Example
 
-It is common to use Duvet with [Pillow](http://pods.fantomfactory.org/pods/afPillow) and [efanXtra](http://pods.fantomfactory.org/pods/afEfanXtra). As such, below is a sample Pillow page / efanXtra component component that may be useful for cut'n'paste purposes:
+It is common to use Duvet with [Pillow](http://eggbox.fantomfactory.org/pods/afPillow) and [efanXtra](http://eggbox.fantomfactory.org/pods/afEfanXtra). As such, below is a sample Pillow page / efanXtra component component that may be useful for cut'n'paste purposes:
 
 ```
 using afIoc::Inject
