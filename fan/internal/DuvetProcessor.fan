@@ -29,8 +29,8 @@ internal const class DuvetProcessor : ResponseProcessor {
 	}
 	
 	override Obj process(Obj response) {
-		headTags.list = headTags.list.exclude { isDup(it) }
-		bodyTags.list = bodyTags.list.exclude { isDup(it) }
+		headTags.val = headTags.val.exclude { isDup(it) }
+		bodyTags.val = bodyTags.val.exclude { isDup(it) }
 		
 		text 		:= (Text) response
 		html 		:= StrBuf(text.text.size).add(text.text)
@@ -40,7 +40,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 		
 		if (tagStyle != null) {
 			if (!headTags.isEmpty && endOfHead != null) {
-				headTags := "\n" + headTags.list.join("\n") |HtmlNode node->Str| { node.print(tagStyle) } + "\n"
+				headTags := "\n" + headTags.val.join("\n") |HtmlNode node->Str| { node.print(tagStyle) } + "\n"
 				html.insert(endOfHead, headTags)
 				
 				// recalculate where the body ends
@@ -52,14 +52,14 @@ internal const class DuvetProcessor : ResponseProcessor {
 				
 				if (requireRequired.val) {
 					config := requireJsConfig.tweakConfig(tagStyle)
-					bodyTags.list.insert(0, config)
+					bodyTags.val.insert(0, config)
 					
 					// can't use FileHandler / ColdFeet for requireJs because it is served up directly, not mapped to the file system.
 					requireJs := HtmlElement("script").set("type", "text/javascript").set("src", requireJsUrl.toStr)
-					bodyTags.list.insert(0, requireJs)
+					bodyTags.val.insert(0, requireJs)
 				}
 				
-				bodyTags := "\n" + bodyTags.list.join("\n") |HtmlNode node->Str| { node.print(tagStyle) } + "\n"
+				bodyTags := "\n" + bodyTags.val.join("\n") |HtmlNode node->Str| { node.print(tagStyle) } + "\n"
 				html.insert(endOfBody, bodyTags)
 			}
 		}
@@ -160,7 +160,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 			src  := element["src"]
 
 			if (code != null && src == null) {
-				if (scriptCode.list.contains(code))
+				if (scriptCode.val.contains(code))
 					return true
 				scriptCode.add(code)
 				return false
@@ -168,7 +168,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 			
 			if (src == null)
 				return false
-			if (scriptSrcs.list.contains(src))
+			if (scriptSrcs.val.contains(src))
 				return true
 			scriptSrcs.add(src)
 			return false
@@ -178,7 +178,7 @@ internal const class DuvetProcessor : ResponseProcessor {
 			href := element["href"]
 			if (href == null)
 				return false
-			if (linkHrefs.list.contains(href))
+			if (linkHrefs.val.contains(href))
 				return true
 			linkHrefs.add(href)
 			return false
