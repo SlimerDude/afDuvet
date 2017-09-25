@@ -118,7 +118,7 @@ const mixin HtmlInjector {
 	** 
 	** Because Fantom only compiles classes with the '@Js' facet into Javascript, ensure the method's class has it! 
 	** 
-	** Method arguments are serialised into JSON so only the following types are supported: 'Str, Num, Bool, Map, List, null'
+	** All method arguments must be '@Serializable' as they are serialised into Strings and embedded into the Javascript.
 	** 
 	** 'env' are environment variables passed into the Fantom Javascript runtime.
 	** 
@@ -201,14 +201,15 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		return injectRequireScript([moduleId:"module"], fCall)
 	}
  
-	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? jsonArgs := null, [Str:Str]? env := null) {
+	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null, [Str:Str]? env := null) {
 		if (!method.parent.hasFacet(Js#))
 			throw ArgErr(ErrMsgs.htmlInjector_noJsFacet(method.parent))
 
 		podName := method.parent.pod.name
 		jsParam	:= [podName:"_${podName}"]
 		
-		params	:= JsonOutStream.writeJsonToStr(jsonArgs ?: Obj#.emptyList)
+		argStrs	:= args == null ? Str#.emptyList : args.map { Buf().writeObj(it).flip.readAllStr }
+		jargs	:= argStrs.map |Str arg->Str| { "args.add(fan.sys.Str.toBuf(${arg.toCode}).readObj());" }
 
 		envs	:= env?.rw ?: Str:Str[:] 
 		if (!envs.containsKey("sys.uriPodBase") && podHandler.baseUrl != null)
@@ -233,8 +234,9 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		 // inject env vars
 		 $envStr.toStr
 		
-		 var args = fan.sys.List.make(fan.sys.Str.\$type, ${params});
-
+		 var args = fan.sys.List.make(fan.sys.Obj.\$type);
+		 ${jargs.join('\n'.toChar)}
+		
 		 // find main
 		 var qname = '$method.qname';
 		 var main = fan.sys.Slot.findMethod(qname);
