@@ -32,7 +32,7 @@ internal class TestInjection : DuvetTest {
 		html := client.get(`/noHead`).body.str
 		verifyEq(html, "<html><body> --- </body></html>")
 		
-		logs := (logs.list as LogRec[]).findAll { it.logName == "afDuvet" }
+		logs := (logs.val as LogRec[]).findAll { it.logName == "afDuvet" }
 		
 		verifyEq(logs.size, 1)
 		rec := logs.first
@@ -44,7 +44,7 @@ internal class TestInjection : DuvetTest {
 		html := client.get(`/noBody`).body.str
 		verifyEq(html, "<html><head> --- </head></html>")
 
-		logs := (logs.list as LogRec[]).findAll { it.logName == "afDuvet" }
+		logs := (logs.val as LogRec[]).findAll { it.logName == "afDuvet" }
 		
 		verifyEq(logs.size, 1)
 		rec := logs.first as LogRec
