@@ -2,6 +2,7 @@ v1.1.6
 ======
  - Chg: Methods args for 'HtmlInjector.injectFantomMethod()' may now be *any* Fantom object, and not just JSON objs.
  - Chg: 'LinkTagBuilder.fromLocalUrl()' now accepts local URLs for all registered 'ClientAssetProducers' such as BedSheet's 'PodHandler'.
+ - Chg: Added a 'domkit' example to the pod doc.
  - Chg: Updated [afConcurrent]`pod:afConcurrent` to v1.0.20.
 
 v1.1.4
