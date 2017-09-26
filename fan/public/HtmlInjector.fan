@@ -233,7 +233,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		"
 		 // inject env vars
 		 $envStr.toStr
-		
+		 // construct method args
 		 var args = fan.sys.List.make(fan.sys.Obj.\$type);
 		 ${jargs.join('\n'.toChar)}
 		
