@@ -6,9 +6,10 @@ using afBedSheet
 ** @see `https://developer.mozilla.org/en/docs/Web/HTML/Element/link` 
 class LinkTagBuilder {
 	
-	@Inject private	FileHandler		fileHandler
-			private	HtmlElement		element
-			private	HtmlConditional	ieConditional
+	@Inject private	FileHandler			fileHandler
+	@Inject private	ClientAssetCache	clientAssets
+			private	HtmlElement			element
+			private	HtmlConditional		ieConditional
 	
 	internal new make(|This|in) {
 		in(this)
@@ -26,11 +27,11 @@ class LinkTagBuilder {
 	}
 
 	** Sets the 'href' attribute to a local URL. 
-	** The URL **must** be mapped by BedSheet's 'FileHandler' service.
+	** The URL **must** be mapped by BedSheet's 'ClientAsset' cache service.
 	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	LinkTagBuilder fromLocalUrl(Uri localUrl) {
-		fileAsset := fileHandler.fromLocalUrl(localUrl)	// this adds any ColdFeet digests
+		fileAsset := clientAssets.getAndUpdateOrProduce(localUrl)
 		element["href"] = fileAsset.clientUrl.encode
 		return this		
 	}
