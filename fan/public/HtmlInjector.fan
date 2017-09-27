@@ -231,6 +231,11 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		
 		script := 
 		"
+		 // default the TimeZone to a sensible default that doesn't cause errors
+		 // see http://fantom.org/forum/topic/2548
+		 if (fan.sys.TimeZone.m_cur == null)
+		     fan.sys.TimeZone.m_cur = fan.sys.TimeZone.fromStr('UTC');
+
 		 // inject env vars
 		 $envStr.toStr
 		 // construct method args
