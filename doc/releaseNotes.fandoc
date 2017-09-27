@@ -1,10 +1,11 @@
 v1.1.6
 ======
- - Chg: Default TimeZone to a sensible default (i.e. 'UTC' and not 'New_York') that doesn't cause errors. See [JS: TimeZone not found]`http://fantom.org/forum/topic/2548` for details.
+ - Chg: 'HtmlInjector.injectFantomMethod()' defaults TimeZone to a sensible default (i.e. 'UTC' and not 'New_York') that doesn't cause errors. See [JS: TimeZone not found]`http://fantom.org/forum/topic/2548` for details.
  - Chg: Methods args for 'HtmlInjector.injectFantomMethod()' may now be *any* Fantom object, and not just JSON objs.
  - Chg: 'LinkTagBuilder.fromLocalUrl()' now accepts local URLs for all registered 'ClientAssetProducers' such as BedSheet's 'PodHandler'.
  - Chg: Added a 'domkit' example to the pod doc.
  - Chg: Updated [afConcurrent]`pod:afConcurrent` to v1.0.20.
+ - Bug: 'HtmlInjector.injectFantomMethod()' could not call static methods with arguments.
 
 v1.1.4
 ======
