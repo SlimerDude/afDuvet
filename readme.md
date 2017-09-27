@@ -1,8 +1,9 @@
-#Duvet v1.1.4
+#Duvet v1.1.6
 ---
+
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
-[![pod: v1.1.4](http://img.shields.io/badge/pod-v1.1.4-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
-![Licence: MIT](http://img.shields.io/badge/licence-MIT-blue.svg)
+[![pod: v1.1.6](http://img.shields.io/badge/pod-v1.1.6-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
+![Licence: ISC](http://img.shields.io/badge/licence-ISC-blue.svg)
 
 ## Overview
 
@@ -90,9 +91,9 @@ Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org
           / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
          / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
         /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
-                   Alien-Factory BedSheet v1.4.8, IoC v2.0.6 /___/
+                   Alien-Factory BedSheet v1.5.6, IoC v3.0.6 /___/
         
-        IoC Registry built in 612ms and started up in 104ms
+        IoC Registry built in 412ms and started up in 104ms
         
         Bed App 'Example_0' listening on http://localhost:8069/
 
@@ -191,7 +192,7 @@ Duvet builds a dependency tree of pods with Javascript files and converts them i
 
 From there it is a small step to require the Fantom modules and execute Fantom code in the browser. Simply call `HtmlInjector.injectFantomMethod(...)`.
 
-#### Using the DOM Pod
+#### Using DOM
 
 The Fantom [dom](http://fantom.org/doc/dom/index.html) pod is used to interact with the browser's Window, Document and DOM objects. For example, the following code fires up a browser alert - note the `@Js` annotation on the class.
 
@@ -210,7 +211,39 @@ To execute the above code, inject it into a web page with the following:
 
     htmlInjector.injectFantomMethod(DomExample#info)
 
-#### Using the FWT Pod
+#### Using DOMKIT
+
+The core [domkit](http://eggbox.fantomfactory.org/pods/domkit) pod extends `dom` to provide a modern windowing framework for single page web applications.
+
+To use domkit, create your container boxes and add them to the exisitng DOM tree. The example below assumes the HTML contains a element with the ID `domkit-container`:
+
+```
+using dom
+using domkit
+
+@Js
+class DomkitExample {
+    Void init() {
+        // create your domkit boxes and elements
+        box := ScrollBox() { it.text = "Chew Bubblegum!" }
+
+        // add them to the existing DOM tree
+        Win.cur.doc.elemById("domkit-container").add(box)
+    }
+}
+```
+
+Inject the code via `injectFantomMethod`. Note that domkit also makes use a stylesheet that you should also inject into the page:
+
+```
+// inject the domkit stylesheet
+injector.injectStylesheet.fromLocalUrl(`/pod/domkit/res/css/domkit.css`)
+
+// inject your Fantom code
+injector.injectFantomMethod(DomkitExample#init)
+```
+
+#### Using FWT / WebFWT
 
 Fantom's [fwt](http://fantom.org/doc/fwt/index.html) and [webfwt](http://fantom.org/doc/webfwt/index.html) pods can be used to generate fully featured FWT windows and graphics in the browser. Example:
 
@@ -241,7 +274,7 @@ Note that the element needs to specify a width, height and give a CSS `position`
 
     <div id="fwt-window" style="width: 640px; height:480px; position:relative;"></div>
 
-For an example of what fwt is capable of in the browser, see the article [Run Fantom Code In a Browser!](http://www.fantomfactory.org/articles/run-fantom-code-in-a-browser).
+For an example of what fwt is capable of in the browser, see the article [Run Fantom Code In a Browser!](http://www.alienfactory.co.uk/articles/run-fantom-code-in-a-browser).
 
 ![Duvet FWT Example - Screenshot](http://eggbox.fantomfactory.org/pods/afDuvet/doc/fwtScreenshot.png)
 

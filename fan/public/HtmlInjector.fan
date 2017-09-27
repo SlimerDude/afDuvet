@@ -115,10 +115,9 @@ const mixin HtmlInjector {
 	abstract ScriptTagBuilder injectRequireModule(Str moduleId, Str? funcName := null, Obj?[]? funcArgs := null)
 
 	** Injects a call to a Fantom method. That's right, this method lets you run Fantom code in your web browser!
-	** 
 	** Because Fantom only compiles classes with the '@Js' facet into Javascript, ensure the method's class has it! 
 	** 
-	** All method arguments must be '@Serializable' as they are serialised into Strings and embedded into the Javascript.
+	** All method arguments must be '@Serializable' as they are serialised into Strings and embedded directly into Javascript.
 	** 
 	** 'env' are environment variables passed into the Fantom Javascript runtime.
 	** 
@@ -128,6 +127,9 @@ const mixin HtmlInjector {
 	**   "fwt.window.root" : "<element-id>"
 	** 
 	** Where '<element-id>' is the html ID of an element on the page. The FWT window will attach itself to this element.
+	** 
+	**   syntax: fantom
+	**   htmlInjector.injectFantomMethod(FwtExample#info, null, ["fwt.window.root" : "<element-id>"])
 	** 
 	** Note that the element needs to specify a width, height and give a CSS position of 'relative'. 
 	** This may either be done in CSS or defined on the element directly:
