@@ -247,7 +247,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		 var main = fan.sys.Slot.findMethod(qname);
 
 		 // invoke main
-		 if (main.isStatic()) main.call(args);
+		 if (main.isStatic()) main.callList(args);
 		 else main.callOn(main.parent().make(), args);"
 
 		return injectRequireScript(jsParam, script)
