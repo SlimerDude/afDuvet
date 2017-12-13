@@ -32,6 +32,8 @@ class LinkTagBuilder {
 	** Returns 'this'.
 	LinkTagBuilder fromLocalUrl(Uri localUrl) {
 		fileAsset := clientAssets.getAndUpdateOrProduce(localUrl)
+		if (fileAsset == null)
+			throw Err(ErrMsgs.urlNotMapped(localUrl))
 		element["href"] = fileAsset.clientUrl.encode
 		return this		
 	}
@@ -41,7 +43,7 @@ class LinkTagBuilder {
 	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	LinkTagBuilder fromServerFile(File serverFile) {
-		fileAsset := fileHandler.fromServerFile(serverFile)	// this add any ColdFeet digests
+		fileAsset := fileHandler.fromServerFile(serverFile, true)	// this add any ColdFeet digests
 		element["href"] = fileAsset.clientUrl.encode
 		return this		
 	}
