@@ -72,8 +72,8 @@ const class DuvetModule {
 	@Contribute { serviceType=FactoryDefaults# }
 	static Void contributeFactoryDefaults(Configuration config) {
 		config[DuvetConfigIds.baseModuleUrl]	= `/modules/`
-		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.1.14.js`
-		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.1.14.js`.get	// --> ZipEntryFile
+		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.3.5.js`
+		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.3.5.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireJsTimeout]	= 15sec
 		config[DuvetConfigIds.disableSmartInsertion]	= false
 	}
