@@ -5,14 +5,11 @@ internal class DuvetTest : Test {
 	BedClient? client
 	
 	override Void setup() {
-		Log.get("afIoc").level		= LogLevel.warn
-		Log.get("afIocEnv").level	= LogLevel.warn
-		Log.get("afBedSheet").level	= LogLevel.warn
-		Log.get("afDuvet").level	= LogLevel.warn
 		startBedSheet(null)
 	}
-
+	
 	Void startBedSheet(Type[]? appModules) {
+		setLogLevels
 		bob := BedServer(DuvetModule#)
 		if (appModules != null)
 			bob.addModules(appModules)
@@ -21,6 +18,13 @@ internal class DuvetTest : Test {
 		client = server.makeClient
 	}
 	
+	private Void setLogLevels() {
+		Log.get("afIoc").level		= LogLevel.warn
+		Log.get("afIocEnv").level	= LogLevel.warn
+		Log.get("afBedSheet").level	= LogLevel.warn
+		Log.get("afDuvet").level	= LogLevel.warn		
+	}
+
 	override Void teardown() {
 		client?.shutdown
 	}

@@ -8,6 +8,8 @@ using util
 ** Elements are listed in the HTML in the order they are added.
 ** Duplicate elements are ignored. 
 ** So if a component adds a stylesheet link, that component may be used many times on a page but, only ONE link to that stylesheet will be rendered.
+** 
+** Injecting scripts and stylesheets will also update an 'Content-Security-Policy' directives to ensure the added content can be executed.
 const mixin HtmlInjector {
 	
 	** Injects a '<meta>' element into the bottom of your head. Example:

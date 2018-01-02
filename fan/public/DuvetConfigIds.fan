@@ -31,15 +31,20 @@ const mixin DuvetConfigIds {
 	static const Str requireJsTimeout	:= "afDuvet.requireJsTimeout"
 	
 	** By default, Duvet will try to insert RequireJS and other script tags *before* the last '<script>' tag in the HTML. 
-	** This allows you to write your own 'require()' script functions at the bottom of the HTML page and still have access to RequireJS.
-	** (Which is handy for quick wins in development).
+	** This allows you to write your own 'require()' script functions at the bottom of the HTML page and still have access to 
+	** RequireJS. (Which is handy for quick wins in development).
 	** 
-	** But inevitably this *smart* insertion will fail at some point, especially if the script contains the character sequence '</script>' in a comment or similar;
-	** it is, after all, just regular expression matching. 
+	** But inevitably this *smart* insertion will fail at some point, especially if the script contains the character sequence 
+	** '</script>' in a comment or similar; it is, after all, just regular expression matching. 
 	** 
-	** So setting this config to 'true' disables the *(ahem)* *smart* insertion and bangs in all scripts just before the closing '</body>' tag. 
+	** So setting this config to 'true' disables the *(ahem)* *smart* insertion and bangs in all scripts just before the 
+	** closing '</body>' tag. 
 	static const Str disableSmartInsertion	:= "afDuvet.disableSmartInsertion"
 
+	** When injecting scripts and stylesheets, Duvet will automatically update any 'Content-Security-Policy' header directives 
+	** to allow the script to load / run. As this may not always be desired, set to 'false' to disable.
+	static const Str updateCspHeader	:= "afDuvet.updateCspHeader"
+	
 	internal static Void validateConfig(ConfigSource iocConfig) {
 		baseModuleUrl := (Uri) iocConfig.get(DuvetConfigIds.baseModuleUrl, Uri#)
 		if (!baseModuleUrl.isPathOnly)

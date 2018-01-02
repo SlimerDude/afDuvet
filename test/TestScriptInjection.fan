@@ -144,6 +144,11 @@ internal const class T_AppModule03 {
 		conf.add(Route(`/multiBody`,	T_AppModule03Routes#multipleBodies))
 		conf.add(Route(`/multiBody2`,	T_AppModule03Routes#multipleBodies2))
 	}
+
+	@Contribute { serviceType=ApplicationDefaults# }
+	Void contributeAppDefaults(Configuration config) {
+		config[DuvetConfigIds.updateCspHeader] = false
+	}
 }
 
 internal const class T_AppModule03Routes {
