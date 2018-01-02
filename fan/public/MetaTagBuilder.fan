@@ -1,5 +1,5 @@
 
-** Defines a '<meta>' tag to be injected into the bottom of your head.
+** Defines a '<meta>' tag to be injected into the bottom of your head. Created via `HtmlInjector`.
 ** 
 ** @see `https://developer.mozilla.org/en/docs/Web/HTML/Element/meta` 
 class MetaTagBuilder {
@@ -48,7 +48,8 @@ class MetaTagBuilder {
 		element[name]
 	}
 
-	internal HtmlNode htmlNode() {
+	@NoDoc	// looks like it could be useful!
+	HtmlNode htmlNode() {
 		element
 	}
 }

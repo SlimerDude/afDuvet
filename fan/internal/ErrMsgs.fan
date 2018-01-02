@@ -32,8 +32,4 @@ internal const class ErrMsgs {
 	static Str requireJsTimeoutMustBePositive(Duration timeout) {
 		"requireJsTimeout must be greater than zero - ${timeout}"
 	}
-
-	static Str urlNotMapped(Uri url) {
-		"Could not map URL to local resource: ${url}"
-	}
 }

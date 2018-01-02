@@ -2,7 +2,8 @@ using afIoc
 using afBedSheet
 using afIocConfig::ApplicationDefaults
 
-internal class TestContentSecurityPolicy : Test {
+** ContentSecurityPolicy
+internal class TestCspScripts : Test {
 	Scope?					scope
 	HttpResponseHeaders?	headers
 	ScriptTagBuilder?		scriptTag

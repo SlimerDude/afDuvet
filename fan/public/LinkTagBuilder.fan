@@ -1,16 +1,24 @@
-using afIoc
+using afIoc::Inject
+using afIocConfig::Config
 using afBedSheet
 
-** Defines a '<link>' tag to be injected into the bottom of your head.
+** Defines a '<link>' tag to be injected into the bottom of your head. Created via `HtmlInjector`.
+** 
+** If defining a stylesheet, note that any 'Content-Security-Policy' response header will be updated to ensure it can be loaded.
 ** 
 ** @see `https://developer.mozilla.org/en/docs/Web/HTML/Element/link` 
 class LinkTagBuilder {
 	
-	@Inject private	FileHandler			fileHandler
+	@Inject private	HttpResponse		httpRes
 	@Inject private	ClientAssetCache	clientAssets
+	@Inject { optional=true }			// nullable for testing
+			private	BedSheetServer?		bedServer
+	@Inject { optional=true }			// nullable for testing
+			private	FileHandler?		fileHandler
 			private	HtmlElement			element
 			private	HtmlConditional		ieConditional
-	
+	@Config private	Bool				updateCspHeader
+
 	internal new make(|This|in) {
 		in(this)
 		this.element = HtmlElement("link")
@@ -23,28 +31,65 @@ class LinkTagBuilder {
 		if (externalUrl.host == null)
 			throw ArgErr(ErrMsgs.externalUrlsNeedHost(externalUrl))
 		element["href"] = externalUrl.encode
+		
+		if (updateCsp) {
+			host := (externalUrl + `/`).encode
+			if (host.endsWith("/"))
+				host = host[0..<-1]
+			if (host.startsWith("//"))
+				host = host[2..-1]
+			csp  := httpRes.headers.contentSecurityPolicy
+			if (addCsp(csp, host))
+				httpRes.headers.contentSecurityPolicy = csp
+
+			cspro := httpRes.headers.contentSecurityPolicyReportOnly
+			if (addCsp(cspro, host))
+				httpRes.headers.contentSecurityPolicyReportOnly = cspro
+		}
+
 		return this
 	}
 
 	** Sets the 'href' attribute to a local URL. 
 	** The URL **must** be mapped by BedSheet's 'ClientAsset' cache service.
-	** The URL is rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
+	** The URL may be rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://eggbox.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	LinkTagBuilder fromLocalUrl(Uri localUrl) {
-		fileAsset := clientAssets.getAndUpdateOrProduce(localUrl)
-		if (fileAsset == null)
-			throw Err(ErrMsgs.urlNotMapped(localUrl))
-		element["href"] = fileAsset.clientUrl.encode
+		// ClientAssets adds ColdFeet digests, BedServer does not
+		clientUrl := clientAssets.getAndUpdateOrProduce(localUrl)?.clientUrl ?: bedServer.toClientUrl(localUrl)	
+		element["href"] = clientUrl.encode
+		
+		if (updateCsp) {
+			csp := httpRes.headers.contentSecurityPolicy
+			if (addCsp(csp, "'self'"))
+				httpRes.headers.contentSecurityPolicy = csp
+
+			cspro := httpRes.headers.contentSecurityPolicyReportOnly
+			if (addCsp(cspro, "'self'"))
+				httpRes.headers.contentSecurityPolicyReportOnly = cspro
+		}
+		
 		return this		
 	}
 
 	** Creates a 'href' URL attribute from the given file. 
 	** The file **must** exist on the file system and be mapped by BedSheet's 'FileHandler' service.
-	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://www.fantomfactory.org/pods/afColdFeet`.
+	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://eggbox.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
 	LinkTagBuilder fromServerFile(File serverFile) {
 		fileAsset := fileHandler.fromServerFile(serverFile, true)	// this add any ColdFeet digests
 		element["href"] = fileAsset.clientUrl.encode
+		
+		if (updateCsp) {
+			csp := httpRes.headers.contentSecurityPolicy
+			if (addCsp(csp, "'self'"))
+				httpRes.headers.contentSecurityPolicy = csp
+
+			cspro := httpRes.headers.contentSecurityPolicyReportOnly
+			if (addCsp(cspro, "'self'"))
+				httpRes.headers.contentSecurityPolicyReportOnly = cspro
+		}
+
 		return this		
 	}
 	
@@ -102,8 +147,31 @@ class LinkTagBuilder {
 		element[name]
 	}	
 
-	internal HtmlNode htmlNode() {
+	@NoDoc	// looks like it could be useful!
+	HtmlNode htmlNode() {
 		ieConditional
 	}
-}
+	
+	private Bool updateCsp() {
+		if (!updateCspHeader) return false 
+		type := MimeType(element["type"] ?: "", false)?.noParams?.toStr
+		rel  := element["rel"]
+		return type == "text/css" || rel == "stylesheet" 
+	}
+	
+	private static Bool addCsp([Str:Str]? csp, Str newDir) {
+		if (csp == null)
+			return false
 
+		directive	:= csp["style-src"]?.trimToNull ?: csp["default-src"]?.trimToNull
+		if (directive == null)
+			return false
+
+		directives	:= directive.split
+		if (directives.contains(newDir))	// e.g. 'self'
+			return false
+		
+		csp["style-src"] = directive + " " + newDir
+		return true
+	}
+}
