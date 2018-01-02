@@ -1,5 +1,6 @@
 v1.1.8
 ======
+ - New: [SleepSafe]`pod:afSleepSafe` integration! Injected scripts and stylesheets automatically update the 'Content-Security-Policy' response header.
  - Chg: Updated RequireJS from v2.1.14 to v2.3.5.
 
 v1.1.6

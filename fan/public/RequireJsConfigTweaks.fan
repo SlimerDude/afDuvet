@@ -31,10 +31,11 @@ const mixin RequireJsConfigTweaks {
 
 internal const class RequireJsConfigTweaksImpl : RequireJsConfigTweaks {
 	
-			@Inject private const ScriptModules	scriptModules
-	@Inject @Config private const Uri			baseModuleUrl
-	@Inject @Config private const Duration?		requireJsTimeout
-					private const |Str:Obj?|[]	manipulators
+	@Inject private const ScriptModules	scriptModules
+	@Inject private const Scope			scope
+	@Config private const Uri			baseModuleUrl
+	@Config private const Duration?		requireJsTimeout
+			private const |Str:Obj?|[]	manipulators
 
 	new make(|Str:Obj?|[] manipulators, |This| in) {
 		in(this)
@@ -59,6 +60,9 @@ internal const class RequireJsConfigTweaksImpl : RequireJsConfigTweaks {
 		
 		args	:= util::JsonOutStream.writeJsonToStr(config)
 		script	:= "requirejs.config(${args});"
-		return HtmlElement("script").set("type", "text/javascript").add(HtmlText(script))
+		
+		// use ScriptTagBuilder to ensure an Content-Security-Policy headers get updated
+		tag		:= (ScriptTagBuilder) scope.build(ScriptTagBuilder#)
+		return tag.withScript(script).htmlNode
 	}
 }

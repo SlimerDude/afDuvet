@@ -9,7 +9,7 @@ using web::WebOutStream
 @NoDoc
 const class DuvetModule { 
 
-	static Void defineServices(RegistryBuilder defs) {
+	Void defineServices(RegistryBuilder defs) {
 		defs.addService(DuvetProcessor#)	.withRootScope
 		defs.addService(HtmlInjector#)		.withRootScope
 		defs.addService(ScriptModules#)		.withRootScope
@@ -17,7 +17,7 @@ const class DuvetModule {
 		defs.addService(DuvetPrinter#)		.withRootScope
 	}
 
-	internal static Void onRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
+	internal Void onRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
 		config["afDuvet.validateConfig"] = |->| {
 			DuvetConfigIds.validateConfig(configSrc)
 		}
@@ -27,29 +27,29 @@ const class DuvetModule {
 	}
 
 	@Contribute { serviceType=StackFrameFilter# }
-	static Void contributeStackFrameFilter(Configuration config) {
+	Void contributeStackFrameFilter(Configuration config) {
 		// remove meaningless and boring stack frames
 		config.add("^afDuvet::DuvetMiddleware.+\$")
 	}
 
 	@Contribute { serviceType=ResponseProcessors# }
-	internal static Void contributeResponseProcessors(Configuration config, DuvetProcessor duvetProcessor) {
+	internal Void contributeResponseProcessors(Configuration config, DuvetProcessor duvetProcessor) {
 		config.overrideValue(Text#, duvetProcessor, "afDuvet.textProcessor")
 	}
 
 	@Contribute { serviceType=MiddlewarePipeline# }
-	static Void contributeMiddlewarePipeline(Configuration conf) {
+	Void contributeMiddlewarePipeline(Configuration conf) {
 		conf.set("afDuvet", conf.build(DuvetMiddleware#)).before("afBedSheet.routes")
 	}
 	
 	@Contribute { serviceType=Routes# }
-	static Void contributeRoutes(Configuration conf, ConfigSource configSrc) {
+	Void contributeRoutes(Configuration conf, ConfigSource configSrc) {
 		requireJsUrl := (Uri) configSrc.get(DuvetConfigIds.requireJsUrl, Uri#)
 		conf.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
 	}
 
 	@Contribute { serviceType=ScriptModules# }
-	internal static Void contributeScriptModules(Configuration config) {
+	internal Void contributeScriptModules(Configuration config) {
 		modulePaths := (ModulePaths) config.build(ModulePaths#)
 		podModules	:= (PodModules)  config.build(PodModules#)
 
@@ -58,23 +58,24 @@ const class DuvetModule {
 	}
 
 	@Contribute { serviceType=NotFoundPrinterHtml# }
-	internal static Void contributeNotFoundHtml(Configuration config, DuvetPrinter printer) {
+	internal Void contributeNotFoundHtml(Configuration config, DuvetPrinter printer) {
 		// make contribution ordering optional so we don't break should the BedSheet names change.
 		config.set("afDuvet.requireJsModules",	|WebOutStream out| { printer.printModules(out) }).after("afBedSheet.routes", true)
 	}
 
 	@Contribute { serviceType=ErrPrinterHtml# }
-	internal static Void contributeErrorHtml(Configuration config, DuvetPrinter printer) {
+	internal Void contributeErrorHtml(Configuration config, DuvetPrinter printer) {
 		// make contribution ordering optional so we don't break should the BedSheet names change.
 		config.set("afDuvet.requireJsModules",	|WebOutStream out, Err? err| { printer.printModules(out) }).after("afBedSheet.routes", true).before("afBedSheet.locals", true)
 	}
 	
 	@Contribute { serviceType=FactoryDefaults# }
-	static Void contributeFactoryDefaults(Configuration config) {
-		config[DuvetConfigIds.baseModuleUrl]	= `/modules/`
-		config[DuvetConfigIds.requireJsUrl]		= `/scripts/require-2.3.5.js`
-		config[DuvetConfigIds.requireJsFile]	= `fan://afDuvet/res/require-2.3.5.js`.get	// --> ZipEntryFile
-		config[DuvetConfigIds.requireJsTimeout]	= 15sec
+	Void contributeFactoryDefaults(Configuration config) {
+		config[DuvetConfigIds.baseModuleUrl]			= `/modules/`
+		config[DuvetConfigIds.requireJsUrl]				= `/scripts/require-2.3.5.js`
+		config[DuvetConfigIds.requireJsFile]			= `fan://afDuvet/res/require-2.3.5.js`.get	// --> ZipEntryFile
+		config[DuvetConfigIds.requireJsTimeout]			= 15sec
 		config[DuvetConfigIds.disableSmartInsertion]	= false
+		config[DuvetConfigIds.updateCspHeader]			= true
 	}
 }
