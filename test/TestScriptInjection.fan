@@ -41,7 +41,6 @@ internal class TestScriptInjection : DuvetTest {
 		verifyEq(html, "<html><head></head><body>\n<script type=\"text/javascript\" src=\"//example.com/\"></script>\n</body></html>")
 
 		html  = client.get(`/twoSame2`).body.str
-		echo(html)
 		i := html.index("dude", 0)
 		verifyNotNull(i)
 		i = html.index("dude", i+1)

@@ -1,4 +1,5 @@
 using afIoc
+using afIocConfig::ApplicationDefaults
 using afBedSheet
 
 internal class TestLinkInjection : DuvetTest {
@@ -43,6 +44,11 @@ internal const class T_AppModule04 {
 		conf.add(Route(`/twoSame`,		T_AppModule04Routes#twoSame))
 		conf.add(Route(`/twoDiff`,		T_AppModule04Routes#twoDiff))
 		conf.add(Route(`/conditional`,	T_AppModule04Routes#conditional))
+	}
+	
+	@Contribute { serviceType=ApplicationDefaults# }
+	Void contributeAppDefaults(Configuration config) {
+		config[DuvetConfigIds.updateCspHeader] = false
 	}
 }
 	
