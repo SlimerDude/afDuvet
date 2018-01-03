@@ -29,7 +29,7 @@ class Build : BuildPod {
 			"afIocConfig  1.1.0  - 1.1",
 			
 			// ---- Web -------------------------
-			"afBedSheet   1.5.0  - 1.5",
+			"afBedSheet   1.5.9  - 1.5",	// needs new Content-Security-Policy headers
 			
 			// ---- Test ------------------------
 			"afBounce     1.1.0  - 1.1",

@@ -6,6 +6,7 @@ using afConcurrent
 internal const class DuvetProcessor : ResponseProcessor {
 
 	@Inject private const RequireJsConfigTweaks requireJsConfig
+	@Inject private const HttpRequest 			httpRequest
 	@Inject private const HttpResponse 			httpResponse
 	@Inject private const LocalList				headTags
 	@Inject private const LocalList				bodyTags
@@ -64,8 +65,14 @@ internal const class DuvetProcessor : ResponseProcessor {
 			}
 		}
 
-		httpResponse.headers.contentType = text.contentType
-		httpResponse.out.print(html.toStr)
+		// ...copied from afBedSheet::TextProcessor...
+		// use toBuf so we only (UTF-8) encode the text the once
+		buf := html.toStr.toBuf(text.contentType.charset)
+		httpResponse.headers.contentType 	= text.contentType
+		httpResponse.headers.contentLength	= buf.size
+		if (httpRequest.httpMethod != "HEAD")
+			httpResponse.out.writeBuf(buf)
+
 		return true
 	}
 
@@ -101,12 +108,12 @@ internal const class DuvetProcessor : ResponseProcessor {
 	}
 	
 	private TagStyle? findTagStyle(MimeType contentType) {
-		switch (contentType.noParams) {
-			case MimeType("text/html"):
+		switch (contentType.noParams.toStr) {
+			case "text/html":
 				return TagStyle.html
-			case MimeType("application/xml"):
+			case "application/xml":
 				return TagStyle.xml
-			case MimeType("application/xhtml+xml"):
+			case "application/xhtml+xml":
 				return TagStyle.xhtml
 		}
 		return null
