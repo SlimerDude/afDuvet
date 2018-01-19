@@ -5,7 +5,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afDuvet"
 		summary = "Something soft and comfortable to wrap your Javascript up in!"
-		version = Version("1.1.8")
+		version = Version("1.1.9")
 
 		meta = [
 			"pod.dis"			: "Duvet",
