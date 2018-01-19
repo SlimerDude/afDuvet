@@ -174,6 +174,7 @@ internal const class HttpResponseStub : HttpResponse {
 	override Bool isCommitted() 				 { false	}
 	override OutStream out() 					 { throw UnsupportedErr() }
 	override Void saveAsAttachment(Str fileName) { throw UnsupportedErr() }
+	override Void onCommit(|HttpResponse| fn)	 { throw UnsupportedErr() }
 	override Bool disableGzip {
 		get { throw UnsupportedErr() }
 		set { throw UnsupportedErr() }
