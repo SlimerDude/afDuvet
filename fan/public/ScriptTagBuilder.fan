@@ -27,8 +27,12 @@ class ScriptTagBuilder {
 		this.element["type"] = "text/javascript"
 	}
 	
-	** Sets the 'src' attribute to an external URL.
+	** Sets the 'src' attribute to an external, absolute, URL.
 	** Returns 'this'.
+	** 
+	**   syntax: fantom
+	**   fromExternalUrl(`http://example.com/css/maxStyles.css`)
+	** 
 	ScriptTagBuilder fromExternalUrl(Uri scriptUrl) {
 		if (scriptUrl.host == null)
 			throw ArgErr(ErrMsgs.externalUrlsNeedHost(scriptUrl))
@@ -55,6 +59,10 @@ class ScriptTagBuilder {
 	** Sets the 'src' attribute to a local URL. 
 	** The URL may be rebuilt to take advantage of any asset caching strategies, such as [Cold Feet]`http://eggbox.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
+	** 
+	**   syntax: fantom
+	**   fromLocalUrl(`/css/maxStyles.css`)
+	** 
 	ScriptTagBuilder fromLocalUrl(Uri scriptUrl) {
 		// ClientAssets adds ColdFeet digests, BedServer does not
 		clientUrl := clientAssets.getAndUpdateOrProduce(scriptUrl)?.clientUrl ?: bedServer.toClientUrl(scriptUrl)	
@@ -77,6 +85,11 @@ class ScriptTagBuilder {
 	** The file **must** exist on the file system and be mapped by BedSheet's 'FileHandler' service.
 	** The URL is built to take advantage of any asset caching strategies, such as [Cold Feet]`http://eggbox.fantomfactory.org/pods/afColdFeet`.
 	** Returns 'this'.
+	** 
+	** 
+	**   syntax: fantom
+	**   fromServerFile(File(`web-static/css/maxStyles.css`))
+	** 
 	ScriptTagBuilder fromServerFile(File scriptFile) {
 		fileAsset := fileHandler.fromServerFile(scriptFile)	// this adds any ColdFeet digests
 		element["src"] = fileAsset.clientUrl.encode
