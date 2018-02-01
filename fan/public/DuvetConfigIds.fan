@@ -16,6 +16,12 @@ const mixin DuvetConfigIds {
 	** 
 	** Defaults to '`/scripts/require-2.3.5.js`'.
 	static const Str requireJsUrl	:= "afDuvet.requireJsUrl"
+
+	** The URL that the [TimeZone database]`http://fantom.org/forum/topic/2548` will be served under. 
+	** Override it should it conflict with an existing BedSheet Route.
+	** 
+	** Defaults to '`/scripts/tz.js`'.
+	static const Str tzJsUrl	:= "afDuvet.tzJsUrl"
 	
 	** The file that will be served under the [RequireJS]`http://requirejs.org/` URL. 
 	** Override it should you wish to serve a custom / updated version of [RequireJS]`http://requirejs.org/`.

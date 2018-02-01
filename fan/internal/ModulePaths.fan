@@ -5,8 +5,7 @@ using afBedSheet
 ** To disable this feature, remove the 'afDuvet.cacheModuleUrls' contribution from the 'ScriptModules' service.
 internal const class ModulePaths {
 	
-	@Config
-	@Inject private const Uri 			baseModuleUrl
+	@Config	private const Uri 			baseModuleUrl
 	@Inject private const FileHandler	fileHandler
 	
 	new make(|This|in) { in(this) }

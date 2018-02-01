@@ -204,7 +204,7 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		}
 		return injectRequireScript([moduleId:"module"], fCall)
 	}
- 
+
 	override ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null, [Str:Str]? env := null) {
 		if (!method.parent.hasFacet(Js#))
 			throw ArgErr(ErrMsgs.htmlInjector_noJsFacet(method.parent))
@@ -233,38 +233,44 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 			envStr.add("fan.sys.Env.cur().\$setVars(env);\n")
 		}
 		
+		// Fantom TimeZone - see http://fantom.org/forum/topic/2548
+		// tz.js is annoying because it has to come *after* sys but before the app
+		// the easiest way to do this is to wrap the injected code in a nested require()
 		script := 
 		"
-		 // default the TimeZone to a sensible default that doesn't cause errors
-		 // see http://fantom.org/forum/topic/2548
+		 // default the tz to a sensible default that doesn't cause errors
 		 if (fan.sys.TimeZone.m_cur == null)
 		     fan.sys.TimeZone.m_cur = fan.sys.TimeZone.fromStr('UTC');
-
-		 // inject env vars
-		 $envStr.toStr
-		 // construct method args
-		 var args = fan.sys.List.make(fan.sys.Obj.\$type);
-		 ${jargs.join('\n'.toChar)}
 		
-		 // find main
-		 var qname = '$method.qname';
-		 var main = fan.sys.Slot.findMethod(qname);
+		 // actually, lets just load the tz database
+		 require(['sysTz'], function(foo) {
 
-		 // invoke main
-		 if (main.isStatic()) main.callList(args);
-		 else main.callOn(main.parent().make(), args);"
+		     // inject env vars
+		     $envStr.toStr
+		     // construct method args
+		     var args = fan.sys.List.make(fan.sys.Obj.\$type);
+		     ${jargs.join('\n'.toChar)}
+		
+		     // find main
+		     var qname = '$method.qname';
+		     var main = fan.sys.Slot.findMethod(qname);
+
+		     // invoke main
+		     if (main.isStatic()) main.callList(args);
+		     else main.callOn(main.parent().make(), args);
+		 });
+		 "
 
 		return injectRequireScript(jsParam, script)
 	}
-	
+
 	override HtmlInjector appendToHead(HtmlNode node) {
 		duvetProcessor.appendToHead(node)
 		return this
 	}
-	
+
 	override HtmlInjector appendToBody(HtmlNode node) {
 		duvetProcessor.appendToBody(node)
 		return this
 	}	
 }
-

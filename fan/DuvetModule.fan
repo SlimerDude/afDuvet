@@ -10,11 +10,11 @@ using web::WebOutStream
 const class DuvetModule { 
 
 	Void defineServices(RegistryBuilder defs) {
-		defs.addService(DuvetProcessor#)	.withRootScope
-		defs.addService(HtmlInjector#)		.withRootScope
-		defs.addService(ScriptModules#)		.withRootScope
-		defs.addService(RequireJsConfigTweaks#).withRootScope
-		defs.addService(DuvetPrinter#)		.withRootScope
+		defs.addService(DuvetProcessor#)
+		defs.addService(HtmlInjector#)
+		defs.addService(ScriptModules#)
+		defs.addService(RequireJsConfigTweaks#)
+		defs.addService(DuvetPrinter#)
 	}
 
 	internal Void onRegistryStartup(Configuration config, ConfigSource configSrc, DuvetPrinter printer) {
@@ -43,18 +43,21 @@ const class DuvetModule {
 	}
 	
 	@Contribute { serviceType=Routes# }
-	Void contributeRoutes(Configuration conf, ConfigSource configSrc) {
+	Void contributeRoutes(Configuration config, ConfigSource configSrc) {
+		tzJsUrl		 := (Uri) configSrc.get(DuvetConfigIds.tzJsUrl, Uri#)
 		requireJsUrl := (Uri) configSrc.get(DuvetConfigIds.requireJsUrl, Uri#)
-		conf.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
+		config.add(Route(tzJsUrl,		 DuvetProcessor#routeTzJs))
+		config.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
 	}
 
 	@Contribute { serviceType=ScriptModules# }
-	internal Void contributeScriptModules(Configuration config) {
+	internal Void contributeScriptModules(Configuration config, ConfigSource configSrc) {
+		tzJsUrl		:= (Uri) configSrc.get(DuvetConfigIds.tzJsUrl, Uri#)
 		modulePaths := (ModulePaths) config.build(ModulePaths#)
 		podModules	:= (PodModules)  config.build(PodModules#)
-
 		config["afDuvet.cacheModuleUrls"]	= modulePaths.scriptModules
 		config["afDuvet.podModules"] 		= podModules.scriptModules
+		config["afDuvet.tzJs"] 				= ScriptModule("sysTz").atUrl(tzJsUrl)
 	}
 
 	@Contribute { serviceType=NotFoundPrinterHtml# }
@@ -72,6 +75,7 @@ const class DuvetModule {
 	@Contribute { serviceType=FactoryDefaults# }
 	Void contributeFactoryDefaults(Configuration config) {
 		config[DuvetConfigIds.baseModuleUrl]			= `/modules/`
+		config[DuvetConfigIds.tzJsUrl]					= `/scripts/tz.js`
 		config[DuvetConfigIds.requireJsUrl]				= `/scripts/require-2.3.5.js`
 		config[DuvetConfigIds.requireJsFile]			= `fan://afDuvet/res/require-2.3.5.js`.get	// --> ZipEntryFile
 		config[DuvetConfigIds.requireJsTimeout]			= 15sec
