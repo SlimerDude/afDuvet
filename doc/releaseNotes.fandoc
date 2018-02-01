@@ -1,6 +1,7 @@
 v1.1.8
 ======
  - New: [SleepSafe]`pod:afSleepSafe` integration! Injected scripts and stylesheets automatically update the 'Content-Security-Policy' response header.
+ - New: 'HtmlInjector.injectFantomMethod()' now loads the Fantom TimeZone database, see `http://fantom.org/forum/topic/2548`.
  - Chg: Made Text processing more efficient (text is no longer encoded twice).
  - Chg: Updated RequireJS from v2.1.14 to v2.3.5.
 
