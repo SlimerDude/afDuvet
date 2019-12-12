@@ -1,3 +1,7 @@
+v1.1.10
+=======
+ - Chg: Clearer log messages when 'head' or 'body' tags can not be found.
+
 v1.1.8
 ======
  - New: [SleepSafe]`pod:afSleepSafe` integration! Injected scripts and stylesheets automatically update the 'Content-Security-Policy' response header.

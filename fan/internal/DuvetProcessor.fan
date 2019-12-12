@@ -130,14 +130,14 @@ internal const class DuvetProcessor : ResponseProcessor {
 	private Int? findEndOfHead(Str html) {
 		headEnd := html.indexIgnoreCase("</head>")
 		if (headEnd == null)
-			log.warn(LogMsgs.canNotFindHead)
+			log.warn(LogMsgs.canNotFindHead(html))
 		return headEnd
 	}
 
 	private Int? findEndOfBody(Str html) {
 		bodyEnd := html.indexrIgnoreCase("</body>")
 		if (bodyEnd == null) {
-			log.warn(LogMsgs.canNotFindBody)
+			log.warn(LogMsgs.canNotFindBody(html))
 			return null
 		}
 
