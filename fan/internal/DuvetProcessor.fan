@@ -36,11 +36,11 @@ internal const class DuvetProcessor : ResponseProcessor {
 		text 		:= (Text) response
 		html 		:= StrBuf(text.text.size).add(text.text)
 		tagStyle	:= findTagStyle(text.contentType)
-		endOfHead	:= headTags.isEmpty ? null : findEndOfHead(text.text)
-		endOfBody	:= bodyTags.isEmpty && !requireRequired.val ? null : findEndOfBody(text.text)
+		endOfHead	:= headTags.isEmpty ? null : findEndOfHead(text.text, headTags.first.toStr)
+		endOfBody	:= bodyTags.isEmpty && !requireRequired.val ? null : findEndOfBody(text.text, bodyTags.first.toStr)
 		
 		if (tagStyle != null) {
-			if (!headTags.isEmpty && endOfHead != null) {
+			if (endOfHead != null && headTags.size > 0) {
 				headTags := "\n" + headTags.val.join("\n") |HtmlNode node->Str| { node.print(tagStyle) } + "\n"
 				html.insert(endOfHead, headTags)
 				
@@ -127,17 +127,17 @@ internal const class DuvetProcessor : ResponseProcessor {
 		return null
 	}
 	
-	private Int? findEndOfHead(Str html) {
+	private Int? findEndOfHead(Str html, Str tag) {
 		headEnd := html.indexIgnoreCase("</head>")
 		if (headEnd == null)
-			log.warn(LogMsgs.canNotFindHead(html))
+			log.warn("Could not find '</head>' in HTML response.\nCan not inject: ${tag}\ninto: ${html}")
 		return headEnd
 	}
 
-	private Int? findEndOfBody(Str html) {
+	private Int? findEndOfBody(Str html, Str tag) {
 		bodyEnd := html.indexrIgnoreCase("</body>")
 		if (bodyEnd == null) {
-			log.warn(LogMsgs.canNotFindBody(html))
+			log.warn("Could not find '</body>' in HTML response.\nCan not inject: ${tag}\ninto: ${html}")
 			return null
 		}
 

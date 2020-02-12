@@ -37,7 +37,7 @@ internal class TestInjection : DuvetTest {
 		verifyEq(logs.size, 1)
 		rec := logs.first
 		verifyEq(rec.level,	LogLevel.warn)
-		verifyEq(rec.msg, 	LogMsgs.canNotFindHead("<html><body> --- </body></html>"))
+		verifyEq(rec.msg, 	"Could not find '</head>' in HTML response.\n<html><body> --- </body></html>")
 	}
 	
 	Void testNoBodyIsOkay() {
@@ -49,7 +49,7 @@ internal class TestInjection : DuvetTest {
 		verifyEq(logs.size, 1)
 		rec := logs.first as LogRec
 		verifyEq(rec.level,	LogLevel.warn)
-		verifyEq(rec.msg, 	LogMsgs.canNotFindBody("<html><head> --- </head></html>"))
+		verifyEq(rec.msg, 	"Could not find '</body>' in HTML response.\n<html><head> --- </head></html>")
 	}
 	
 }
