@@ -1,5 +1,9 @@
+v1.1
+****
+
 v1.1.10
 =======
+ - Chg: Recompiled for new the [BedSheet 1.5.16]`pod:afBedSheet` wildcard routing system.
  - Chg: Clearer log messages when 'head' or 'body' tags can not be found.
 
 v1.1.8
@@ -30,6 +34,11 @@ v1.1.0
 ======
  - Chg: Updated to work with [IoC v3]`pod:afIoc` and  [BedSheet 1.5]`pod:afBedSheet`. (Breaking change.)
  - Chg: Deleted deprecated methods. (Breaking change.)
+
+
+
+v1.0
+****
 
 v1.0.12
 =======
@@ -65,9 +74,19 @@ v1.0.0
  - New: 'RequireJsConfigTweaks' service allows last minute tweaks to the RequireJS config.
  - Bug: Could not inject Fantom JS code from other pods if the main web app itself did not have JS code.
 
+
+
+v0.1
+****
+
 v0.1.0
 ======
  - New: Support for executing Fantom code on web pages! See 'HtmlInjector.injectFantomMethod()'.
+
+
+
+v0.0
+****
 
 v0.0.14
 =======

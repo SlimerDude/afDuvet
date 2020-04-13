@@ -46,8 +46,8 @@ const class DuvetModule {
 	Void contributeRoutes(Configuration config, ConfigSource configSrc) {
 		tzJsUrl		 := (Uri) configSrc.get(DuvetConfigIds.tzJsUrl, Uri#)
 		requireJsUrl := (Uri) configSrc.get(DuvetConfigIds.requireJsUrl, Uri#)
-		config.add(Route(tzJsUrl,		 DuvetProcessor#routeTzJs))
-		config.add(Route(requireJsUrl, DuvetProcessor#routeRequireJs))
+		config.add(Route(tzJsUrl,		DuvetProcessor#routeTzJs))
+		config.add(Route(requireJsUrl,	DuvetProcessor#routeRequireJs))
 	}
 
 	@Contribute { serviceType=ScriptModules# }

@@ -1,9 +1,9 @@
-#Duvet v1.1.8
+# Duvet v1.1.10
 ---
 
-[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](http://fantom-lang.org/)
-[![pod: v1.1.8](http://img.shields.io/badge/pod-v1.1.8-yellow.svg)](http://www.fantomfactory.org/pods/afDuvet)
-![Licence: ISC Licence](http://img.shields.io/badge/licence-ISC Licence-blue.svg)
+[![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](https://fantom-lang.org/)
+[![pod: v1.1.10](http://img.shields.io/badge/pod-v1.1.10-yellow.svg)](http://eggbox.fantomfactory.org/pods/afDuvet)
+[![Licence: ISC](http://img.shields.io/badge/licence-ISC-blue.svg)](https://choosealicense.com/licenses/isc/)
 
 ## Overview
 
@@ -15,92 +15,87 @@
 
 Embracing RequireJs and AMD modules is like having an IoC for Javascript; and using it gives you a warm, fuzzy feeling all over!
 
-## Install
+## <a name="Install"></a>Install
 
 Install `Duvet` with the Fantom Pod Manager ( [FPM](http://eggbox.fantomfactory.org/pods/afFpm) ):
 
     C:\> fpm install afDuvet
 
-Or install `Duvet` with [fanr](http://fantom.org/doc/docFanr/Tool.html#install):
+Or install `Duvet` with [fanr](https://fantom.org/doc/docFanr/Tool.html#install):
 
     C:\> fanr install -r http://eggbox.fantomfactory.org/fanr/ afDuvet
 
-To use in a [Fantom](http://fantom-lang.org/) project, add a dependency to `build.fan`:
+To use in a [Fantom](https://fantom-lang.org/) project, add a dependency to `build.fan`:
 
     depends = ["sys 1.0", ..., "afDuvet 1.1"]
 
-## Documentation
+## <a name="documentation"></a>Documentation
 
 Full API & fandocs are available on the [Eggbox](http://eggbox.fantomfactory.org/pods/afDuvet/) - the Fantom Pod Repository.
 
 ## Quick Start
 
-1. Create a text file called `Example.fan`
-
-        using afIoc
-        using afBedSheet
-        using afDuvet
-        
-        class Example {
-            @Inject HtmlInjector? injector
-        
-            Text duvetExample() {
-                // inject meta tags and stylesheets into your HTML
-                injector.injectMeta.withName("author").withContent("Fantom-Factory")
-        
-                // inject a RequireJS script snippet
-                // this ensures all dependencies are loaded before execution
-                injector.injectRequireScript(["jquery":"\$"],
-                    "alert('jQuery v' + \$().jquery);"
-                )
-        
-                // let Duvet inject all it needs into a plain HTML shell
-                return Text.fromHtml(
-                    "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
-                )
-            }
+1. Create a text file called `Example.fan`    using afIoc
+    using afBedSheet
+    using afDuvet
+    
+    class Example {
+        @Inject HtmlInjector? injector
+    
+        Text duvetExample() {
+            // inject meta tags and stylesheets into your HTML
+            injector.injectMeta.withName("author").withContent("Fantom-Factory")
+    
+            // inject a RequireJS script snippet
+            // this ensures all dependencies are loaded before execution
+            injector.injectRequireScript(["jquery":"\$"],
+                "alert('jQuery v' + \$().jquery);"
+            )
+    
+            // let Duvet inject all it needs into a plain HTML shell
+            return Text.fromHtml(
+                "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
+            )
         }
-        
-        @SubModule { modules=[DuvetModule#] }
-        const class AppModule {
-            @Contribute { serviceType=Routes# }
-            Void contributeRoutes(Configuration conf) {
-                conf.add(Route(`/`, Example#duvetExample))
-            }
-        
-            @Contribute { serviceType=ScriptModules# }
-            Void contributeScriptModules(Configuration config) {
-                // configure any non-standard AMD modules
-                config.add(
-                    ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
-                )
-            }
+    }
+    
+    @SubModule { modules=[DuvetModule#] }
+    const class AppModule {
+        @Contribute { serviceType=Routes# }
+        Void contributeRoutes(Configuration conf) {
+            conf.add(Route(`/`, Example#duvetExample))
         }
-        
-        class Main {
-            Int main() {
-                BedSheetBuilder(AppModule#.qname).startWisp(8069)
-            }
+    
+        @Contribute { serviceType=ScriptModules# }
+        Void contributeScriptModules(Configuration config) {
+            // configure any non-standard AMD modules
+            config.add(
+                ScriptModule("jquery").atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
+            )
         }
+    }
+    
+    class Main {
+        Int main() {
+            BedSheetBuilder(AppModule#.qname).startWisp(8069)
+        }
+    }
 
 
-2. Run `Example.fan` as a Fantom script from the command line. This starts the [BedSheet](http://eggbox.fantomfactory.org/pods/afBedSheet) app server:
-
-        C:\> fan Example.fan
-           ___    __                 _____        _
-          / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
-         / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
-        /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
-                   Alien-Factory BedSheet v1.5.6, IoC v3.0.6 /___/
-        
-        IoC Registry built in 412ms and started up in 104ms
-        
-        Bed App 'Example_0' listening on http://localhost:8069/
+2. Run `Example.fan` as a Fantom script from the command line. This starts the [BedSheet](http://eggbox.fantomfactory.org/pods/afBedSheet) app server:    C:\> fan Example.fan
+       ___    __                 _____        _
+      / _ |  / /_____  _____    / ___/__  ___/ /_________  __ __
+     / _  | / // / -_|/ _  /===/ __// _ \/ _/ __/ _  / __|/ // /
+    /_/ |_|/_//_/\__|/_//_/   /_/   \_,_/__/\__/____/_/   \_, /
+               Alien-Factory BedSheet v1.5.6, IoC v3.0.6 /___/
+    
+    IoC Registry built in 412ms and started up in 104ms
+    
+    Bed App 'Example_0' listening on http://localhost:8069/
 
 
 3. Visit `http://localhost:8069/`
-
-  ![Duvet Quickstart Example - Screenshot](http://eggbox.fantomfactory.org/pods/afDuvet/doc/quickstartScreenshot.png)
+    ![Duvet Quickstart Example - Screenshot](http://eggbox.fantomfactory.org/pods/afDuvet/doc/quickstartScreenshot.png)
 
 
 
@@ -134,12 +129,11 @@ RequireJS requires Javascript to be packaged up into module files. A lot of popu
 
 All Javascript module files need to be served from the same [baseUrl](http://eggbox.fantomfactory.org/pods/afDuvet/api/DuvetConfigIds#baseModuleUrl) which defaults to ``/modules/``, so configure BedSheet's `FileHandler` to serve these files:
 
-```
-@Contribute { serviceType=FileHandler# }
-Void contributeFileHandler(Configuration config) {
-    config[`/modules/`] = `etc/web-static/modules/`
-}
-```
+    @Contribute { serviceType=FileHandler# }
+    Void contributeFileHandler(Configuration config) {
+        config[`/modules/`] = `etc/web-static/modules/`
+    }
+    
 
 Javascript module files should have the same name as the module. So, using the directory above, to define jQuery as a module it would should be saved as:
 
@@ -147,11 +141,10 @@ Javascript module files should have the same name as the module. So, using the d
 
 `HtmlInjector.injectRequireScript()` may now be used to inject and run small scripts:
 
-```
-htmlInjector.injectRequireScript( ["jQuery" : "jq"],
-    "alert('jQuery v' + jq().jquery);"
-)
-```
+    htmlInjector.injectRequireScript( ["jQuery" : "jq"],
+        "alert('jQuery v' + jq().jquery);"
+    )
+    
 
 All injected scripts are wrapped up in a `require()` function call to ensure proper dependency management.
 
@@ -161,26 +154,24 @@ To write your own module, create a Javascript file and save it in the `modules/`
 
 An example `modules/MyModule.js` file:
 
-```
-define(["jquery"], function($) {
-    return {
-        doStuff: function() {
-            alert("Doing stuff with jQuery v" + $().jquery);
-        },
-        doOtherStuff: function(stuff) {
-            alert("Doing " + stuff);
+    define(["jquery"], function($) {
+        return {
+            doStuff: function() {
+                alert("Doing stuff with jQuery v" + $().jquery);
+            },
+            doOtherStuff: function(stuff) {
+                alert("Doing " + stuff);
+            }
         }
-    }
-});
-```
+    });
+    
 
 We could then invoke the exposed methods on the module with `HtmlInjector.injectRequireModule(...)`.
 
-```
-htmlInjector.injectRequireModule("myModule", "doStuff")
-
-htmlInjector.injectRequireModule("myModule", "doOtherStuff", ["Emma!"])
-```
+    htmlInjector.injectRequireModule("myModule", "doStuff")
+    
+    htmlInjector.injectRequireModule("myModule", "doOtherStuff", ["Emma!"])
+    
 
 ### Fantom Pod Modules
 
@@ -194,18 +185,17 @@ From there it is a small step to require the Fantom modules and execute Fantom c
 
 #### Using DOM
 
-The Fantom [dom](http://fantom.org/doc/dom/index.html) pod is used to interact with the browser's Window, Document and DOM objects. For example, the following code fires up a browser alert - note the `@Js` annotation on the class.
+The Fantom [dom](https://fantom.org/doc/dom/index.html) pod is used to interact with the browser's Window, Document and DOM objects. For example, the following code fires up a browser alert - note the `@Js` annotation on the class.
 
-```
-using dom
-
-@Js
-class DomExample {
-    Void info() {
-        Win.cur.alert("Chew Bubblegum!")
+    using dom
+    
+    @Js
+    class DomExample {
+        Void info() {
+            Win.cur.alert("Chew Bubblegum!")
+        }
     }
-}
-```
+    
 
 To execute the above code, inject it into a web page with the following:
 
@@ -213,52 +203,49 @@ To execute the above code, inject it into a web page with the following:
 
 #### Using DOMKIT
 
-The core [domkit](http://fantom.org/doc/domkit/index.html) pod extends `dom` to provide a modern windowing framework for single page web applications.
+The core [domkit](https://fantom.org/doc/domkit/index.html) pod extends `dom` to provide a modern windowing framework for single page web applications.
 
 To use domkit, create your container boxes and add them to the exisitng DOM tree. The example below assumes the HTML contains a element with the ID `domkit-container`:
 
-```
-using dom
-using domkit
-
-@Js
-class DomkitExample {
-    Void init() {
-        // create your domkit boxes and elements
-        box := ScrollBox() { it.text = "Chew Bubblegum!" }
-
-        // add them to the existing DOM tree
-        Win.cur.doc.elemById("domkit-container").add(box)
+    using dom
+    using domkit
+    
+    @Js
+    class DomkitExample {
+        Void init() {
+            // create your domkit boxes and elements
+            box := ScrollBox() { it.text = "Chew Bubblegum!" }
+    
+            // add them to the existing DOM tree
+            Win.cur.doc.elemById("domkit-container").add(box)
+        }
     }
-}
-```
+    
 
 Inject the code via `injectFantomMethod`. Note that domkit also makes use a stylesheet that you should also inject into the page:
 
-```
-// inject the domkit stylesheet
-injector.injectStylesheet.fromLocalUrl(`/pod/domkit/res/css/domkit.css`)
-
-// inject your Fantom code
-injector.injectFantomMethod(DomkitExample#init)
-```
+    // inject the domkit stylesheet
+    injector.injectStylesheet.fromLocalUrl(`/pod/domkit/res/css/domkit.css`)
+    
+    // inject your Fantom code
+    injector.injectFantomMethod(DomkitExample#init)
+    
 
 #### Using FWT / WebFWT
 
-Fantom's [fwt](http://fantom.org/doc/fwt/index.html) and [webfwt](http://fantom.org/doc/webfwt/index.html) pods can be used to generate fully featured FWT windows and graphics in the browser. Example:
+Fantom's [fwt](https://fantom.org/doc/fwt/index.html) and [webfwt](https://fantom.org/doc/webfwt/index.html) pods can be used to generate fully featured FWT windows and graphics in the browser. Example:
 
-```
-using fwt
-
-@Js
-class FwtExample {
-    Void info() {
-        Window {
-            Label { text = "Chew Bubblegum!"; halign = Halign.center },
-        }.open
+    using fwt
+    
+    @Js
+    class FwtExample {
+        Void info() {
+            Window {
+                Label { text = "Chew Bubblegum!"; halign = Halign.center },
+            }.open
+        }
     }
-}
-```
+    
 
 Again, this can be executed with:
 
@@ -282,12 +269,11 @@ For an example of what fwt is capable of in the browser, see the article [Run Fa
 
 If you want to restrict access to Fantom generated Javascript, or just don't like Fantom modules cluttering up the RequireJS shim, then pods can be easily disabled. Simply remove the `afDuvet.podModules` configuration from the `ScriptModules` service:
 
-```
-@Contribute { serviceType=ScriptModules# }
-Void contributeScriptModules(Configuration config) {
-    config.remove("afDuvet.podModules")
-}
-```
+    @Contribute { serviceType=ScriptModules# }
+    Void contributeScriptModules(Configuration config) {
+        config.remove("afDuvet.podModules")
+    }
+    
 
 ### Module Config
 
@@ -297,38 +283,36 @@ All `ScriptModule` data map to the RequireJS [path](http://requirejs.org/docs/ap
 
 Here's a working example from the Fantom-Factory website:
 
-```
-@Contribute { serviceType=ScriptModules# }
-Void contributeScriptModules(Configuration config) {
-    config.add(
-        ScriptModule("jquery")
-            .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
-            .fallbackToUrl(`/scripts/jquery-2.1.1.min.js`)
-    )
-    config.add(
-        ScriptModule("bootstrap")
-            .atUrl(`/scripts/bootstrap.min.js`)
-            .requires("jquery")
-    )
-}
-```
+    @Contribute { serviceType=ScriptModules# }
+    Void contributeScriptModules(Configuration config) {
+        config.add(
+            ScriptModule("jquery")
+                .atUrl(`//code.jquery.com/jquery-2.1.1.min.js`)
+                .fallbackToUrl(`/scripts/jquery-2.1.1.min.js`)
+        )
+        config.add(
+            ScriptModule("bootstrap")
+                .atUrl(`/scripts/bootstrap.min.js`)
+                .requires("jquery")
+        )
+    }
+    
 
 ### Custom Require Scripts
 
 Sometimes, for quick wins in development, it is handy to write your own script tags directly in the HTML. This is still possible, even when it calls RequireJS. Example:
 
-```
-<html>
-<body>
-    <h1>Hello!</h1>
-    <script>
-        require(['jquery'], function($) {
-            // ... wotever...
-        });
-    </script>
-</body>
-</html>
-```
+    <html>
+    <body>
+        <h1>Hello!</h1>
+        <script>
+            require(['jquery'], function($) {
+                // ... wotever...
+            });
+        </script>
+    </body>
+    </html>
+    
 
 To make the above work, make a call to `HtmlInjector.injectRequireJs()`. That will ensure that RequireJS, and any corresponding config, is injected into the HTML.
 
@@ -338,12 +322,11 @@ Inevitably this *smart* insertion will fail at some point, especially if your sc
 
 So to disable this *(ahem)* *smart* insertion and bang all scripts in just before the closing `</body>` tag, add the following to your `AppModule`:
 
-```
-@Contribute { serviceType=ApplicationDefaults# }
-Void contributeAppDefaults(Configuration config) {
-    config[DuvetConfigIds.disableSmartInsertion]    = true
-}
-```
+    @Contribute { serviceType=ApplicationDefaults# }
+    Void contributeAppDefaults(Configuration config) {
+        config[DuvetConfigIds.disableSmartInsertion]    = true
+    }
+    
 
 ## Non-RequireJS Usage
 
@@ -351,63 +334,61 @@ Sometimes an old skool approach is more convenient when executing Fantom code on
 
 For this you don't actually need Duvet at all, instead you just rely on BedSheet's `PodHandler` service to serve up the pod `.js` files. Here is an example that calls `alert()` via Fantom's DOM pod; just serve it up in BedSHeet as static HTML:
 
-```
-<!DOCTYPE html>
-<html>
-<head>
-    <script type="text/javascript" src="/pod/sys/sys.js"></script>
-    <script type="text/javascript" src="/pod/gfx/gfx.js"></script>
-    <script type="text/javascript" src="/pod/web/web.js"></script>
-    <script type="text/javascript" src="/pod/dom/dom.js"></script>
-</head>
-<body>
-    <h1>Old Skool Example</h1>
-
-    <script type="text/javascript">
-        fan.dom.Win.cur().alert("Hello Mum!");
-    </script>
-</body>
-</html>
-```
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <script type="text/javascript" src="/pod/sys/sys.js"></script>
+        <script type="text/javascript" src="/pod/gfx/gfx.js"></script>
+        <script type="text/javascript" src="/pod/web/web.js"></script>
+        <script type="text/javascript" src="/pod/dom/dom.js"></script>
+    </head>
+    <body>
+        <h1>Old Skool Example</h1>
+    
+        <script type="text/javascript">
+            fan.dom.Win.cur().alert("Hello Mum!");
+        </script>
+    </body>
+    </html>
+    
 
 Note that the order in which the pod `.js` files are listed is very important; each pod's dependencies must be listed before the pod itself.
 
-Fantom code may also be executed via the [web::WebUtil.jsMain()](http://fantom.org/doc/web/WebUtil.html#jsMain) method.
+Fantom code may also be executed via the [web::WebUtil.jsMain()](https://fantom.org/doc/web/WebUtil.html#jsMain) method.
 
 ## Pillow & efanExtra Example
 
 It is common to use Duvet with [Pillow](http://eggbox.fantomfactory.org/pods/afPillow) and [efanXtra](http://eggbox.fantomfactory.org/pods/afEfanXtra). As such, below is a sample Pillow page / efanXtra component component that may be useful for cut'n'paste purposes:
 
-```
-using afIoc::Inject
-using afEfanXtra::EfanComponent
-using afEfanXtra::InitRender
-using afPillow::Page
-using afDuvet::HtmlInjector
-
-@Page { contentType=MimeType("text/html") }
-const mixin PooPage : EfanComponent {
-
-    @Inject abstract HtmlInjector htmlInjector
-
-    @InitRender
-    Void initRender() {
-
-        // inject meta tags and stylesheets into your HTML
-        htmlInjector.injectMeta.withName("author").withContent("Fantom-Factory")
-
-        // inject a RequireJS script snippet
-        // this ensures all dependencies are loaded before execution
-        htmlInjector.injectRequireScript(
-            ["jquery" : "jq"],
-            "alert('jQuery v' + jq().jquery);"
-        )
+    using afIoc::Inject
+    using afEfanXtra::EfanComponent
+    using afEfanXtra::InitRender
+    using afPillow::Page
+    using afDuvet::HtmlInjector
+    
+    @Page { contentType=MimeType("text/html") }
+    const mixin PooPage : EfanComponent {
+    
+        @Inject abstract HtmlInjector htmlInjector
+    
+        @InitRender
+        Void initRender() {
+    
+            // inject meta tags and stylesheets into your HTML
+            htmlInjector.injectMeta.withName("author").withContent("Fantom-Factory")
+    
+            // inject a RequireJS script snippet
+            // this ensures all dependencies are loaded before execution
+            htmlInjector.injectRequireScript(
+                ["jquery" : "jq"],
+                "alert('jQuery v' + jq().jquery);"
+            )
+        }
+    
+        // This is usually an external template file - overridden here for visibility.
+        override Str renderTemplate() {
+            "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
+        }
     }
-
-    // This is usually an external template file - overridden here for visibility.
-    override Str renderTemplate() {
-        "<html><head></head><body><h1>Duvet by Alien-Factory</h1></body></html>"
-    }
-}
-```
+    
 
