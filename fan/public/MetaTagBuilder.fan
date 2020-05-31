@@ -5,7 +5,8 @@
 class MetaTagBuilder {
 	private HtmlElement element
 	
-	internal new make() {
+	@NoDoc
+	new make() {
 		this.element = HtmlElement("meta")
 	}
 	
@@ -53,4 +54,3 @@ class MetaTagBuilder {
 		element
 	}
 }
-
