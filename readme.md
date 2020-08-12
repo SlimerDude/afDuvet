@@ -1,8 +1,8 @@
-# Duvet v1.1.10
+# Duvet v1.1.12
 ---
 
 [![Written in: Fantom](http://img.shields.io/badge/written%20in-Fantom-lightgray.svg)](https://fantom-lang.org/)
-[![pod: v1.1.10](http://img.shields.io/badge/pod-v1.1.10-yellow.svg)](http://eggbox.fantomfactory.org/pods/afDuvet)
+[![pod: v1.1.12](http://img.shields.io/badge/pod-v1.1.12-yellow.svg)](http://eggbox.fantomfactory.org/pods/afDuvet)
 [![Licence: ISC](http://img.shields.io/badge/licence-ISC-blue.svg)](https://choosealicense.com/licenses/isc/)
 
 ## Overview
