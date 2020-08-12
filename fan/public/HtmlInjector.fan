@@ -139,15 +139,13 @@ const mixin HtmlInjector {
 	**   <div id="fwt-window" style="width: 640px; height:480px; position:relative;"></div>    
 	abstract ScriptTagBuilder injectFantomMethod(Method method, Obj?[]? args := null, [Str:Str]? env := null)
 	
-	** Appends the given 'HtmlNode' to the bottom of the head section.
+	** Appends the given HTML Str (or 'afDuvet::HtmlNode') to the bottom of the head section.
 	** Returns 'this'.
-	@NoDoc
-	abstract HtmlInjector appendToHead(HtmlNode node)
+	abstract HtmlInjector appendToHead(Obj html)
 	
-	** Appends the given 'HtmlNode' to the bottom of the body section.
+	** Appends the given HTML Str (or 'afDuvet::HtmlNode') to the bottom of the body section.
 	** Returns 'this'.
-	@NoDoc
-	abstract HtmlInjector appendToBody(HtmlNode node)
+	abstract HtmlInjector appendToBody(Obj html)
 }
 
 internal const class HtmlInjectorImpl : HtmlInjector {
@@ -264,12 +262,22 @@ internal const class HtmlInjectorImpl : HtmlInjector {
 		return injectRequireScript(jsParam, script)
 	}
 
-	override HtmlInjector appendToHead(HtmlNode node) {
+	override HtmlInjector appendToHead(Obj html) {
+		node := html as HtmlNode
+		if (node == null && html is Str)
+			node = HtmlText(html)
+		if (node == null)
+			throw Err("html arg must be Str or ${HtmlNode#.qname}: ${html.typeof} - $html")
 		duvetProcessor.appendToHead(node)
 		return this
 	}
 
-	override HtmlInjector appendToBody(HtmlNode node) {
+	override HtmlInjector appendToBody(Obj html) {
+		node := html as HtmlNode
+		if (node == null && html is Str)
+			node = HtmlText(html)
+		if (node == null)
+			throw Err("html arg must be Str or ${HtmlNode#.qname}: ${html.typeof} - $html")
 		duvetProcessor.appendToBody(node)
 		return this
 	}	

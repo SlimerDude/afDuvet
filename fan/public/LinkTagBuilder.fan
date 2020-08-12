@@ -2,7 +2,7 @@ using afIoc::Inject
 using afIocConfig::Config
 using afBedSheet
 
-** Defines a '<link>' tag to be injected into the bottom of your head. Created via `HtmlInjector`.
+** Defines a '<link>' tag to be injected into the bottom of your head. Autobuild or create via `HtmlInjector`.
 ** 
 ** If defining a stylesheet, note that any 'Content-Security-Policy' response header will be updated to ensure it can be loaded.
 ** 

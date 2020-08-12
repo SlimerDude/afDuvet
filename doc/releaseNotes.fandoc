@@ -2,6 +2,7 @@ v1.1
 ****
 v1.1.12
 =======
+ - Chg: Exposed 'HtmlInjector.appendToHead()' and 'HtmlInjector.appendToBody()' and they may now also accept HTML strings.
  - Chg: 'MetaTagBuilder' ctor no longer internal.
 
 v1.1.10
